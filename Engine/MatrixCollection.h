@@ -13,11 +13,12 @@ private:
 	glm::mat4 worldScale;
 	glm::mat4 model;
 	MatrixCollection *parentMatrix;
-	std::vector<MatrixCollection> children;
+	std::vector<MatrixCollection*> children;
 	
 	void updateModel();
 protected:
-
+	void addChild(MatrixCollection* childMatrix);
+	void removeChild(MatrixCollection* childMatrix);
 public:
 	bool inheritTranslation = true;
 	bool inheritRotation = true;
@@ -25,6 +26,7 @@ public:
 	bool applyParentRotationToPosition = false;
 	bool applyParentScaleToPosition = true;
 
+	void setParent(MatrixCollection* newParent);
 	glm::mat4 getModel();
 	glm::mat4 getInverseTranspose();
 	void setLocalTranslation(glm::mat4 localTranslation);
