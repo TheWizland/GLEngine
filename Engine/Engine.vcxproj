@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3.h" />
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3native.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="shaderloader.h" />
   </ItemGroup>
   <ItemGroup>
