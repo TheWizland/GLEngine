@@ -11,7 +11,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "shaderloader.h"
-//#include "Camera.h"
+#include "Camera.h"
 #include <iostream>
 
 GLuint vao[1];
@@ -20,9 +20,9 @@ GLuint vbo[numVBO];
 GLuint renderingProgram;
 int windowX = 900;
 int windowY = 900;
-//Matrix::Camera camera = Matrix::Camera(90.f, float(windowX)/windowY);
+Camera camera = Camera(90.f, float(windowX)/windowY);
 const char* windowTitle = "Hello World";
-glm::mat4 model, view, perspective;
+glm::mat4 model;
 
 
 float cube[] = { -1.0f,  1.0f, -1.0f,        -1.0f, -1.0f, -1.0f,        1.0f, -1.0f, -1.0f, //Back-Bottom
@@ -43,12 +43,7 @@ void init() {
     model = glm::mat4(1.f);
     model = glm::translate(model, glm::vec3(0.f, -2.f, 0.f));
 
-    view = glm::mat4(1.f);
-    view = glm::translate(view, glm::vec3(0.f, 0.f, -8.f));
-    
-
-    perspective = glm::perspective(glm::radians(90.f), float(windowX) / windowY, 0.1f, 100.f);
-    
+    camera.moveForward(-8);
 }
 
 void updateTransform(float deltaTime) {
@@ -60,10 +55,10 @@ void updateUniform(GLuint program) {
     glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(model));
 
     vMatLoc = glGetUniformLocation(program, "v_matrix");
-    glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
 
     pMatLoc = glGetUniformLocation(program, "proj_matrix");
-    glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(perspective));
+    glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
     
     //glProgramUniform4fv(program, vMatLoc, 1, glm::value_ptr(camera.getView()));
     //glProgramUniform4fv(program, pMatLoc, 1, glm::value_ptr(camera.getPerspective()));
