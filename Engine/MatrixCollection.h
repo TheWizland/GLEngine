@@ -6,9 +6,9 @@
 class MatrixCollection
 {
 private:
-	glm::mat4 localTranslation;
-	glm::mat4 localRotation;
-	glm::mat4 localScale;
+	glm::mat4 localTranslation = glm::mat4(1.f);
+	glm::mat4 localRotation = glm::mat4(1.f);;
+	glm::mat4 localScale = glm::mat4(1.f);;
 	glm::mat4 worldTranslation;
 	glm::mat4 worldRotation;
 	glm::mat4 worldScale;
