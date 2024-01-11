@@ -2,6 +2,7 @@
 #include <GLM/mat4x4.hpp>
 #include <vector>
 
+//Node Graph Data
 class MatrixCollection
 {
 private:
@@ -12,7 +13,7 @@ private:
 	glm::mat4 worldRotation;
 	glm::mat4 worldScale;
 	glm::mat4 model;
-	MatrixCollection *parentMatrix;
+	MatrixCollection *parentMatrix = NULL;
 	std::vector<MatrixCollection*> children;
 	
 	void updateModel();

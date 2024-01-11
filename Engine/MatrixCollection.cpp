@@ -2,6 +2,7 @@
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/matrix_inverse.hpp>
 #include <algorithm>
+#include <vector>
 
 void MatrixCollection::updateModel()
 {
@@ -9,7 +10,10 @@ void MatrixCollection::updateModel()
 	worldRotation = glm::mat4(1.f);
 	worldScale = glm::mat4(1.f);
 	glm::vec4 location = glm::vec4(0.f, 0.f, 0.f, 1.f);
-	location *= localTranslation;
+	location = localTranslation * location;
+	//Do not use *=, ordering of matrix operations is important.
+	//a *= b will do a * b, when we want b * a
+	//You will get compiler vomit if you try *= here
 
 	if (parentMatrix) 
 	{
@@ -17,28 +21,28 @@ void MatrixCollection::updateModel()
 		{
 			if (applyParentRotationToPosition) 
 			{
-				location *= parentMatrix->getWorldRotation();
+				location = parentMatrix->getWorldRotation() * location;
 			}
 			if (applyParentScaleToPosition) 
 			{
-				location *= parentMatrix->getWorldScale();
+				location = parentMatrix->getWorldScale() * location;
 			}
-			location *= parentMatrix->getWorldTranslation();
+			location = parentMatrix->getWorldTranslation() * location;
 		}
 
 		if (inheritRotation) 
 		{
-			worldRotation *= parentMatrix->getWorldRotation();
+			worldRotation = parentMatrix->getWorldRotation() * worldRotation;
 		}
 		if (inheritScale) 
 		{
-			worldScale *= parentMatrix->getWorldScale();
+			worldScale = parentMatrix->getWorldScale() * worldScale;
 		}
 	}
-	
+
 	worldTranslation = glm::translate(worldTranslation, glm::vec3(location));
-	worldRotation *= localRotation;
-	worldScale *= localScale;
+	worldRotation = localRotation * worldRotation;
+	worldScale = localScale * worldScale;
 
 	for (MatrixCollection* child : children) {
 		child->updateModel();
@@ -60,7 +64,7 @@ void MatrixCollection::addChild(MatrixCollection* childMatrix)
 
 void MatrixCollection::removeChild(MatrixCollection* childMatrix)
 {
-	std::remove(children.begin(), children.end(), childMatrix);
+	children.erase(std::remove(children.begin(), children.end(), childMatrix));
 }
 
 glm::mat4 MatrixCollection::getModel()
