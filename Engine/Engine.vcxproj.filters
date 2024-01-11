@@ -30,6 +30,12 @@
     <ClInclude Include="MatrixCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp">
@@ -42,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixCollection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

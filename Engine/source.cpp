@@ -12,37 +12,30 @@
 
 #include "shaderloader.h"
 #include "Camera.h"
+#include "ModelData.h"
+#include "ObjectData.h"
 #include <iostream>
 
 GLuint vao[1];
 const int numVBO = 2;
+int maxUnusedVBO = 0;
 GLuint vbo[numVBO];
 GLuint renderingProgram;
 int windowX = 900;
 int windowY = 900;
 Camera camera = Camera(90.f, float(windowX)/windowY);
 const char* windowTitle = "Hello World";
-glm::mat4 model;
-
-
-float cube[] = { -1.0f,  1.0f, -1.0f,        -1.0f, -1.0f, -1.0f,        1.0f, -1.0f, -1.0f, //Back-Bottom
-            1.0f, -1.0f, -1.0f,         1.0f,  1.0f, -1.0f,         -1.0f,  1.0f, -1.0f, //Back-Top
-            1.0f, -1.0f, -1.0f,         1.0f, -1.0f,  1.0f,         1.0f,  1.0f, -1.0f, //Right-Bottom
-            1.0f, -1.0f,  1.0f,         1.0f,  1.0f,  1.0f,         1.0f,  1.0f, -1.0f, //Right-Top
-            1.0f, -1.0f,  1.0f,         -1.0f, -1.0f,  1.0f,        1.0f,  1.0f,  1.0f, //Front-Bottom
-            -1.0f, -1.0f,  1.0f,        -1.0f,  1.0f,  1.0f,        1.0f,  1.0f,  1.0f, //Front-Top
-            -1.0f, -1.0f,  1.0f,        -1.0f, -1.0f, -1.0f,        -1.0f,  1.0f,  1.0f, //Left-Bottom
-            -1.0f, -1.0f, -1.0f,        -1.0f,  1.0f, -1.0f,        -1.0f,  1.0f,  1.0f, //Left-Top
-            -1.0f, -1.0f,  1.0f,        1.0f, -1.0f,  1.0f,         1.0f, -1.0f, -1.0f, //Bottom
-            1.0f, -1.0f, -1.0f,         -1.0f, -1.0f, -1.0f,        -1.0f, -1.0f,  1.0f, //Bottom
-            -1.0f,  1.0f, -1.0f,        1.0f,  1.0f, -1.0f,         1.0f,  1.0f,  1.0f, //Top
-            1.0f,  1.0f,  1.0f,         -1.0f,  1.0f,  1.0f,        -1.0f,  1.0f, -1.0f //Top
-};
+ObjectData cube;
 
 void init() {
-    model = glm::mat4(1.f);
-    model = glm::translate(model, glm::vec3(0.f, -2.f, 0.f));
+    glGenVertexArrays(1, vao);
+    glBindVertexArray(vao[0]);
+    glGenBuffers(numVBO, vbo);
 
+    cube.loadModel(ModelData::getCube(), vbo[maxUnusedVBO]);
+    maxUnusedVBO++;
+
+    cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(0.f, -2.f, 0.f)));
     camera.moveForward(-8);
 }
 
@@ -52,7 +45,8 @@ void updateTransform(float deltaTime) {
 void updateUniform(GLuint program) {
     GLuint mMatLoc, vMatLoc, pMatLoc;
     mMatLoc = glGetUniformLocation(program, "m_matrix");
-    glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(cube.matrices.getModel()));
+    //glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(model));
 
     vMatLoc = glGetUniformLocation(program, "v_matrix");
     glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
@@ -113,13 +107,6 @@ int main(void)
     renderingProgram = createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
     
     //VAO
-    glGenVertexArrays(1, vao);
-    glBindVertexArray(vao[0]);
-    glGenBuffers(numVBO, vbo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
-
     init();
     
     float prevTime = glfwGetTime();

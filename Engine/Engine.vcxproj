@@ -147,13 +147,17 @@
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3native.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MatrixCollection.h" />
+    <ClInclude Include="ModelData.h" />
+    <ClInclude Include="ObjectData.h" />
     <ClInclude Include="shaderloader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="MatrixCollection.cpp" />
+    <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="shaderLoader.cpp" />
     <ClCompile Include="source.cpp" />
+    <ClCompile Include="ModelData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
