@@ -14,6 +14,8 @@
 #include "Camera.h"
 #include "ModelData.h"
 #include "ObjectData.h"
+#include "ModelLoader.h"
+
 #include <iostream>
 
 GLuint vao[1];
@@ -28,6 +30,10 @@ const char* windowTitle = "Hello World";
 ObjectData cube;
 
 void init() {
+    //FileLoader::ObjLoader objLoader;
+    //objLoader.loadObj("./assets/cube.obj");
+    //std::vector<float> cubeVList = objLoader.getVertices();
+
     glGenVertexArrays(1, vao);
     glBindVertexArray(vao[0]);
     glGenBuffers(numVBO, vbo);
@@ -104,7 +110,7 @@ int main(void)
 
     glfwSwapInterval(1);
 
-    renderingProgram = createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
+    renderingProgram = FileLoader::createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
     
     //VAO
     init();
@@ -113,7 +119,6 @@ int main(void)
     float curTime = prevTime;
     float deltaTime = 0;
 
-    //std::cout << glm::to_string(camera.getPerspective()) << std::endl;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {

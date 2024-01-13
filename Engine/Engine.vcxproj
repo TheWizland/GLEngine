@@ -148,12 +148,14 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MatrixCollection.h" />
     <ClInclude Include="ModelData.h" />
+    <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjectData.h" />
-    <ClInclude Include="shaderloader.h" />
+    <ClInclude Include="shaderLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="MatrixCollection.cpp" />
+    <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="shaderLoader.cpp" />
     <ClCompile Include="source.cpp" />
