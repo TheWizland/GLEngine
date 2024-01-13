@@ -23,6 +23,13 @@ std::vector<std::string> splitLine(std::string line, char delim) {
 }
 
 namespace FileLoader {
+	void ModelLoader::clearVals()
+	{
+		vertexList.clear();
+		texList.clear();
+		normalList.clear();
+	}
+
 	bool FileLoader::ObjLoader::loadObj(std::string filePath)
 	{
 		std::vector<glm::vec3> vertices;
@@ -37,7 +44,7 @@ namespace FileLoader {
 		glm::vec2 tex(0, 0);
 
 		if (!objFile.is_open())
-			return false;
+			throw("ifstream: " + filePath + " failed to load.");
 
 		while (std::getline(objFile, buffer)) {
 			if (buffer[0] == '#')
@@ -84,28 +91,6 @@ namespace FileLoader {
 		}
 
 		return true;
-	}
-
-	std::vector<float> ObjLoader::getVertices()
-	{
-		return vertexList;
-	}
-
-	std::vector<float> ObjLoader::getTexCoords()
-	{
-		return texList;
-	}
-
-	std::vector<float> ObjLoader::getNormals()
-	{
-		return normalList;
-	}
-
-	void ObjLoader::clearVals()
-	{
-		vertexList.clear();
-		texList.clear();
-		normalList.clear();
 	}
 }
 

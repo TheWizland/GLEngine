@@ -2,10 +2,14 @@
 //Basic models that can be defined by hand.
 #include <vector>
 #include <iostream>
-namespace ModelData {
-    std::vector<float> getCube() {
+#include "ModelData.h"
+
+
+namespace ModelGenerator {
+    void ModelGenerator::CubeGenerator::genCube()
+    {
         int vertexCount = 108;
-        std::vector<float> cubePtr = {
+        vertexList = {
                 -1.0f,  1.0f, -1.0f,        -1.0f, -1.0f, -1.0f,        1.0f, -1.0f, -1.0f, //Back-Bottom
                 1.0f, -1.0f, -1.0f,         1.0f,  1.0f, -1.0f,         -1.0f,  1.0f, -1.0f, //Back-Top
                 1.0f, -1.0f, -1.0f,         1.0f, -1.0f,  1.0f,         1.0f,  1.0f, -1.0f, //Right-Bottom
@@ -19,6 +23,19 @@ namespace ModelData {
                 -1.0f,  1.0f, -1.0f,        1.0f,  1.0f, -1.0f,         1.0f,  1.0f,  1.0f, //Top
                 1.0f,  1.0f,  1.0f,         -1.0f,  1.0f,  1.0f,        -1.0f,  1.0f, -1.0f //Top
         };
-        return cubePtr;
+        texList = {
+            0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f,
+            1.0f, 0.0f,     1.0f, 1.0f,     0.0f, 1.0f,
+            1.0f, 0.0f,     0.0f, 0.0f,     1.0f, 1.0f,
+            0.0f, 0.0f,     0.0f, 1.0f,     1.0f, 1.0f,
+            1.0f, 0.0f,     0.0f, 0.0f,     1.0f, 1.0f,
+            0.0f, 0.0f,     0.0f, 1.0f,     1.0f, 1.0f,
+            1.0f, 0.0f,     0.0f, 0.0f,     1.0f, 1.0f,
+            0.0f, 0.0f,     0.0f, 1.0f,     1.0f, 1.0f,
+            0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f,
+            1.0f, 0.0f,     1.0f, 1.0f,     0.0f, 1.0f,
+            0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f,
+            1.0f, 0.0f,     1.0f, 1.0f,     0.0f, 1.0f
+        };
     }
 }

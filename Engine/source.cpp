@@ -10,16 +10,17 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-#include "shaderloader.h"
+#include "Loaders/shaderLoader.h"
+#include "Loaders/ModelData.h"
+#include "Loaders/ModelLoader.h"
 #include "Camera.h"
-#include "ModelData.h"
 #include "ObjectData.h"
-#include "ModelLoader.h"
+
 
 #include <iostream>
 
 GLuint vao[1];
-const int numVBO = 2;
+const int numVBO = 3;
 int maxUnusedVBO = 0;
 GLuint vbo[numVBO];
 GLuint renderingProgram;
@@ -30,16 +31,19 @@ const char* windowTitle = "Hello World";
 ObjectData cube;
 
 void init() {
-    //FileLoader::ObjLoader objLoader;
-    //objLoader.loadObj("./assets/cube.obj");
-    //std::vector<float> cubeVList = objLoader.getVertices();
+    FileLoader::ObjLoader objLoader;
+    objLoader.loadObj("./assets/cube.obj");
+
+    ModelGenerator::CubeGenerator cubeLoader;
+    cubeLoader.genCube();
 
     glGenVertexArrays(1, vao);
     glBindVertexArray(vao[0]);
     glGenBuffers(numVBO, vbo);
 
-    cube.loadModel(ModelData::getCube(), vbo[maxUnusedVBO]);
-    maxUnusedVBO++;
+    cube.loadModel(cubeLoader, vbo[maxUnusedVBO], vbo[maxUnusedVBO+1]);
+    maxUnusedVBO += 2;
+    cube.setTexture("./assets/Textures/sand.jpg");
 
     cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(0.f, -2.f, 0.f)));
     camera.moveForward(-8);
@@ -52,7 +56,6 @@ void updateUniform(GLuint program) {
     GLuint mMatLoc, vMatLoc, pMatLoc;
     mMatLoc = glGetUniformLocation(program, "m_matrix");
     glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(cube.matrices.getModel()));
-    //glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(model));
 
     vMatLoc = glGetUniformLocation(program, "v_matrix");
     glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
@@ -68,6 +71,15 @@ void display(GLFWwindow* window, double deltaTime) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, cube.textureID);
+
+    //glBindBuffer(GL_ARRAY_BUFFER, )
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
