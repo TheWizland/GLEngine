@@ -24,7 +24,7 @@ const int numVBO = 3;
 int maxUnusedVBO = 0;
 GLuint vbo[numVBO];
 GLuint renderingProgram;
-int windowX = 900;
+int windowX = 1200;
 int windowY = 900;
 const char* windowTitle = "Hello World";
 InputManager inputManager;
@@ -64,9 +64,6 @@ void updateUniform(GLuint program) {
 
     pMatLoc = glGetUniformLocation(program, "proj_matrix");
     glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
-    
-    //glProgramUniform4fv(program, vMatLoc, 1, glm::value_ptr(camera.getView()));
-    //glProgramUniform4fv(program, pMatLoc, 1, glm::value_ptr(camera.getPerspective()));
 }
 
 void display(GLFWwindow* window, double deltaTime) {
@@ -90,25 +87,24 @@ void display(GLFWwindow* window, double deltaTime) {
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     inputManager.key_callback(window, key, scancode, action, mods);
-    /*switch (key) {
-    case GLFW_KEY_ESCAPE:
-        glfwSetWindowShouldClose(window, 1);
-    case GLFW_KEY_LEFT:
-        camera.moveRight(-1);
-    case GLFW_KEY_RIGHT:
-        camera.moveRight(deltaTime);
-    }*/
-    
 }
 
 void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_ESCAPE, [window](float deltaTime) -> void { glfwSetWindowShouldClose(window, 1); });
-    inputManager.addAction(GLFW_KEY_A, [](float deltaTime) -> void { camera.moveRight(-deltaTime); });
-    inputManager.addAction(GLFW_KEY_D, [](float deltaTime) -> void { camera.moveRight(deltaTime); });
-    inputManager.addAction(GLFW_KEY_W, [](float deltaTime) -> void { camera.moveForward(deltaTime); });
-    inputManager.addAction(GLFW_KEY_S, [](float deltaTime) -> void { camera.moveForward(-deltaTime); });
+
+    float camSpeed = 1;
+    inputManager.addAction(GLFW_KEY_A, [camSpeed](float deltaTime) -> void { camera.moveRight(-deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_D, [camSpeed](float deltaTime) -> void { camera.moveRight(deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_W, [camSpeed](float deltaTime) -> void { camera.moveForward(deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_S, [camSpeed](float deltaTime) -> void { camera.moveForward(-deltaTime * camSpeed); });
     inputManager.addAction(GLFW_KEY_Q, [](float deltaTime) -> void { camera.moveUp(deltaTime); });
     inputManager.addAction(GLFW_KEY_E, [](float deltaTime) -> void { camera.moveUp(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_RIGHT, [](float deltaTime) -> void { camera.globalYaw(deltaTime); });
+    inputManager.addAction(GLFW_KEY_LEFT, [](float deltaTime) -> void { camera.globalYaw(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_UP, [](float deltaTime) -> void { camera.pitch(deltaTime); });
+    inputManager.addAction(GLFW_KEY_DOWN, [](float deltaTime) -> void { camera.pitch(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_Z, [](float deltaTime) -> void { camera.roll(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_C, [](float deltaTime) -> void { camera.roll(deltaTime); });
     glfwSetKeyCallback(window, key_callback);
 }
 

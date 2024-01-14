@@ -9,12 +9,15 @@ private:
 	float fovMin = 30;
 	float fov;
 	float aspectRatio;
+	float curPitch = 0;
 public:
 	Camera();
 	Camera(float fieldOfView, float aspectRatio);
 	void addFoV(float deltaFoV);
 	void yaw(float distance);
 	void globalYaw(float distance);
+	void pitch(float distance);
+	void roll(float distance);
 	void moveForward(float distance);
 	void moveRight(float distance);
 	void moveUp(float distance);

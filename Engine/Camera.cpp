@@ -55,10 +55,28 @@ void Camera::globalYaw(float distance)
 	V = glm::rotateY(V, -distance);
 }
 
+void Camera::pitch(float distance)
+{
+	if (curPitch + distance > M_PI / 2) {
+		distance = M_PI / 2 - curPitch;
+	}
+	else if (curPitch + distance < -M_PI / 2) {
+		distance = (float)(-curPitch - M_PI / 2);
+	}
+	curPitch += distance;
+	N = glm::rotate(N, distance, U);
+	V = glm::rotate(V, distance, U);
+}
+
+void Camera::roll(float distance)
+{
+	U = glm::rotate(U, distance, N);
+	V = glm::rotate(V, distance, N);
+}
+
 void Camera::moveForward(float distance)
 {
-	//vec3 movement = N * distance;
-	location += N*distance;
+	location += N * distance;
 }
 
 void Camera::moveRight(float distance)
