@@ -18,9 +18,9 @@ void InputHandler::handleInput(float deltaTime)
 
 void InputManager::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	auto iter = inputMap.find(key);
+	std::map<int,InputHandler*>::iterator iter = inputMap.find(key);
 	if (iter == inputMap.end()) {
-		return;	
+		return;
 	}
 	if (action == GLFW_PRESS) {
 		iter->second->activate();

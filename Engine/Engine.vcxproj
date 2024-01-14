@@ -153,6 +153,7 @@
     <ClInclude Include="Loaders\ModelLoader.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Loaders\shaderLoader.h" />
+    <ClInclude Include="VBOManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Loaders\shaderLoader.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="Loaders\ModelData.cpp" />
+    <ClCompile Include="VBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />

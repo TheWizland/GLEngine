@@ -16,13 +16,12 @@
 #include "Camera.h"
 #include "ObjectData.h"
 #include "InputHandler/InputHandler.h"
+#include "VBOManager.h"
 
 #include <iostream>
 
 GLuint vao[1];
-const int numVBO = 3;
-int maxUnusedVBO = 0;
-GLuint vbo[numVBO];
+VBOManager vboGenerator; //Needs to be constructed
 GLuint renderingProgram;
 int windowX = 1200;
 int windowY = 900;
@@ -33,18 +32,13 @@ ObjectData cube;
 float deltaTime = 0;
 
 void init() {
+    vboGenerator.init(2);
+
     FileLoader::ObjLoader objLoader;
     objLoader.loadObj("./assets/cube.obj");
 
-    ModelGenerator::CubeGenerator cubeLoader;
-    cubeLoader.genCube();
-
-    glGenVertexArrays(1, vao);
-    glBindVertexArray(vao[0]);
-    glGenBuffers(numVBO, vbo);
-
-    cube.loadModel(cubeLoader, vbo[maxUnusedVBO], vbo[maxUnusedVBO+1]);
-    maxUnusedVBO += 2;
+    
+    cube.loadModel(objLoader, vboGenerator);
     cube.setTexture("./assets/Textures/sand.jpg");
 
     cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(0.f, -2.f, 0.f)));
@@ -67,11 +61,11 @@ void updateUniform(GLuint program) {
 }
 
 void display(GLFWwindow* window, double deltaTime) {
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, cube.vboVertex);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, cube.vboTex);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
@@ -92,13 +86,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_ESCAPE, [window](float deltaTime) -> void { glfwSetWindowShouldClose(window, 1); });
 
-    float camSpeed = 1;
+    float camSpeed = 1.5;
     inputManager.addAction(GLFW_KEY_A, [camSpeed](float deltaTime) -> void { camera.moveRight(-deltaTime * camSpeed); });
     inputManager.addAction(GLFW_KEY_D, [camSpeed](float deltaTime) -> void { camera.moveRight(deltaTime * camSpeed); });
     inputManager.addAction(GLFW_KEY_W, [camSpeed](float deltaTime) -> void { camera.moveForward(deltaTime * camSpeed); });
     inputManager.addAction(GLFW_KEY_S, [camSpeed](float deltaTime) -> void { camera.moveForward(-deltaTime * camSpeed); });
-    inputManager.addAction(GLFW_KEY_Q, [](float deltaTime) -> void { camera.moveUp(deltaTime); });
-    inputManager.addAction(GLFW_KEY_E, [](float deltaTime) -> void { camera.moveUp(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_Q, [camSpeed](float deltaTime) -> void { camera.moveUp(deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_E, [camSpeed](float deltaTime) -> void { camera.moveUp(-deltaTime * camSpeed); });
     inputManager.addAction(GLFW_KEY_RIGHT, [](float deltaTime) -> void { camera.globalYaw(deltaTime); });
     inputManager.addAction(GLFW_KEY_LEFT, [](float deltaTime) -> void { camera.globalYaw(-deltaTime); });
     inputManager.addAction(GLFW_KEY_UP, [](float deltaTime) -> void { camera.pitch(deltaTime); });
