@@ -15,7 +15,7 @@
 #include "Loaders/ModelLoader.h"
 #include "Camera.h"
 #include "ObjectData.h"
-
+#include "InputHandler/InputHandler.h"
 
 #include <iostream>
 
@@ -26,9 +26,11 @@ GLuint vbo[numVBO];
 GLuint renderingProgram;
 int windowX = 900;
 int windowY = 900;
-Camera camera = Camera(90.f, float(windowX)/windowY);
 const char* windowTitle = "Hello World";
+InputManager inputManager;
+Camera camera = Camera(90.f, float(windowX) / windowY);
 ObjectData cube;
+float deltaTime = 0;
 
 void init() {
     FileLoader::ObjLoader objLoader;
@@ -87,12 +89,26 @@ void display(GLFWwindow* window, double deltaTime) {
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE) {
+    inputManager.key_callback(window, key, scancode, action, mods);
+    /*switch (key) {
+    case GLFW_KEY_ESCAPE:
         glfwSetWindowShouldClose(window, 1);
-    }
+    case GLFW_KEY_LEFT:
+        camera.moveRight(-1);
+    case GLFW_KEY_RIGHT:
+        camera.moveRight(deltaTime);
+    }*/
+    
 }
 
 void initCallbacks(GLFWwindow* window) {
+    inputManager.addAction(GLFW_KEY_ESCAPE, [window](float deltaTime) -> void { glfwSetWindowShouldClose(window, 1); });
+    inputManager.addAction(GLFW_KEY_A, [](float deltaTime) -> void { camera.moveRight(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_D, [](float deltaTime) -> void { camera.moveRight(deltaTime); });
+    inputManager.addAction(GLFW_KEY_W, [](float deltaTime) -> void { camera.moveForward(deltaTime); });
+    inputManager.addAction(GLFW_KEY_S, [](float deltaTime) -> void { camera.moveForward(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_Q, [](float deltaTime) -> void { camera.moveUp(deltaTime); });
+    inputManager.addAction(GLFW_KEY_E, [](float deltaTime) -> void { camera.moveUp(-deltaTime); });
     glfwSetKeyCallback(window, key_callback);
 }
 
@@ -129,7 +145,7 @@ int main(void)
     
     float prevTime = glfwGetTime();
     float curTime = prevTime;
-    float deltaTime = 0;
+    deltaTime = 0;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -150,6 +166,7 @@ int main(void)
 
         /* Poll for and process events */
         glfwPollEvents();
+        inputManager.checkInputs(deltaTime);
     }
 
     glfwDestroyWindow(window);

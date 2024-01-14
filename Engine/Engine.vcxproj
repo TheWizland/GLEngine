@@ -146,6 +146,7 @@
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3.h" />
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3native.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="InputHandler\InputHandler.h" />
     <ClInclude Include="Loaders\textureLoader.h" />
     <ClInclude Include="MatrixCollection.h" />
     <ClInclude Include="Loaders\ModelData.h" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="InputHandler\InputHandler.cpp" />
     <ClCompile Include="Loaders\textureLoader.cpp" />
     <ClCompile Include="MatrixCollection.cpp" />
     <ClCompile Include="Loaders\ModelLoader.cpp" />
