@@ -22,36 +22,41 @@
 
 GLuint vao[1];
 VBOManager vboGenerator; //Needs to be constructed
-GLuint renderingProgram;
+GLuint textureProgram;
 int windowX = 1200;
 int windowY = 900;
 const char* windowTitle = "Hello World";
 InputManager inputManager;
 Camera camera = Camera(90.f, float(windowX) / windowY);
-ObjectData cube;
+ObjectData cube, sphere;
 float deltaTime = 0;
 
 void init() {
-    vboGenerator.init(2);
+    textureProgram = FileLoader::createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
+    vboGenerator.init(8);
 
     FileLoader::ObjLoader objLoader;
     objLoader.loadObj("./assets/cube.obj");
-
-    
-    cube.loadModel(objLoader, vboGenerator);
+    cube.loadModel(objLoader, &vboGenerator);
     cube.setTexture("./assets/Textures/sand.jpg");
-
     cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(0.f, -2.f, 0.f)));
+    
+    ModelGenerator::SphereGenerator sphereGen;
+    sphereGen.genSphere(9);
+    sphere.loadModel(sphereGen, &vboGenerator);
+    sphere.setTexture("./assets/Textures/sand.jpg");
+    sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(2.f, -2.f, 0.f)));
+    
     camera.moveForward(-8);
 }
 
 void updateTransform(float deltaTime) {
 }
 
-void updateUniform(GLuint program) {
+void updateUniform(GLuint program, ObjectData object) {
     GLuint mMatLoc, vMatLoc, pMatLoc;
     mMatLoc = glGetUniformLocation(program, "m_matrix");
-    glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(cube.matrices.getModel()));
+    glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(object.matrices.getModel()));
 
     vMatLoc = glGetUniformLocation(program, "v_matrix");
     glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
@@ -60,23 +65,28 @@ void updateUniform(GLuint program) {
     glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
 }
 
-void display(GLFWwindow* window, double deltaTime) {
-    glBindBuffer(GL_ARRAY_BUFFER, cube.vboVertex);
+void renderObject(GLuint program, ObjectData object) {
+    updateUniform(program, object);
+
+    glBindBuffer(GL_ARRAY_BUFFER, object.vboVertex);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, cube.vboTex);
+    glBindBuffer(GL_ARRAY_BUFFER, object.vboTex);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, cube.textureID);
-
-    //glBindBuffer(GL_ARRAY_BUFFER, )
+    glBindTexture(GL_TEXTURE_2D, object.textureID);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLES, 0, object.vertexCount);
+}
+
+void display(GLFWwindow* window, double deltaTime) {
+    renderObject(textureProgram, cube);
+    renderObject(textureProgram, sphere);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -127,10 +137,7 @@ int main(void)
         exit(EXIT_FAILURE);
 
     glfwSwapInterval(1);
-
-    renderingProgram = FileLoader::createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
     
-    //VAO
     init();
     
     float prevTime = glfwGetTime();
@@ -144,11 +151,11 @@ int main(void)
         prevTime = curTime;
         curTime = glfwGetTime();
 
-        glUseProgram(renderingProgram);
+        glUseProgram(textureProgram);
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);
+
         updateTransform(deltaTime);
-        updateUniform(renderingProgram);
         display(window, deltaTime);
 
         /* Swap front and back buffers */
