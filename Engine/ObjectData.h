@@ -14,8 +14,9 @@ public:
 	GLuint vboTex;
 	GLuint vboNormal;
 	GLuint textureID;
+	int vertexCount;
 
-	void loadModel(FileLoader::ModelLoader modelData, VBOManager vboHandler);
+	void loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler);
 	void setTexture(std::string path);
 };
 
