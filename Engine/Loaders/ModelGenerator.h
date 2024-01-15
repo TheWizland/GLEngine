@@ -10,6 +10,8 @@ namespace ModelGenerator {
 
     class SphereGenerator : public FileLoader::ModelLoader {
     public:
+        SphereGenerator() {}
+        SphereGenerator(int precision) { genSphere(precision); }
         void genSphere(int precision);
     };
 }

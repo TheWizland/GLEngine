@@ -18,6 +18,8 @@ namespace FileLoader {
 	class ObjLoader : public ModelLoader {
 	private:
 	public:
+		ObjLoader() {}
+		ObjLoader(std::string filePath) { loadObj(filePath); }
 		bool loadObj(std::string filePath);
 	};
 }
