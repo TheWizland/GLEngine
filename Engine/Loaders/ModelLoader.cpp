@@ -54,17 +54,17 @@ namespace FileLoader {
 				point = glm::vec3(std::stof(temp[1]), std::stof(temp[2]), std::stof(temp[3]));
 				vertices.push_back(point);
 			}
-			if (buffer.rfind("vt ", 0) == 0) {
+			else if (buffer.rfind("vt ", 0) == 0) {
 				temp = splitLine(buffer, ' ');
 				tex = glm::vec2(std::stof(temp[1]), std::stof(temp[2]));
 				textures.push_back(tex);
 			}
-			if (buffer.rfind("vn ", 0) == 0) {
+			else if (buffer.rfind("vn ", 0) == 0) {
 				temp = splitLine(buffer, ' ');
 				point = glm::vec3(std::stof(temp[1]), std::stof(temp[2]), std::stof(temp[3]));
 				normals.push_back(point);
 			}
-			if (buffer.rfind("f ", 0) == 0) {
+			else if (buffer.rfind("f ", 0) == 0) {
 				temp = splitLine(buffer, ' ');
 				//Should split into 4.
 				std::vector<std::string> triangles;

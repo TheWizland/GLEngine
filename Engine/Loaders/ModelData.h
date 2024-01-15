@@ -7,4 +7,9 @@ namespace ModelGenerator {
     public:
         void genCube();
     };
+
+    class SphereGenerator : public FileLoader::ModelLoader {
+    public:
+        void genSphere(int precision);
+    };
 }
