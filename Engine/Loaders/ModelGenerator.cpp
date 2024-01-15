@@ -2,7 +2,7 @@
 //Basic models that can be defined by hand.
 #include <vector>
 #include <iostream>
-#include "ModelData.h"
+#include "ModelGenerator.h"
 #include <GLM/vec3.hpp>
 #include <GLM/vec2.hpp>
 #include <GLM/geometric.hpp>

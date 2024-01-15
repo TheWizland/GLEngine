@@ -33,7 +33,7 @@
     <ClInclude Include="ObjectData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Loaders\ModelData.h">
+    <ClInclude Include="Loaders\ModelGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Loaders\ModelLoader.h">
@@ -65,7 +65,7 @@
     <ClCompile Include="ObjectData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Loaders\ModelData.cpp">
+    <ClCompile Include="Loaders\ModelGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Loaders\ModelLoader.cpp">

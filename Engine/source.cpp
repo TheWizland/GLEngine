@@ -11,7 +11,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "Loaders/shaderLoader.h"
-#include "Loaders/ModelData.h"
+#include "Loaders/ModelGenerator.h"
 #include "Loaders/ModelLoader.h"
 #include "Camera.h"
 #include "ObjectData.h"

@@ -149,7 +149,7 @@
     <ClInclude Include="InputHandler\InputHandler.h" />
     <ClInclude Include="Loaders\textureLoader.h" />
     <ClInclude Include="MatrixCollection.h" />
-    <ClInclude Include="Loaders\ModelData.h" />
+    <ClInclude Include="Loaders\ModelGenerator.h" />
     <ClInclude Include="Loaders\ModelLoader.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Loaders\shaderLoader.h" />
@@ -164,7 +164,7 @@
     <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="Loaders\shaderLoader.cpp" />
     <ClCompile Include="source.cpp" />
-    <ClCompile Include="Loaders\ModelData.cpp" />
+    <ClCompile Include="Loaders\ModelGenerator.cpp" />
     <ClCompile Include="VBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
