@@ -30,27 +30,39 @@ int windowY = 900;
 const char* windowTitle = "Hello World";
 InputManager inputManager;
 Camera camera = Camera(90.f, float(windowX) / windowY);
-ObjectData cube, sphere, skybox;
+ObjectData skybox;
+std::vector<ObjectData> objectList;
 Light positionalLight;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
 
 void init() {
-    textureProgram = FileLoader::createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
+    textureProgram = FileLoader::createShaderProgram("shaders/textureV.glsl", "shaders/textureF.glsl");
     skyboxProgram = FileLoader::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
     vboGenerator.init(8);
 
     FileLoader::ObjLoader objLoader("./assets/Models/cube.obj");
+    ObjectData cube;
     cube.loadModel(objLoader, &vboGenerator);
     cube.setTexture("./assets/Textures/sand.jpg");
     cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(1.f, 0.f, 0.f)));
+    objectList.push_back(cube);
     
     ModelGenerator::SphereGenerator sphereGen;
+    ObjectData sphere;
     sphereGen.genSphere(24);
     sphere.loadModel(sphereGen, &vboGenerator);
     sphere.setTexture("./assets/Textures/rock.jpg");
     sphere.matrices.setParent(&cube.matrices);
     sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(4.f, 0.f, 0.f)));
+    objectList.push_back(sphere);
+
+    ObjectData sphere2;
+    sphere2.copyVBO(sphere);
+    sphere2.textureID = sphere.textureID;
+    sphere2.matrices.setParent(&cube.matrices);
+    sphere2.matrices.setLocalTranslation(glm::translate(sphere2.matrices.getLocalTranslation(), glm::vec3(12.f, 0.f, 0.f)));
+    objectList.push_back(sphere2);
     
     skybox.copyVBO(cube);
     skybox.textureID = FileLoader::genCubeMap("./assets/Skybox/milkyway/");
@@ -81,6 +93,16 @@ void updateLight(GLuint program, Light light) {
 
     positionLoc = glGetUniformLocation(program, "light.position");
     glUniform3fv(positionLoc, 1, glm::value_ptr(light.position));
+
+    GLuint constAttLoc, linearAttLoc, quadAttLoc;
+    constAttLoc = glGetUniformLocation(program, "light.constantAttenuation");
+    glUniform1f(constAttLoc, light.constantAttenuation);
+
+    linearAttLoc = glGetUniformLocation(program, "light.linearAttenuation");
+    glUniform1f(linearAttLoc, light.linearAttenuation);
+
+    quadAttLoc = glGetUniformLocation(program, "light.quadraticAttenuation");
+    glUniform1f(quadAttLoc, light.quadraticAttenuation);
 }
 
 void updateUniform(GLuint program, ObjectData object) {
@@ -172,8 +194,9 @@ void display(GLFWwindow* window, double deltaTime) {
 
     glUseProgram(textureProgram);
     updateLight(textureProgram, positionalLight);
-    renderObject(textureProgram, cube);
-    renderObject(textureProgram, sphere);
+    for (ObjectData object : objectList) {
+        renderObject(textureProgram, object);
+    }
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {

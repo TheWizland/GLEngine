@@ -13,6 +13,9 @@ struct Light {
 	vec4 diffuse;
 	vec4 specular;
 	vec3 position;
+	float constantAttenuation;
+    float linearAttenuation;
+    float quadraticAttenuation;
 };
 struct Material {
 	vec4 ambient;

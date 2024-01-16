@@ -11,6 +11,9 @@ public:
 	glm::vec4 diffuse;
 	glm::vec4 specular;
 	glm::vec3 position;
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
 	Light();
 };
 

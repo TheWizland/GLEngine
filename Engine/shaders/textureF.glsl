@@ -11,6 +11,9 @@ struct Light {
 	vec4 diffuse;
 	vec4 specular;
 	vec3 position;
+	float constantAttenuation;
+    float linearAttenuation;
+    float quadraticAttenuation;
 };
 struct Material {
 	vec4 ambient;
@@ -26,7 +29,7 @@ uniform mat4 v_matrix;
 uniform mat4 proj_matrix;
 uniform vec4 globalAmbient;
 
-vec3 lightDirection, L, N, V, H, R;
+vec3 L, N, V, R;
 vec4 ambient, diffuse, specular;
 vec3 halfVector;
 float cosTheta, cosPhi;
@@ -34,28 +37,23 @@ float dist, attenuationFactor, intensity;
 vec4 texColor;
 
 void main(void) {
-	lightDirection = light.position - varyingVertexPosition;
-	L = normalize(lightDirection);
+	L = normalize(light.position - varyingVertexPosition);
 	N = normalize(varyingNormal);
 	V = normalize(-v_matrix[3].xyz - varyingVertexPosition);
 
 	cosTheta = dot(L,N);
+	halfVector = normalize(L + V);
+    cosPhi = dot(halfVector,N);
 
-	//This method creates specular highlights that do not move with the camera angle.
-	//halfVector = normalize(L + normalize(-varyingVertexPosition)).xyz;
-    //H = normalize(halfVector);
-    //cosPhi = dot(H,N);
-
-	//Specular highlights do follow camera angle.
-	//However, this produces highlights on the opposite side of the object if cosTheta is not checked.
-	//Also results in some graphical oddities.
-	R = normalize(reflect(-L, N));
-	cosPhi = cosTheta > 0 ? dot(V,R) : 0.0;
+	dist = distance(varyingVertexPosition, light.position);
+	attenuationFactor = 1.0 / (light.constantAttenuation + light.linearAttenuation*dist + light.quadraticAttenuation*dist*dist);
 
 	ambient = (globalAmbient + light.ambient * material.ambient);
-	diffuse = (light.diffuse * material.diffuse * max(cosTheta,0.0));
-	specular = (light.specular * material.specular * pow(max(cosPhi,0.0), material.shininess*3.0));
+	diffuse = (light.diffuse * material.diffuse * max(cosTheta,0.0))*attenuationFactor;
+	specular = (light.specular * material.specular * pow(max(cosPhi,0.0), material.shininess))*attenuationFactor;
 
     texColor = texture(samp, textureCoordinate);
-    color = texColor * (ambient + diffuse) + specular;
+	color = texColor * (ambient + diffuse + specular);
+	//Alternatively:
+    //color = texColor * (ambient + diffuse) + specular;
 }
