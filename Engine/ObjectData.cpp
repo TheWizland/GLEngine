@@ -6,12 +6,10 @@
 void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler)
 {
 	std::vector<float> vertexList = modelData.getVertices();
-	std::vector<float> texList = modelData.getTexCoords();
-
-	vboVertex = vboHandler->setupVBO(vertexList);
-	vboTex = vboHandler->setupVBO(texList);
 	vertexCount = vertexList.size();
-	//vboNormal = vboHandler.setupVBO(normalList);
+	vboVertex = vboHandler->setupVBO(vertexList);
+	vboTex = vboHandler->setupVBO(modelData.getTexCoords());
+	vboNormal = vboHandler->setupVBO(modelData.getNormals());
 }
 
 void ObjectData::setTexture(std::string path)

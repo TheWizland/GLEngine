@@ -41,35 +41,47 @@ void init() {
     FileLoader::ObjLoader objLoader("./assets/Models/cube.obj");
     cube.loadModel(objLoader, &vboGenerator);
     cube.setTexture("./assets/Textures/sand.jpg");
-    cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(0.f, -2.f, 0.f)));
+    cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(1.f, 0.f, 0.f)));
     
     ModelGenerator::SphereGenerator sphereGen;
-    sphereGen.genSphere(9);
+    sphereGen.genSphere(24);
     sphere.loadModel(sphereGen, &vboGenerator);
     sphere.setTexture("./assets/Textures/rock.jpg");
     sphere.matrices.setParent(&cube.matrices);
-    sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(2.f, 0.f, 0.f)));
+    sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(4.f, 0.f, 0.f)));
     
     camera.moveForward(-8);
+
+    Light::globalAmbient = glm::vec4(0.3f, 0.3f, 0.3f, 1);
+    positionalLight.position = glm::vec3(0, 2, 0);
 }
 
 void updateTransform(float deltaTime) {
 }
 
 void updateLight(GLuint program, Light light) {
-    GLuint globalAmbientLoc, ambientLoc, diffuseLoc, specularLoc;
+    GLuint globalAmbientLoc, ambientLoc, diffuseLoc, specularLoc, positionLoc;
 
     globalAmbientLoc = glGetUniformLocation(program, "globalAmbient");
     glUniform4fv(globalAmbientLoc, 1, glm::value_ptr(Light::globalAmbient));
 
     ambientLoc = glGetUniformLocation(program, "light.ambient");
     glUniform4fv(ambientLoc, 1, glm::value_ptr(light.ambient));
+
+    diffuseLoc = glGetUniformLocation(program, "light.diffuse");
+    glUniform4fv(diffuseLoc, 1, glm::value_ptr(light.diffuse));
+
+    specularLoc = glGetUniformLocation(program, "light.specular");
+    glUniform4fv(specularLoc, 1, glm::value_ptr(light.specular));
+
+    positionLoc = glGetUniformLocation(program, "light.position");
+    glUniform3fv(positionLoc, 1, glm::value_ptr(light.position));
 }
 
 void updateUniform(GLuint program, ObjectData object) {
     //Model and Camera Matrices
     { 
-        GLuint mMatLoc, vMatLoc, pMatLoc;
+        GLuint mMatLoc, vMatLoc, pMatLoc, nLoc;
         mMatLoc = glGetUniformLocation(program, "m_matrix");
         glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(object.matrices.getModel()));
 
@@ -78,13 +90,25 @@ void updateUniform(GLuint program, ObjectData object) {
 
         pMatLoc = glGetUniformLocation(program, "proj_matrix");
         glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
+
+        nLoc = glGetUniformLocation(program, "norm_matrix");
+        glUniformMatrix4fv(nLoc, 1, GL_FALSE, glm::value_ptr(object.matrices.getInverseTranspose()));
     }
 
     //Material
     {
-        GLuint matAmbientLoc, matDiffuseLoc, matSpecularLoc;
+        GLuint matAmbientLoc, matDiffuseLoc, matSpecularLoc, shininessLoc;
         matAmbientLoc = glGetUniformLocation(program, "material.ambient");
         glUniform4fv(matAmbientLoc, 1, glm::value_ptr(object.material.ambient));
+
+        matDiffuseLoc = glGetUniformLocation(program, "material.diffuse");
+        glUniform4fv(matDiffuseLoc, 1, glm::value_ptr(object.material.diffuse));
+
+        matSpecularLoc = glGetUniformLocation(program, "material.specular");
+        glUniform4fv(matSpecularLoc, 1, glm::value_ptr(object.material.specular));
+
+        shininessLoc = glGetUniformLocation(program, "material.shininess");
+        glUniform1f(shininessLoc, object.material.shininess);
     }
 }
 
@@ -98,6 +122,10 @@ void renderObject(GLuint program, ObjectData object) {
     glBindBuffer(GL_ARRAY_BUFFER, object.vboTex);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, object.vboNormal);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(2);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, object.textureID);
