@@ -13,6 +13,7 @@
 #include "Loaders/shaderLoader.h"
 #include "Loaders/ModelGenerator.h"
 #include "Loaders/ModelLoader.h"
+#include "Loaders/textureLoader.h"
 #include "Camera.h"
 #include "ObjectData.h"
 #include "InputHandler/InputHandler.h"
@@ -23,19 +24,20 @@
 
 GLuint vao[1];
 VBOManager vboGenerator; //Needs to be constructed
-GLuint textureProgram;
+GLuint textureProgram, skyboxProgram;
 int windowX = 1200;
 int windowY = 900;
 const char* windowTitle = "Hello World";
 InputManager inputManager;
 Camera camera = Camera(90.f, float(windowX) / windowY);
-ObjectData cube, sphere;
+ObjectData cube, sphere, skybox;
 Light positionalLight;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
 
 void init() {
     textureProgram = FileLoader::createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
+    skyboxProgram = FileLoader::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
     vboGenerator.init(8);
 
     FileLoader::ObjLoader objLoader("./assets/Models/cube.obj");
@@ -50,6 +52,9 @@ void init() {
     sphere.matrices.setParent(&cube.matrices);
     sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(4.f, 0.f, 0.f)));
     
+    skybox.copyVBO(cube);
+    skybox.textureID = FileLoader::genCubeMap("./assets/Skybox/milkyway/");
+
     camera.moveForward(-8);
 
     Light::globalAmbient = glm::vec4(0.3f, 0.3f, 0.3f, 1);
@@ -136,7 +141,36 @@ void renderObject(GLuint program, ObjectData object) {
     glDrawArrays(GL_TRIANGLES, 0, object.vertexCount);
 }
 
+void renderSkybox(GLuint program) {
+    GLuint vMatLoc, pMatLoc;
+    vMatLoc = glGetUniformLocation(program, "v_matrix");
+    glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
+
+    pMatLoc = glGetUniformLocation(program, "proj_matrix");
+    glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
+
+    glBindBuffer(GL_ARRAY_BUFFER, skybox.vboVertex);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.textureID);
+
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glDisable(GL_DEPTH_TEST);
+
+    glDrawArrays(GL_TRIANGLES, 0, skybox.vertexCount);
+
+    glFrontFace(GL_CCW);
+    glEnable(GL_DEPTH_TEST);
+}
+
 void display(GLFWwindow* window, double deltaTime) {
+    glUseProgram(skyboxProgram);
+    renderSkybox(skyboxProgram);
+
+    glUseProgram(textureProgram);
     updateLight(textureProgram, positionalLight);
     renderObject(textureProgram, cube);
     renderObject(textureProgram, sphere);
@@ -205,8 +239,7 @@ int main(void)
         deltaTime = curTime - prevTime;
         prevTime = curTime;
         curTime = glfwGetTime();
-
-        glUseProgram(textureProgram);
+  
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);
 

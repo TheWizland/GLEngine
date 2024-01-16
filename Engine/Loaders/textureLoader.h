@@ -4,4 +4,5 @@
 
 namespace FileLoader {
 	GLuint genTexture(std::string path);
+	GLuint genCubeMap(std::string path);
 }
