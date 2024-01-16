@@ -16,3 +16,11 @@ void ObjectData::setTexture(std::string path)
 {
 	textureID = FileLoader::genTexture(path);
 }
+
+void ObjectData::copyVBO(ObjectData object)
+{
+	vboVertex = object.vboVertex;
+	vboTex = object.vboTex;
+	vboNormal = object.vboNormal;
+	vertexCount = object.vertexCount;
+}
