@@ -4,6 +4,7 @@
 #include <GL\glew.h>
 #include <vector>
 #include "VBOManager.h"
+#include "Material.h"
 
 //Stores data about an individual object.
 class ObjectData
@@ -15,6 +16,7 @@ public:
 	GLuint vboNormal;
 	GLuint textureID;
 	int vertexCount;
+	Material material;
 
 	void loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler);
 	void setTexture(std::string path);

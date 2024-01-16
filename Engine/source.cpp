@@ -17,6 +17,7 @@
 #include "ObjectData.h"
 #include "InputHandler/InputHandler.h"
 #include "VBOManager.h"
+#include "Light.h"
 
 #include <iostream>
 
@@ -29,14 +30,15 @@ const char* windowTitle = "Hello World";
 InputManager inputManager;
 Camera camera = Camera(90.f, float(windowX) / windowY);
 ObjectData cube, sphere;
+Light positionalLight;
 float deltaTime = 0;
+glm::vec4 globalAmbient = glm::vec4();
 
 void init() {
     textureProgram = FileLoader::createShaderProgram("shaders/vshader.glsl", "shaders/fshader.glsl");
     vboGenerator.init(8);
 
-    FileLoader::ObjLoader objLoader;
-    objLoader.loadObj("./assets/cube.obj");
+    FileLoader::ObjLoader objLoader("./assets/Models/cube.obj");
     cube.loadModel(objLoader, &vboGenerator);
     cube.setTexture("./assets/Textures/sand.jpg");
     cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(0.f, -2.f, 0.f)));
@@ -44,8 +46,9 @@ void init() {
     ModelGenerator::SphereGenerator sphereGen;
     sphereGen.genSphere(9);
     sphere.loadModel(sphereGen, &vboGenerator);
-    sphere.setTexture("./assets/Textures/sand.jpg");
-    sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(2.f, -2.f, 0.f)));
+    sphere.setTexture("./assets/Textures/rock.jpg");
+    sphere.matrices.setParent(&cube.matrices);
+    sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(2.f, 0.f, 0.f)));
     
     camera.moveForward(-8);
 }
@@ -53,16 +56,36 @@ void init() {
 void updateTransform(float deltaTime) {
 }
 
+void updateLight(GLuint program, Light light) {
+    GLuint globalAmbientLoc, ambientLoc, diffuseLoc, specularLoc;
+
+    globalAmbientLoc = glGetUniformLocation(program, "globalAmbient");
+    glUniform4fv(globalAmbientLoc, 1, glm::value_ptr(Light::globalAmbient));
+
+    ambientLoc = glGetUniformLocation(program, "light.ambient");
+    glUniform4fv(ambientLoc, 1, glm::value_ptr(light.ambient));
+}
+
 void updateUniform(GLuint program, ObjectData object) {
-    GLuint mMatLoc, vMatLoc, pMatLoc;
-    mMatLoc = glGetUniformLocation(program, "m_matrix");
-    glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(object.matrices.getModel()));
+    //Model and Camera Matrices
+    { 
+        GLuint mMatLoc, vMatLoc, pMatLoc;
+        mMatLoc = glGetUniformLocation(program, "m_matrix");
+        glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(object.matrices.getModel()));
 
-    vMatLoc = glGetUniformLocation(program, "v_matrix");
-    glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
+        vMatLoc = glGetUniformLocation(program, "v_matrix");
+        glUniformMatrix4fv(vMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
 
-    pMatLoc = glGetUniformLocation(program, "proj_matrix");
-    glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
+        pMatLoc = glGetUniformLocation(program, "proj_matrix");
+        glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
+    }
+
+    //Material
+    {
+        GLuint matAmbientLoc, matDiffuseLoc, matSpecularLoc;
+        matAmbientLoc = glGetUniformLocation(program, "material.ambient");
+        glUniform4fv(matAmbientLoc, 1, glm::value_ptr(object.material.ambient));
+    }
 }
 
 void renderObject(GLuint program, ObjectData object) {
@@ -79,12 +102,14 @@ void renderObject(GLuint program, ObjectData object) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, object.textureID);
 
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glDrawArrays(GL_TRIANGLES, 0, object.vertexCount);
 }
 
 void display(GLFWwindow* window, double deltaTime) {
+    updateLight(textureProgram, positionalLight);
     renderObject(textureProgram, cube);
     renderObject(textureProgram, sphere);
 }
@@ -109,6 +134,8 @@ void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_DOWN, [](float deltaTime) -> void { camera.pitch(-deltaTime); });
     inputManager.addAction(GLFW_KEY_Z, [](float deltaTime) -> void { camera.roll(-deltaTime); });
     inputManager.addAction(GLFW_KEY_C, [](float deltaTime) -> void { camera.roll(deltaTime); });
+    inputManager.addAction(GLFW_KEY_EQUAL, [](float deltaTime) -> void { Light::globalAmbient += deltaTime; });
+    inputManager.addAction(GLFW_KEY_MINUS, [](float deltaTime) -> void { Light::globalAmbient -= deltaTime; });
     glfwSetKeyCallback(window, key_callback);
 }
 
