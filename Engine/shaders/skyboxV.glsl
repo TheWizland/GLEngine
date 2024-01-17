@@ -9,7 +9,7 @@ layout(binding = 0) uniform samplerCube samp;
 
 void main(void)
 {
-    tc = position;
+    tc = vec3(position.x, position.y, -position.z);
     mat4 v3_matrix = mat4(mat3(v_matrix));
     gl_Position = proj_matrix * v3_matrix * vec4(position, 1.0);
 }
