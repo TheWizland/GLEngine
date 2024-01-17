@@ -155,6 +155,9 @@
     <ClInclude Include="Loaders\ModelLoader.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Loaders\shaderLoader.h" />
+    <ClInclude Include="Renderers\StandardRenderer.h" />
+    <ClInclude Include="Renderers\SkyboxRenderer.h" />
+    <ClInclude Include="SceneData.h" />
     <ClInclude Include="VBOManager.h" />
   </ItemGroup>
   <ItemGroup>
@@ -167,8 +170,11 @@
     <ClCompile Include="Loaders\ModelLoader.cpp" />
     <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="Loaders\shaderLoader.cpp" />
+    <ClCompile Include="Renderers\SkyboxRenderer.cpp" />
+    <ClCompile Include="SceneData.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="Loaders\ModelGenerator.cpp" />
+    <ClCompile Include="Renderers\StandardRenderer.cpp" />
     <ClCompile Include="VBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
