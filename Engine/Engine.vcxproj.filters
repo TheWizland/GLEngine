@@ -94,7 +94,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\vshader.glsl" />
+    <None Include="shaders\textureV.glsl" />
     <None Include="glew32.dll" />
   </ItemGroup>
 </Project>

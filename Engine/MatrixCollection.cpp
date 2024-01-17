@@ -95,3 +95,43 @@ void MatrixCollection::setLocalScale(glm::mat4 localScale)
 	this->localScale = localScale;
 	updateModel();
 }
+
+void MatrixCollection::translate(glm::vec3 distance)
+{
+	setLocalTranslation(glm::translate(localTranslation, distance));
+}
+
+void MatrixCollection::translate(float x, float y, float z)
+{
+	setLocalTranslation(glm::translate(localTranslation, glm::vec3(x, y, z)));
+}
+
+void MatrixCollection::rotate(float distance, glm::vec3 angle)
+{
+	setLocalRotation(glm::rotate(localRotation, distance, angle));
+}
+
+void MatrixCollection::rotateX(float distance)
+{
+	setLocalRotation(glm::rotate(localRotation, distance, glm::vec3(1, 0, 0)));
+}
+
+void MatrixCollection::rotateY(float distance)
+{
+	setLocalRotation(glm::rotate(localRotation, distance, glm::vec3(0, 1, 0)));
+}
+
+void MatrixCollection::rotateZ(float distance)
+{
+	setLocalRotation(glm::rotate(localRotation, distance, glm::vec3(0, 0, 1)));
+}
+
+void MatrixCollection::scale(float amount)
+{
+	setLocalScale(glm::scale(localScale, glm::vec3(amount, amount, amount)));
+}
+
+void MatrixCollection::scale(float x, float y, float z)
+{
+	setLocalScale(glm::scale(localScale, glm::vec3(x, y, z)));
+}

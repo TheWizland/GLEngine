@@ -173,7 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
-    <None Include="shaders\vshader.glsl" />
+    <None Include="shaders\textureV.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -39,14 +39,15 @@ glm::vec4 globalAmbient = glm::vec4();
 void init() {
     textureProgram = FileLoader::createShaderProgram("shaders/textureV.glsl", "shaders/textureF.glsl");
     skyboxProgram = FileLoader::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
-    vboGenerator.init(8);
+    vboGenerator.init(9);
 
     FileLoader::ObjLoader objLoader("./assets/Models/cube.obj");
     ObjectData cube;
     cube.loadModel(objLoader, &vboGenerator);
     cube.setTexture("./assets/Textures/sand.jpg");
-    cube.matrices.setLocalTranslation(glm::translate(cube.matrices.getLocalTranslation(), glm::vec3(1.f, 0.f, 0.f)));
+    cube.matrices.rotateY(M_PI / 4);
     objectList.push_back(cube);
+    
     
     ModelGenerator::SphereGenerator sphereGen;
     ObjectData sphere;
@@ -54,15 +55,26 @@ void init() {
     sphere.loadModel(sphereGen, &vboGenerator);
     sphere.setTexture("./assets/Textures/rock.jpg");
     sphere.matrices.setParent(&cube.matrices);
-    sphere.matrices.setLocalTranslation(glm::translate(sphere.matrices.getLocalTranslation(), glm::vec3(4.f, 0.f, 0.f)));
+    sphere.matrices.translate(4.f, 0.f, 0.f);
     objectList.push_back(sphere);
 
-    ObjectData sphere2;
-    sphere2.copyVBO(sphere);
-    sphere2.textureID = sphere.textureID;
-    sphere2.matrices.setParent(&cube.matrices);
-    sphere2.matrices.setLocalTranslation(glm::translate(sphere2.matrices.getLocalTranslation(), glm::vec3(12.f, 0.f, 0.f)));
-    objectList.push_back(sphere2);
+    ObjectData dolphin;
+    dolphin.copyVBO(sphere);
+    dolphin.loadModel(FileLoader::ObjLoader("./assets/Models/dolphinHighPoly.obj"), &vboGenerator);
+    dolphin.setTexture("./assets/Textures/Dolphin_HighPolyUV.png");
+    dolphin.matrices.setParent(&cube.matrices);
+    dolphin.matrices.translate(6.f, 0.f, 0.f);
+    dolphin.matrices.scale(1.75f);
+    dolphin.matrices.setApplyParentRotationToPosition(false);
+    objectList.push_back(dolphin);
+
+    ObjectData lightSourceModel;
+    lightSourceModel.copyVBO(sphere);
+    lightSourceModel.setTexture("./assets/Textures/sunmap.jpg");
+    lightSourceModel.matrices.translate(0, 2, 0);
+    lightSourceModel.matrices.scale(0.1f);
+    objectList.push_back(lightSourceModel);
+
     
     skybox.copyVBO(cube);
     skybox.textureID = FileLoader::genCubeMap("./assets/Skybox/milkyway/");
