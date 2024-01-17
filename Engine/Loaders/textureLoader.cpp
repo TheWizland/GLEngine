@@ -25,15 +25,15 @@ namespace FileLoader {
 		return textureID;
 	}
 
-	GLuint FileLoader::genCubeMap(std::string path)
+	GLuint FileLoader::genCubeMap(std::string path, std::string extension)
 	{
 		std::vector<std::string> files;
-		files.push_back(path + "xp.jpg"); //right
-		files.push_back(path + "xn.jpg"); //left
-		files.push_back(path + "yp.jpg"); //top
-		files.push_back(path + "yn.jpg"); //bottom
-		files.push_back(path + "zp.jpg"); //front
-		files.push_back(path + "zn.jpg"); //back
+		files.push_back(path + "xp" + extension); //right
+		files.push_back(path + "xn" + extension); //left
+		files.push_back(path + "yp" + extension); //top
+		files.push_back(path + "yn" + extension); //bottom
+		files.push_back(path + "zp" + extension); //front
+		files.push_back(path + "zn" + extension); //back
 
 		GLuint textureID;
 		glGenTextures(1, &textureID);

@@ -5,7 +5,7 @@
 #include <GLM/gtc/type_ptr.hpp>
 
 namespace Renderers {
-	void SkyboxRenderer::init(std::string skyboxPath, VBOManager vboGenerator)
+	void SkyboxRenderer::init(std::string skyboxPath, std::string imageExtension, VBOManager vboGenerator)
 	{
 		program = FileLoader::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
 		ModelGenerator::CubeGenerator cubeGen;
@@ -15,7 +15,7 @@ namespace Renderers {
 		vboVertex = vboGenerator.setupVBO(cubeVertices);
 		vboTexture = vboGenerator.setupVBO(cubeGen.getTexCoords());
 
-		textureID = FileLoader::genCubeMap("./assets/Skybox/milkyway/");
+		textureID = FileLoader::genCubeMap(skyboxPath, imageExtension);
 	}
 	void SkyboxRenderer::render(Camera camera)
 	{
