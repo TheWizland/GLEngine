@@ -30,8 +30,7 @@ namespace FileLoader {
 		glm::vec3 point(0, 0, 0);
 		glm::vec2 tex(0, 0);
 
-		if (!objFile.is_open())
-			throw("ifstream: " + filePath + " failed to load.");
+		assert(objFile.is_open());
 
 		while (std::getline(objFile, buffer)) {
 			std::stringstream iss(buffer);

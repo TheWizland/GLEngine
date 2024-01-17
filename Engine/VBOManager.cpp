@@ -1,4 +1,5 @@
 #include "VBOManager.h"
+#include <cassert>
 
 void VBOManager::init(int numVBO)
 {
@@ -12,8 +13,7 @@ void VBOManager::init(int numVBO)
 
 int VBOManager::setupVBO(std::vector<float> vals)
 {
-    if (maxUnusedVBO == numVBO)
-        throw std::exception("Insufficient VBOs available.");
+    assert(maxUnusedVBO < numVBO && "Insufficient VBO Available");
     glBindBuffer(GL_ARRAY_BUFFER, vbo[maxUnusedVBO]);
     glBufferData(GL_ARRAY_BUFFER, vals.size() * sizeof(float), &vals[0], GL_STATIC_DRAW);
     maxUnusedVBO++;

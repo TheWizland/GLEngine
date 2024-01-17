@@ -10,9 +10,8 @@ namespace FileLoader {
 	{
 		int width, height, channels;
 		unsigned char* img = stbi_load(path.c_str(), &width, &height, &channels, STBI_rgb_alpha);
-		if (img == NULL) {
-			throw("stbi_load: " + path + " failed to load.");
-		}
+		std::string fail = path + " failed to load.";
+		assert(("Image failed to load.", img != NULL));
 
 		GLuint textureID;
 		glGenTextures(1, &textureID);
@@ -43,9 +42,7 @@ namespace FileLoader {
 		for (int i = 0; i < files.size(); ++i) {
 			int width, height, channels;
 			unsigned char* img = stbi_load(files[i].c_str(), &width, &height, &channels, STBI_rgb);
-			if (img == NULL) {
-				throw("stbi_load: " + path + " failed to load.");
-			}
+			assert(img != NULL && "Image failed to load.");
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
 		}
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
