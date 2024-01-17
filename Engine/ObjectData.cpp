@@ -5,6 +5,8 @@
 
 void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler)
 {
+	assert(modelData.modelLoaded());
+		
 	std::vector<float> vertexList = modelData.getVertices();
 	vertexCount = vertexList.size();
 	vboVertex = vboHandler->setupVBO(vertexList);

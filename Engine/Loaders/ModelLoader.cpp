@@ -13,6 +13,7 @@ namespace FileLoader {
 		vertexList.clear();
 		texList.clear();
 		normalList.clear();
+		isLoaded = false;
 	}
 
 	bool FileLoader::ObjLoader::loadObj(std::string filePath)
@@ -76,7 +77,7 @@ namespace FileLoader {
 				}
 			}
 		}
-
+		isLoaded = true;
 		return true;
 	}
 }

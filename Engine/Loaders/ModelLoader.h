@@ -8,6 +8,7 @@ namespace FileLoader {
 		std::vector<float> vertexList;
 		std::vector<float> texList;
 		std::vector<float> normalList;
+		bool isLoaded = false;
 	public:
 		bool genTextures = true;
 		bool genNormals = true;
@@ -15,6 +16,7 @@ namespace FileLoader {
 		std::vector<float> getVertices() { return vertexList; }
 		std::vector<float> getTexCoords() {	return texList; }
 		std::vector<float> getNormals() { return normalList; }
+		bool modelLoaded() { return isLoaded; }
 		void clearVals();
 	};
 

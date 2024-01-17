@@ -5,6 +5,7 @@
 namespace ModelGenerator {
     class CubeGenerator : public FileLoader::ModelLoader {
     public:
+        CubeGenerator() { genCube(); }
         void genCube();
     };
 

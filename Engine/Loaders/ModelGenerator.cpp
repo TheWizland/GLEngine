@@ -42,6 +42,8 @@ namespace ModelGenerator {
             0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f,
             1.0f, 0.0f,     1.0f, 1.0f,     0.0f, 1.0f
         };
+
+        isLoaded = true;
     }
 
     void SphereGenerator::genSphere(int precision)
@@ -79,7 +81,7 @@ namespace ModelGenerator {
         for (int i = 0; i < precision; i++) {
             for (int j = 0; j < precision; j++) {
                 int index = 6 * (i * precision + j);
-                indices[index] = i * (precision + 1) + j;
+                indices[index] = i * (precision + 1) + j; //Buffer overrun? VS might be lying.
                 indices[index + 1] = i * (precision + 1) + j + 1;
                 indices[index + 2] = (i + 1) * (precision + 1) + j;
                 indices[index + 3] = i * (precision + 1) + j + 1;
@@ -88,7 +90,7 @@ namespace ModelGenerator {
             }
         }
 
-        vertexCount = numIndices * 3;
+        vertexCount = numIndices * 3; //forgot why I reassign vertexCount
         for (int i = 0; i < numIndices; i++) {
             vertexList.push_back(vertices.at(indices[i]).x);
             vertexList.push_back(vertices.at(indices[i]).y);
@@ -102,5 +104,7 @@ namespace ModelGenerator {
             tangentList.push_back(tangents.at(indices[i]).y());
             tangentList.push_back(tangents.at(indices[i]).z());*/
         }
+
+        isLoaded = true;
     }
 }
