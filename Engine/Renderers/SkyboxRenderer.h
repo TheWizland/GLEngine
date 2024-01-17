@@ -10,7 +10,7 @@ namespace Renderers {
 		GLuint program, vboVertex, vboTexture, textureID;
 		int vertexCount;
 	public:
-		void init(std::string skyboxPath, std::string extension, VBOManager vboGenerator);
+		void init(std::string skyboxName, std::string extension, VBOManager vboGenerator);
 		void render(Camera camera);
 	};
 }

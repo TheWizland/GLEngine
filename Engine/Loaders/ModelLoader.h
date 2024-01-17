@@ -24,7 +24,7 @@ namespace FileLoader {
 	private:
 	public:
 		ObjLoader() {}
-		ObjLoader(std::string filePath) { loadObj(filePath); }
-		bool loadObj(std::string filePath);
+		ObjLoader(std::string fileName) { loadObj(fileName); }
+		bool loadObj(std::string fileName);
 	};
 }

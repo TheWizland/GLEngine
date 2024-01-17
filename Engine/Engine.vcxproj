@@ -161,6 +161,7 @@
     <ClInclude Include="VBOManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssetPaths.h" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="InputHandler\InputHandler.cpp" />
     <ClCompile Include="Light.cpp" />

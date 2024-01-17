@@ -43,12 +43,12 @@ glm::vec4 globalAmbient = glm::vec4();
 void init() {
     vboGenerator.init(12);
     textureRenderer.init();
-    skyboxRenderer.init("./assets/Skybox/milkyway/", vboGenerator);
+    skyboxRenderer.init("milkyway", ".jpg", vboGenerator);
 
-    FileLoader::ObjLoader objLoader("./assets/Models/cube.obj");
+    FileLoader::ObjLoader objLoader("cube.obj");
     ObjectData cube;
     cube.loadModel(objLoader, &vboGenerator);
-    cube.setTexture("./assets/Textures/sand.jpg");
+    cube.setTexture("sand.jpg");
     cube.matrices.rotateY(M_PI / 4);
     objectList.push_back(cube);
     
@@ -57,15 +57,15 @@ void init() {
     ObjectData sphere;
     sphereGen.genSphere(24);
     sphere.loadModel(sphereGen, &vboGenerator);
-    sphere.setTexture("./assets/Textures/rock.jpg");
+    sphere.setTexture("rock.jpg");
     sphere.matrices.setParent(&cube.matrices);
     sphere.matrices.translate(4.f, 0.f, 0.f);
     objectList.push_back(sphere);
 
     ObjectData dolphin;
     dolphin.copyVBO(sphere);
-    dolphin.loadModel(FileLoader::ObjLoader("./assets/Models/dolphinHighPoly.obj"), &vboGenerator);
-    dolphin.setTexture("./assets/Textures/Dolphin_HighPolyUV.png");
+    dolphin.loadModel(FileLoader::ObjLoader("dolphinHighPoly.obj"), &vboGenerator);
+    dolphin.setTexture("Dolphin_HighPolyUV.png");
     dolphin.matrices.setParent(&cube.matrices);
     dolphin.matrices.translate(6.f, 0.f, 0.f);
     dolphin.matrices.scale(1.75f);
@@ -74,7 +74,7 @@ void init() {
 
     ObjectData lightSourceModel;
     lightSourceModel.copyVBO(sphere);
-    lightSourceModel.setTexture("./assets/Textures/sunmap.jpg");
+    lightSourceModel.setTexture("sunmap.jpg");
     lightSourceModel.matrices.translate(0, 2, 0);
     lightSourceModel.matrices.scale(0.1f);
     objectList.push_back(lightSourceModel);

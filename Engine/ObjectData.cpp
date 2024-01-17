@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Loaders/textureLoader.h"
+#include "./AssetPaths.h"
 
 void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler)
 {
@@ -14,9 +15,9 @@ void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHan
 	vboNormal = vboHandler->setupVBO(modelData.getNormals());
 }
 
-void ObjectData::setTexture(std::string path)
+void ObjectData::setTexture(std::string imageName)
 {
-	textureID = FileLoader::genTexture(path);
+	textureID = FileLoader::genTexture(texturePath + imageName);
 }
 
 void ObjectData::copyVBO(ObjectData object)

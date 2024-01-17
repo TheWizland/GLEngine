@@ -3,9 +3,10 @@
 #include "../Loaders/ModelGenerator.h"
 #include "../Loaders/textureLoader.h"
 #include <GLM/gtc/type_ptr.hpp>
+#include "../AssetPaths.h"
 
 namespace Renderers {
-	void SkyboxRenderer::init(std::string skyboxPath, std::string imageExtension, VBOManager vboGenerator)
+	void SkyboxRenderer::init(std::string skyboxName, std::string imageExtension, VBOManager vboGenerator)
 	{
 		program = FileLoader::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
 		ModelGenerator::CubeGenerator cubeGen;
@@ -15,7 +16,8 @@ namespace Renderers {
 		vboVertex = vboGenerator.setupVBO(cubeVertices);
 		vboTexture = vboGenerator.setupVBO(cubeGen.getTexCoords());
 
-		textureID = FileLoader::genCubeMap(skyboxPath, imageExtension);
+        std::string skyboxDir = skyboxPath + skyboxName + "/";
+		textureID = FileLoader::genCubeMap(skyboxDir, imageExtension);
 	}
 	void SkyboxRenderer::render(Camera camera)
 	{
