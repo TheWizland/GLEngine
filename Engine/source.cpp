@@ -21,6 +21,7 @@
 #include "Light.h"
 #include "Renderers/StandardRenderer.h"
 #include "Renderers/SkyboxRenderer.h"
+#include "SceneData.h"
 
 #include <iostream>
 
@@ -33,10 +34,11 @@ int windowX = 1200;
 int windowY = 900;
 const char* windowTitle = "Hello World";
 InputManager inputManager;
-Camera camera = Camera(90.f, float(windowX) / windowY);
+Camera* camera;
 ObjectData skybox;
 std::vector<ObjectData> objectList;
 Light positionalLight;
+SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
 
@@ -44,58 +46,48 @@ void init() {
     vboGenerator.init(12);
     textureRenderer.init();
     skyboxRenderer.init("milkyway", ".jpg", vboGenerator);
+    defaultScene.init();
 
+    ObjectData* cube = defaultScene.genObject();
     FileLoader::ObjLoader objLoader("cube.obj");
-    ObjectData cube;
-    cube.loadModel(objLoader, &vboGenerator);
-    cube.setTexture("sand.jpg");
-    cube.matrices.rotateY(M_PI / 4);
-    objectList.push_back(cube);
+    cube->loadModel(objLoader, &vboGenerator);
+    cube->setTexture("sand.jpg");
+    cube->matrices.rotateY(M_PI / 4);
     
-    
-    ModelGenerator::SphereGenerator sphereGen;
-    ObjectData sphere;
-    sphereGen.genSphere(24);
-    sphere.loadModel(sphereGen, &vboGenerator);
-    sphere.setTexture("rock.jpg");
-    sphere.matrices.setParent(&cube.matrices);
-    sphere.matrices.translate(4.f, 0.f, 0.f);
-    objectList.push_back(sphere);
+    ObjectData* sphere = defaultScene.genObject();
+    sphere->loadModel(ModelGenerator::SphereGenerator(24), &vboGenerator);
+    sphere->setTexture("rock.jpg");
+    sphere->matrices.setParent(&cube->matrices);
+    sphere->matrices.translate(4.f, 0.f, 0.f);
 
-    ObjectData dolphin;
-    dolphin.copyVBO(sphere);
-    dolphin.loadModel(FileLoader::ObjLoader("dolphinHighPoly.obj"), &vboGenerator);
-    dolphin.setTexture("Dolphin_HighPolyUV.png");
-    dolphin.matrices.setParent(&cube.matrices);
-    dolphin.matrices.translate(6.f, 0.f, 0.f);
-    dolphin.matrices.scale(1.75f);
-    dolphin.matrices.setApplyParentRotationToPosition(false);
-    objectList.push_back(dolphin);
+    ObjectData* dolphin = defaultScene.genObject();
+    dolphin->copyVBO(*sphere);
+    dolphin->loadModel(FileLoader::ObjLoader("dolphinHighPoly.obj"), &vboGenerator);
+    dolphin->setTexture("Dolphin_HighPolyUV.png");
+    dolphin->matrices.setParent(&cube->matrices);
+    dolphin->matrices.translate(6.f, 0.f, 0.f);
+    dolphin->matrices.scale(1.75f);
+    dolphin->matrices.setApplyParentRotationToPosition(false);
 
-    ObjectData lightSourceModel;
-    lightSourceModel.copyVBO(sphere);
-    lightSourceModel.setTexture("sunmap.jpg");
-    lightSourceModel.matrices.translate(0, 2, 0);
-    lightSourceModel.matrices.scale(0.1f);
-    objectList.push_back(lightSourceModel);
+    ObjectData* lightSourceModel = defaultScene.genObject();
+    lightSourceModel->copyVBO(*sphere);
+    lightSourceModel->setTexture("sunmap.jpg");
+    lightSourceModel->matrices.translate(0, 2, 0);
+    lightSourceModel->matrices.scale(0.1f);
 
     Light::globalAmbient = glm::vec4(0.3f, 0.3f, 0.3f, 1);
     positionalLight.position = glm::vec3(0, 2, 0);
-
-    camera.moveForward(-8);
+    
+    camera = defaultScene.newCamera(90.f, float(windowX) / windowY);
+    camera->moveForward(-8);
 }
 
 void updateTransform(float deltaTime) {
 }
 
 void display(GLFWwindow* window, double deltaTime) {
-    skyboxRenderer.render(camera);
-
-    textureRenderer.uniformCamera(camera);
-    textureRenderer.uniformLight(positionalLight);
-    for (ObjectData object : objectList) {
-        textureRenderer.render(object);
-    }
+    skyboxRenderer.render(*camera);
+    defaultScene.render(positionalLight);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -106,18 +98,18 @@ void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_ESCAPE, [window](float deltaTime) -> void { glfwSetWindowShouldClose(window, 1); });
 
     float camSpeed = 1.5;
-    inputManager.addAction(GLFW_KEY_A, [camSpeed](float deltaTime) -> void { camera.moveRight(-deltaTime * camSpeed); });
-    inputManager.addAction(GLFW_KEY_D, [camSpeed](float deltaTime) -> void { camera.moveRight(deltaTime * camSpeed); });
-    inputManager.addAction(GLFW_KEY_W, [camSpeed](float deltaTime) -> void { camera.moveForward(deltaTime * camSpeed); });
-    inputManager.addAction(GLFW_KEY_S, [camSpeed](float deltaTime) -> void { camera.moveForward(-deltaTime * camSpeed); });
-    inputManager.addAction(GLFW_KEY_Q, [camSpeed](float deltaTime) -> void { camera.moveUp(deltaTime * camSpeed); });
-    inputManager.addAction(GLFW_KEY_E, [camSpeed](float deltaTime) -> void { camera.moveUp(-deltaTime * camSpeed); });
-    inputManager.addAction(GLFW_KEY_RIGHT, [](float deltaTime) -> void { camera.globalYaw(deltaTime); });
-    inputManager.addAction(GLFW_KEY_LEFT, [](float deltaTime) -> void { camera.globalYaw(-deltaTime); });
-    inputManager.addAction(GLFW_KEY_UP, [](float deltaTime) -> void { camera.pitch(deltaTime); });
-    inputManager.addAction(GLFW_KEY_DOWN, [](float deltaTime) -> void { camera.pitch(-deltaTime); });
-    inputManager.addAction(GLFW_KEY_Z, [](float deltaTime) -> void { camera.roll(-deltaTime); });
-    inputManager.addAction(GLFW_KEY_C, [](float deltaTime) -> void { camera.roll(deltaTime); });
+    inputManager.addAction(GLFW_KEY_A, [camSpeed](float deltaTime) -> void { camera->moveRight(-deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_D, [camSpeed](float deltaTime) -> void { camera->moveRight(deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_W, [camSpeed](float deltaTime) -> void { camera->moveForward(deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_S, [camSpeed](float deltaTime) -> void { camera->moveForward(-deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_Q, [camSpeed](float deltaTime) -> void { camera->moveUp(deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_E, [camSpeed](float deltaTime) -> void { camera->moveUp(-deltaTime * camSpeed); });
+    inputManager.addAction(GLFW_KEY_RIGHT, [](float deltaTime) -> void { camera->globalYaw(deltaTime); });
+    inputManager.addAction(GLFW_KEY_LEFT, [](float deltaTime) -> void { camera->globalYaw(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_UP, [](float deltaTime) -> void { camera->pitch(deltaTime); });
+    inputManager.addAction(GLFW_KEY_DOWN, [](float deltaTime) -> void { camera->pitch(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_Z, [](float deltaTime) -> void { camera->roll(-deltaTime); });
+    inputManager.addAction(GLFW_KEY_C, [](float deltaTime) -> void { camera->roll(deltaTime); });
     inputManager.addAction(GLFW_KEY_EQUAL, [](float deltaTime) -> void { Light::globalAmbient += deltaTime; });
     inputManager.addAction(GLFW_KEY_MINUS, [](float deltaTime) -> void { Light::globalAmbient -= deltaTime; });
     glfwSetKeyCallback(window, key_callback);
