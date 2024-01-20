@@ -146,6 +146,7 @@
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3.h" />
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3native.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="InputHandler\CameraMouse.h" />
     <ClInclude Include="InputHandler\InputHandler.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Loaders\textureLoader.h" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="AssetPaths.h" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="InputHandler\CameraMouse.cpp" />
     <ClCompile Include="InputHandler\InputHandler.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Loaders\textureLoader.cpp" />

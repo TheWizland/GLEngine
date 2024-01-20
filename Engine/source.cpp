@@ -24,6 +24,7 @@
 #include "SceneData.h"
 
 #include <iostream>
+#include "InputHandler/CameraMouse.h"
 
 
 GLuint vao[1];
@@ -41,6 +42,7 @@ Light positionalLight;
 SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
+CameraMouse cameraHandler;
 
 void init() {
     vboGenerator.init(12);
@@ -61,7 +63,6 @@ void init() {
     sphere->matrices.translate(4.f, 0.f, 0.f);
 
     ObjectData* dolphin = defaultScene.genObject();
-    dolphin->copyVBO(*sphere);
     dolphin->loadModel(FileLoader::ObjLoader("dolphinHighPoly.obj"), &vboGenerator);
     dolphin->setTexture("Dolphin_HighPolyUV.png");
     dolphin->matrices.setParent(&cube->matrices);
@@ -77,6 +78,7 @@ void init() {
 
     Light::globalAmbient = glm::vec4(0.3f, 0.3f, 0.3f, 1);
     positionalLight.position = glm::vec3(0, 2, 0);
+    
     
     camera = defaultScene.newCamera(90.f, float(windowX) / windowY);
     camera->moveForward(-8);
@@ -97,7 +99,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_ESCAPE, [window](float deltaTime) -> void { glfwSetWindowShouldClose(window, 1); });
 
-    float camSpeed = 1.5;
+    float camSpeed = 2.5;
     inputManager.addAction(GLFW_KEY_A, [camSpeed](float deltaTime) -> void { camera->moveRight(-deltaTime * camSpeed); });
     inputManager.addAction(GLFW_KEY_D, [camSpeed](float deltaTime) -> void { camera->moveRight(deltaTime * camSpeed); });
     inputManager.addAction(GLFW_KEY_W, [camSpeed](float deltaTime) -> void { camera->moveForward(deltaTime * camSpeed); });
@@ -142,6 +144,7 @@ int main(void)
     glfwSwapInterval(1);
     
     init();
+    cameraHandler.init(window, camera);
     
     float prevTime = glfwGetTime();
     float curTime = prevTime;
@@ -158,6 +161,7 @@ int main(void)
         glClear(GL_DEPTH_BUFFER_BIT);
 
         updateTransform(deltaTime);
+        cameraHandler.checkMouse(window);
         display(window, deltaTime);
 
         /* Swap front and back buffers */
