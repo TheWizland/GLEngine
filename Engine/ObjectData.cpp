@@ -7,7 +7,7 @@
 void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler)
 {
 	assert(modelData.modelLoaded());
-		
+	
 	std::vector<float> vertexList = modelData.getVertices();
 	vertexCount = vertexList.size();
 	vboVertex = vboHandler->setupVBO(vertexList);
@@ -18,6 +18,11 @@ void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHan
 void ObjectData::setTexture(std::string imageName)
 {
 	textureID = FileLoader::genTexture(texturePath + imageName);
+}
+
+void ObjectData::setTexture(GLuint textureID)
+{
+	this->textureID = textureID;
 }
 
 void ObjectData::copyVBO(ObjectData object)
