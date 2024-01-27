@@ -37,15 +37,15 @@ const char* windowTitle = "Hello World";
 InputManager inputManager;
 Camera* camera;
 ObjectData skybox;
-std::vector<ObjectData> objectList;
 Light positionalLight;
 SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
 CameraMouse cameraHandler;
+ObjectData* cube;
 
 void init() {
-    vboGenerator.init(12);
+    vboGenerator.init(15);
     textureRenderer.init();
     skyboxRenderer.init("milkyway", ".jpg", vboGenerator);
     defaultScene.init();
@@ -54,7 +54,17 @@ void init() {
     FileLoader::ObjLoader objLoader("cube.obj");
     cube->loadModel(objLoader, &vboGenerator);
     cube->setTexture("sand.jpg");
+    cube->matrices.translate(0, 3, 0);
     cube->matrices.rotateY(M_PI / 4);
+
+    ObjectData* terrain = defaultScene.genObject();
+    objLoader.applyTiling(5);
+    terrain->loadModel(objLoader, &vboGenerator);
+    terrain->setTexture("sand.jpg");
+    terrain->matrices.translate(0, -4, 0);
+    terrain->matrices.scale(10, 1, 10);
+    terrain->material.shininess = 10;
+    terrain->material.specular = glm::vec4(0.1, 0.1, 0.1, 1);
     
     ObjectData* sphere = defaultScene.genObject();
     sphere->loadModel(ModelGenerator::SphereGenerator(24), &vboGenerator);
@@ -69,6 +79,9 @@ void init() {
     dolphin->matrices.translate(6.f, 0.f, 0.f);
     dolphin->matrices.scale(1.75f);
     dolphin->matrices.setApplyParentRotationToPosition(false);
+
+    defaultScene.deleteObject(cube);
+    dolphin->matrices.translate(0.f, -1.f, 0.f);
 
     ObjectData* lightSourceModel = defaultScene.genObject();
     lightSourceModel->copyVBO(*sphere);

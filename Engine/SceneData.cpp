@@ -1,4 +1,5 @@
 #include "SceneData.h"
+#include <algorithm>
 
 void SceneData::init()
 {
@@ -22,6 +23,12 @@ ObjectData* SceneData::genObject()
 	return renderList.back().get();
 }
 
+void SceneData::deleteObject(ObjectData* object)
+{
+	renderList.erase(std::remove_if(renderList.begin(), renderList.end(), 
+		[object](std::unique_ptr<ObjectData> const& objectPtr) { return objectPtr.get() == object; }));
+}
+
 void SceneData::render(Light light)
 {
 	standardRenderer.uniformCamera(*camera.get());
@@ -29,5 +36,4 @@ void SceneData::render(Light light)
 	for (auto const& object : renderList) {
 		standardRenderer.render(*object);
 	}
-	//standardRenderer.render(renderList);
 }

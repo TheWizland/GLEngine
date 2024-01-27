@@ -24,6 +24,7 @@ public:
 	Camera* getCamera();
 	/* Adds an object to the scene and returns a non-owned pointer. */
 	ObjectData* genObject();
+	void deleteObject(ObjectData* object);
 	void render(Light light);
 	
 };
