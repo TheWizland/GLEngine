@@ -7,8 +7,14 @@
 #include <GLM/vec2.hpp>
 #include <sstream>
 #include "../AssetPaths.h"
+#include <algorithm>
 
 namespace FileLoader {
+	void ModelLoader::applyTiling(float tiling)
+	{
+		std::for_each(texList.begin(), texList.end(), [tiling](float& coord) -> void { coord *= tiling; });
+	}
+
 	void ModelLoader::clearVals()
 	{
 		vertexList.clear();

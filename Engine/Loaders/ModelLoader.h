@@ -13,6 +13,9 @@ namespace FileLoader {
 		bool genTextures = true;
 		bool genNormals = true;
 		//bool genTangents = false;
+		/* Apply tiling to an already loaded set of texture coordinates. 
+		   Does nothing if no texture coordinates have been loaded. */
+		void applyTiling(float tiling);
 		std::vector<float> getVertices() { return vertexList; }
 		std::vector<float> getTexCoords() {	return texList; }
 		std::vector<float> getNormals() { return normalList; }
