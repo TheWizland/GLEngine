@@ -57,6 +57,15 @@ void MatrixCollection::setParent(MatrixCollection* newParent)
 	parentMatrix->addChild(this);
 }
 
+void MatrixCollection::removeParent()
+{
+	//updateModel();
+	localTranslation = worldTranslation;
+	localScale = worldScale;
+	localRotation = worldRotation;
+	parentMatrix = nullptr;
+}
+
 void MatrixCollection::addChild(MatrixCollection* childMatrix)
 {
 	children.push_back(childMatrix);
@@ -134,4 +143,15 @@ void MatrixCollection::scale(float amount)
 void MatrixCollection::scale(float x, float y, float z)
 {
 	setLocalScale(glm::scale(localScale, glm::vec3(x, y, z)));
+}
+
+MatrixCollection::~MatrixCollection()
+{
+	if (parentMatrix) {
+		parentMatrix->removeChild(this);
+	}
+	for (MatrixCollection* child : children) {
+		child->removeParent();
+	}
+	children.clear();
 }
