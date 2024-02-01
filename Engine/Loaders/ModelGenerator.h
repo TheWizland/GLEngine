@@ -15,4 +15,10 @@ namespace ModelGenerator {
         SphereGenerator(int precision) { genSphere(precision); }
         void genSphere(int precision);
     };
+
+    class TileGenerator : public FileLoader::ModelLoader {
+    public:
+        TileGenerator() { genTile(); }
+        void genTile();
+    };
 }

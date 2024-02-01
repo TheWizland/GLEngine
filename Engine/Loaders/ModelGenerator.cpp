@@ -13,7 +13,6 @@
 namespace ModelGenerator {
     void ModelGenerator::CubeGenerator::genCube()
     {
-        int vertexCount = 108;
         vertexList = {
                 -1.0f,  1.0f, -1.0f,        -1.0f, -1.0f, -1.0f,        1.0f, -1.0f, -1.0f, //Back-Bottom
                 1.0f, -1.0f, -1.0f,         1.0f,  1.0f, -1.0f,         -1.0f,  1.0f, -1.0f, //Back-Top
@@ -48,7 +47,6 @@ namespace ModelGenerator {
 
     void SphereGenerator::genSphere(int precision)
     {
-        int vertexCount = (precision + 1) * (precision + 1);
         std::vector<glm::vec3> vertices;
         std::vector<glm::vec2> texCoords;
         std::vector<glm::vec3> normals;
@@ -90,7 +88,6 @@ namespace ModelGenerator {
             }
         }
 
-        vertexCount = numIndices * 3; //forgot why I reassign vertexCount
         for (int i = 0; i < numIndices; i++) {
             vertexList.push_back(vertices.at(indices[i]).x);
             vertexList.push_back(vertices.at(indices[i]).y);
@@ -104,6 +101,35 @@ namespace ModelGenerator {
             tangentList.push_back(tangents.at(indices[i]).y());
             tangentList.push_back(tangents.at(indices[i]).z());*/
         }
+
+        isLoaded = true;
+    }
+    void TileGenerator::genTile()
+    {
+        vertexList = {
+            -1.0f, 0.0f, -1.0f,
+            1.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, -1.0f,
+            -1.0f, 0.0f, -1.0f,
+            -1.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 1.0f
+        };
+        texList = {
+            0.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f
+        };
+        normalList = {
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f
+        };
 
         isLoaded = true;
     }
