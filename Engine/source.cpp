@@ -88,7 +88,7 @@ void init() {
     lightSourceModel->matrices.translate(0, 2, 0);
     lightSourceModel->matrices.scale(0.1f);
 
-    Light::globalAmbient = glm::vec4(0.3f, 0.3f, 0.3f, 1);
+    Light::globalAmbient = glm::vec4(0.0f, 0.0f, 0.0f, 1);
     positionalLight.position = glm::vec3(0, 2, 0);
     
     
@@ -101,7 +101,12 @@ void updateTransform(float deltaTime) {
 
 void display(GLFWwindow* window, double deltaTime) {
     skyboxRenderer.render(*camera);
-    defaultScene.render(positionalLight);
+
+    textureRenderer.uniformCamera(*defaultScene.getCamera());
+    textureRenderer.uniformLight(positionalLight);
+    for (auto const& object : defaultScene.getObjectList()) {
+        textureRenderer.render(*object);
+    }
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {

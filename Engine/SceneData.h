@@ -11,7 +11,7 @@ private:
 	Renderers::StandardRenderer standardRenderer;
 	std::vector<std::unique_ptr<ObjectData>> renderList;
 	std::unique_ptr<Camera> camera;
-
+	std::unique_ptr<ObjectData> skybox;
 public:
 	void init();
 	
@@ -25,7 +25,7 @@ public:
 	/* Adds an object to the scene and returns a non-owned pointer. */
 	ObjectData* genObject();
 	void deleteObject(ObjectData* object);
-	void render(Light light);
-	
+	ObjectData* genSkybox(std::string name, std::string extension, VBOManager vboGenerator);
+	std::vector<std::unique_ptr<ObjectData>> const& getObjectList() const;
 };
 
