@@ -4,7 +4,7 @@
 #include "Loaders/textureLoader.h"
 #include "./AssetPaths.h"
 
-void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler)
+void ObjectData::loadModel(Models::ModelLoader modelData, VBOManager* vboHandler)
 {
 	assert(modelData.modelLoaded());
 	
@@ -17,7 +17,7 @@ void ObjectData::loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHan
 
 void ObjectData::setTexture(std::string imageName)
 {
-	textureID = FileLoader::genTexture(texturePath + imageName);
+	textureID = Models::genTexture(texturePath + imageName);
 }
 
 void ObjectData::setTexture(GLuint textureID)

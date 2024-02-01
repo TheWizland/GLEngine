@@ -5,7 +5,7 @@
 
 using namespace std;
 
-namespace FileLoader {
+namespace Models {
     //Most of this file is from Computer Graphics Programming in OpenGL with C++ by V. Scott Gordon and John Clevenger
     string readFile(const char* path) {
         string content;

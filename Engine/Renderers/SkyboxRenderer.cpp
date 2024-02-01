@@ -8,8 +8,8 @@
 namespace Renderers {
 	void SkyboxRenderer::init(std::string skyboxName, std::string imageExtension, VBOManager vboGenerator)
 	{
-		program = FileLoader::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
-		ModelGenerator::CubeGenerator cubeGen;
+		program = Models::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
+		Models::CubeGenerator cubeGen;
 		cubeGen.genCube();
         std::vector<float> cubeVertices = cubeGen.getVertices();
         vertexCount = cubeVertices.size();
@@ -17,7 +17,7 @@ namespace Renderers {
 		vboTexture = vboGenerator.setupVBO(cubeGen.getTexCoords());
 
         std::string skyboxDir = skyboxPath + skyboxName + "/";
-		textureID = FileLoader::genCubeMap(skyboxDir, imageExtension);
+		textureID = Models::genCubeMap(skyboxDir, imageExtension);
 	}
 	void SkyboxRenderer::render(Camera camera)
 	{

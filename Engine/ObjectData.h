@@ -18,7 +18,7 @@ public:
 	int vertexCount;
 	Material material;
 
-	void loadModel(FileLoader::ModelLoader modelData, VBOManager* vboHandler);
+	void loadModel(Models::ModelLoader modelData, VBOManager* vboHandler);
 	void setTexture(std::string path);
 	void setTexture(GLuint textureID);
 	void copyVBO(ObjectData object);

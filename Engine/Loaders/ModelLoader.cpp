@@ -9,7 +9,7 @@
 #include "../AssetPaths.h"
 #include <algorithm>
 
-namespace FileLoader {
+namespace Models {
 	void ModelLoader::applyTiling(float tiling)
 	{
 		std::for_each(texList.begin(), texList.end(), [tiling](float& coord) -> void { coord *= tiling; });
@@ -23,7 +23,7 @@ namespace FileLoader {
 		isLoaded = false;
 	}
 
-	bool FileLoader::ObjLoader::loadObj(std::string fileName)
+	bool Models::ObjLoader::loadObj(std::string fileName)
 	{
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec2> textures;

@@ -51,15 +51,16 @@ void init() {
     defaultScene.init();
 
     ObjectData* cube = defaultScene.genObject();
-    FileLoader::ObjLoader objLoader("cube.obj");
+    Models::ObjLoader objLoader("cube.obj");
     cube->loadModel(objLoader, &vboGenerator);
     cube->setTexture("sand.jpg");
     cube->matrices.translate(0, 3, 0);
     cube->matrices.rotateY(M_PI / 4);
 
+    Models::TileGenerator tileGen;
     ObjectData* terrain = defaultScene.genObject();
     objLoader.applyTiling(5);
-    terrain->loadModel(objLoader, &vboGenerator);
+    terrain->loadModel(tileGen, &vboGenerator);
     terrain->setTexture("sand.jpg");
     terrain->matrices.translate(0, -4, 0);
     terrain->matrices.scale(10, 1, 10);
@@ -67,13 +68,13 @@ void init() {
     terrain->material.specular = glm::vec4(0.1, 0.1, 0.1, 1);
     
     ObjectData* sphere = defaultScene.genObject();
-    sphere->loadModel(ModelGenerator::SphereGenerator(24), &vboGenerator);
+    sphere->loadModel(Models::SphereGenerator(24), &vboGenerator);
     sphere->setTexture("rock.jpg");
     sphere->matrices.setParent(&cube->matrices);
     sphere->matrices.translate(4.f, 0.f, 0.f);
 
     ObjectData* dolphin = defaultScene.genObject();
-    dolphin->loadModel(FileLoader::ObjLoader("dolphinHighPoly.obj"), &vboGenerator);
+    dolphin->loadModel(Models::ObjLoader("dolphinHighPoly.obj"), &vboGenerator);
     dolphin->setTexture("Dolphin_HighPolyUV.png");
     dolphin->matrices.setParent(&cube->matrices);
     dolphin->matrices.translate(6.f, 0.f, 0.f);

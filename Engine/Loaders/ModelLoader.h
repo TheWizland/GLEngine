@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-namespace FileLoader {
+namespace Models {
 	class ModelLoader {
 	protected:
 		std::vector<float> vertexList;

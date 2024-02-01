@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-namespace FileLoader {
+namespace Models {
 	std::string readFile(const char* path);
 	void printShaderLog(GLuint shader);
 	void printProgramLog(int prog);

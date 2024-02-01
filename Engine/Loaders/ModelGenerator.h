@@ -2,21 +2,21 @@
 #include <vector>
 #include "ModelLoader.h"
 
-namespace ModelGenerator {
-    class CubeGenerator : public FileLoader::ModelLoader {
+namespace Models {
+    class CubeGenerator : public Models::ModelLoader {
     public:
         CubeGenerator() { genCube(); }
         void genCube();
     };
 
-    class SphereGenerator : public FileLoader::ModelLoader {
+    class SphereGenerator : public Models::ModelLoader {
     public:
         SphereGenerator() {}
         SphereGenerator(int precision) { genSphere(precision); }
         void genSphere(int precision);
     };
 
-    class TileGenerator : public FileLoader::ModelLoader {
+    class TileGenerator : public Models::ModelLoader {
     public:
         TileGenerator() { genTile(); }
         void genTile();
