@@ -46,8 +46,10 @@ ObjectData* cube;
 void init() {
     vboGenerator.init(15);
     textureRenderer.init();
-    skyboxRenderer.init("milkyway", ".jpg", vboGenerator);
+    skyboxRenderer.init();
     defaultScene.init();
+
+    defaultScene.genSkybox("milkyway", ".jpg", vboGenerator);
 
     ObjectData* cube = defaultScene.genObject();
     cube->loadModel(Models::loadObj("cube.obj"), &vboGenerator);
@@ -88,7 +90,7 @@ void init() {
     lightSourceModel->matrices.translate(0, 2, 0);
     lightSourceModel->matrices.scale(0.1f);
 
-    Light::globalAmbient = glm::vec4(0.0f, 0.0f, 0.0f, 1);
+    Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight.position = glm::vec3(0, 2, 0);
     
     
@@ -100,7 +102,7 @@ void updateTransform(float deltaTime) {
 }
 
 void display(GLFWwindow* window, double deltaTime) {
-    skyboxRenderer.render(*camera);
+    skyboxRenderer.render(*defaultScene.getSkybox(), *camera);
 
     textureRenderer.uniformCamera(*defaultScene.getCamera());
     textureRenderer.uniformLight(positionalLight);

@@ -1,3 +1,4 @@
+#include "AssetPaths.h"
 #include "SceneData.h"
 #include "Loaders/ModelGenerator.h"
 #include "Loaders/textureLoader.h"
@@ -31,7 +32,7 @@ void SceneData::deleteObject(ObjectData* object)
 		[object](std::unique_ptr<ObjectData> const& objectPtr) { return objectPtr.get() == object; }));
 }
 
-ObjectData* SceneData::genSkybox(std::string skyboxPath, std::string extension, VBOManager vboGenerator)
+ObjectData* SceneData::genSkybox(std::string skyboxName, std::string extension, VBOManager vboGenerator)
 {
 	skybox = std::make_unique<ObjectData>();
 
@@ -41,9 +42,14 @@ ObjectData* SceneData::genSkybox(std::string skyboxPath, std::string extension, 
 	skybox->vboVertex = vboGenerator.setupVBO(cube.getVertices());
 	skybox->vboTex = vboGenerator.setupVBO(cube.getTexCoords());
 
-	std::string skyboxDir = skyboxPath + "/";
+	std::string skyboxDir = skyboxPath + skyboxName + "/";
 	skybox->textureID = Models::genCubeMap(skyboxDir, extension);
 
+	return skybox.get();
+}
+
+ObjectData* SceneData::getSkybox()
+{
 	return skybox.get();
 }
 

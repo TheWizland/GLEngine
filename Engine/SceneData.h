@@ -26,6 +26,7 @@ public:
 	ObjectData* genObject();
 	void deleteObject(ObjectData* object);
 	ObjectData* genSkybox(std::string name, std::string extension, VBOManager vboGenerator);
+	ObjectData* getSkybox();
 	std::vector<std::unique_ptr<ObjectData>> const& getObjectList() const;
 };
 
