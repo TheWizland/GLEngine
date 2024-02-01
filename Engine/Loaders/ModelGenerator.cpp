@@ -11,9 +11,12 @@
 
 
 namespace Models {
-    void Models::CubeGenerator::genCube()
+    bool genTextures = true;
+    bool genNormals = true;
+
+    Model genCube()
     {
-        vertexList = {
+        std::vector<float> vertexList = {
             -1.0f,  1.0f, -1.0f,        -1.0f, -1.0f, -1.0f,        1.0f, -1.0f, -1.0f, //Back-Bottom
             1.0f, -1.0f, -1.0f,         1.0f,  1.0f, -1.0f,         -1.0f,  1.0f, -1.0f, //Back-Top
             1.0f, -1.0f, -1.0f,         1.0f, -1.0f,  1.0f,         1.0f,  1.0f, -1.0f, //Right-Bottom
@@ -27,7 +30,7 @@ namespace Models {
             -1.0f,  1.0f, -1.0f,        1.0f,  1.0f, -1.0f,         1.0f,  1.0f,  1.0f, //Top
             1.0f,  1.0f,  1.0f,         -1.0f,  1.0f,  1.0f,        -1.0f,  1.0f, -1.0f //Top
         };
-        texList = {
+        std::vector<float> texList = {
             0.0f, 1.0f,     0.0f, 0.0f,     1.0f, 0.0f,
             1.0f, 0.0f,     1.0f, 1.0f,     0.0f, 1.0f,
             1.0f, 0.0f,     0.0f, 0.0f,     1.0f, 1.0f,
@@ -42,24 +45,28 @@ namespace Models {
             1.0f, 0.0f,     1.0f, 1.0f,     0.0f, 1.0f
         };
 
-        isLoaded = true;
+        return Model(vertexList, texList);
     }
 
-    void SphereGenerator::genSphere(int precision)
+    Model genSphere(int precision)
     {
         std::vector<glm::vec3> vertices;
         std::vector<glm::vec2> texCoords;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec3> tangents;
 
+        std::vector<float> vertexList;
+        std::vector<float> texList;
+        std::vector<float> normalList;
+
         double toRadians = M_PI / 180;
         // calculate triangle vertices
         for (int i = 0; i <= precision; i++) {
             for (int j = 0; j <= precision; j++) {
                 int index = i * (precision + 1) + j;
-                double y = cos(toRadians*(180.0 - i * 180.0 / precision));
-                double x = -cos(toRadians*(j * 360.0 / precision)) * abs(cos(asin(y)));
-                double z = sin(toRadians*(j * 360.0 / precision)) * abs(cos(asin(y)));
+                double y = cos(toRadians * (180.0 - i * 180.0 / precision));
+                double x = -cos(toRadians * (j * 360.0 / precision)) * abs(cos(asin(y)));
+                double z = sin(toRadians * (j * 360.0 / precision)) * abs(cos(asin(y)));
                 vertices.push_back(glm::vec3(x, y, z));
                 texCoords.push_back(glm::vec2((float)j / precision, (float)i / precision));
                 normals.push_back(glm::vec3(x, y, z));
@@ -102,11 +109,12 @@ namespace Models {
             tangentList.push_back(tangents.at(indices[i]).z());*/
         }
 
-        isLoaded = true;
+        return Model(vertexList, texList, normalList);
     }
-    void TileGenerator::genTile()
+
+    Model genTile()
     {
-        vertexList = {
+        std::vector<float> vertexList = {
             -1.0f, 0.0f, -1.0f,
             1.0f, 0.0f, 1.0f,
             1.0f, 0.0f, -1.0f,
@@ -114,7 +122,7 @@ namespace Models {
             -1.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 1.0f
         };
-        texList = {
+        std::vector<float> texList = {
             0.0f, 0.0f,
             1.0f, 1.0f,
             0.0f, 1.0f,
@@ -122,7 +130,7 @@ namespace Models {
             1.0f, 0.0f,
             1.0f, 1.0f
         };
-        normalList = {
+        std::vector<float> normalList = {
             0.0f, 1.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
@@ -130,7 +138,6 @@ namespace Models {
             0.0f, 1.0f, 0.0f,
             0.0f, 1.0f, 0.0f
         };
-
-        isLoaded = true;
+        return Model(vertexList, texList, normalList);
     }
 }

@@ -1,24 +1,13 @@
 #pragma once
 #include <vector>
-#include "ModelLoader.h"
+#include <string>
+#include "Model.h"
 
 namespace Models {
-    class CubeGenerator : public Models::ModelLoader {
-    public:
-        CubeGenerator() { genCube(); }
-        void genCube();
-    };
-
-    class SphereGenerator : public Models::ModelLoader {
-    public:
-        SphereGenerator() {}
-        SphereGenerator(int precision) { genSphere(precision); }
-        void genSphere(int precision);
-    };
-
-    class TileGenerator : public Models::ModelLoader {
-    public:
-        TileGenerator() { genTile(); }
-        void genTile();
-    };
+    extern bool genTextures;
+    extern bool genNormals;
+    Model genCube();
+    Model genSphere(int precision);
+    Model genTile();
+    Model loadObj(std::string fileName);
 }

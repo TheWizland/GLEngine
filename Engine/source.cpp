@@ -12,7 +12,6 @@
 
 #include "Loaders/shaderLoader.h"
 #include "Loaders/ModelGenerator.h"
-#include "Loaders/ModelLoader.h"
 #include "Loaders/textureLoader.h"
 #include "Camera.h"
 #include "ObjectData.h"
@@ -33,7 +32,7 @@ Renderers::StandardRenderer textureRenderer;
 Renderers::SkyboxRenderer skyboxRenderer;
 int windowX = 1200;
 int windowY = 900;
-const char* windowTitle = "Hello World";
+const char* windowTitle = "OpenGL Window";
 InputManager inputManager;
 Camera* camera;
 ObjectData skybox;
@@ -51,16 +50,15 @@ void init() {
     defaultScene.init();
 
     ObjectData* cube = defaultScene.genObject();
-    Models::ObjLoader objLoader("cube.obj");
-    cube->loadModel(objLoader, &vboGenerator);
+    cube->loadModel(Models::loadObj("cube.obj"), &vboGenerator);
     cube->setTexture("sand.jpg");
     cube->matrices.translate(0, 3, 0);
-    cube->matrices.rotateY(M_PI / 4);
+    cube->matrices.rotateY((float)M_PI / 4);
 
-    Models::TileGenerator tileGen;
+    Models::Model tile = Models::genTile();
+    tile.applyTiling(5);
     ObjectData* terrain = defaultScene.genObject();
-    objLoader.applyTiling(5);
-    terrain->loadModel(tileGen, &vboGenerator);
+    terrain->loadModel(tile, &vboGenerator);
     terrain->setTexture("sand.jpg");
     terrain->matrices.translate(0, -4, 0);
     terrain->matrices.scale(10, 1, 10);
@@ -68,13 +66,13 @@ void init() {
     terrain->material.specular = glm::vec4(0.1, 0.1, 0.1, 1);
     
     ObjectData* sphere = defaultScene.genObject();
-    sphere->loadModel(Models::SphereGenerator(24), &vboGenerator);
+    sphere->loadModel(Models::genSphere(24), &vboGenerator);
     sphere->setTexture("rock.jpg");
     sphere->matrices.setParent(&cube->matrices);
     sphere->matrices.translate(4.f, 0.f, 0.f);
 
     ObjectData* dolphin = defaultScene.genObject();
-    dolphin->loadModel(Models::ObjLoader("dolphinHighPoly.obj"), &vboGenerator);
+    dolphin->loadModel(Models::loadObj("dolphinHighPoly.obj"), &vboGenerator);
     dolphin->setTexture("Dolphin_HighPolyUV.png");
     dolphin->matrices.setParent(&cube->matrices);
     dolphin->matrices.translate(6.f, 0.f, 0.f);
@@ -160,7 +158,7 @@ int main(void)
     init();
     cameraHandler.init(window, camera);
     
-    float prevTime = glfwGetTime();
+    float prevTime = (float)glfwGetTime();
     float curTime = prevTime;
     deltaTime = 0;
 
@@ -169,7 +167,7 @@ int main(void)
     {
         deltaTime = curTime - prevTime;
         prevTime = curTime;
-        curTime = glfwGetTime();
+        curTime = (float)glfwGetTime();
   
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);

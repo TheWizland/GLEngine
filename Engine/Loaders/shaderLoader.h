@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
-namespace Models {
+#include <GL\glew.h>
+
+namespace Shaders {
 	std::string readFile(const char* path);
 	void printShaderLog(GLuint shader);
 	void printProgramLog(int prog);

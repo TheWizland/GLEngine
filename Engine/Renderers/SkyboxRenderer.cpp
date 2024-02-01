@@ -1,20 +1,19 @@
-#include "SkyboxRenderer.h"
-#include "../Loaders/shaderLoader.h"
-#include "../Loaders/ModelGenerator.h"
-#include "../Loaders/textureLoader.h"
-#include <GLM/gtc/type_ptr.hpp>
 #include "../AssetPaths.h"
+#include "../Loaders/ModelGenerator.h"
+#include "../Loaders/shaderLoader.h"
+#include "../Loaders/textureLoader.h"
+#include "SkyboxRenderer.h"
+#include <GLM/gtc/type_ptr.hpp>
 
 namespace Renderers {
 	void SkyboxRenderer::init(std::string skyboxName, std::string imageExtension, VBOManager vboGenerator)
 	{
-		program = Models::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
-		Models::CubeGenerator cubeGen;
-		cubeGen.genCube();
-        std::vector<float> cubeVertices = cubeGen.getVertices();
-        vertexCount = cubeVertices.size();
-		vboVertex = vboGenerator.setupVBO(cubeVertices);
-		vboTexture = vboGenerator.setupVBO(cubeGen.getTexCoords());
+		program = Shaders::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
+		Models::Model cube = Models::genCube();
+
+        vertexCount = (int)cube.vertexCount();
+		vboVertex = vboGenerator.setupVBO(cube.getVertices());
+		vboTexture = vboGenerator.setupVBO(cube.getTexCoords());
 
         std::string skyboxDir = skyboxPath + skyboxName + "/";
 		textureID = Models::genCubeMap(skyboxDir, imageExtension);

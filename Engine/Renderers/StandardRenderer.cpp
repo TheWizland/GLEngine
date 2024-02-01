@@ -85,7 +85,7 @@ namespace Renderers {
 
     void StandardRenderer::init()
     {
-        program = Models::createShaderProgram("shaders/textureV.glsl", "shaders/textureF.glsl");
+        program = Shaders::createShaderProgram("shaders/textureV.glsl", "shaders/textureF.glsl");
     }
 
     void StandardRenderer::render(ObjectData object) 

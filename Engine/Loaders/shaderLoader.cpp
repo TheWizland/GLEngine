@@ -3,14 +3,12 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
-namespace Models {
+namespace Shaders {
     //Most of this file is from Computer Graphics Programming in OpenGL with C++ by V. Scott Gordon and John Clevenger
-    string readFile(const char* path) {
-        string content;
-        ifstream fileStream(path, ios::in);
-        string line = "";
+    std::string readFile(const char* path) {
+        std::string content;
+        std::ifstream fileStream(path, std::ios::in);
+        std::string line = "";
         while (!fileStream.eof()) {
             getline(fileStream, line);
             content.append(line + "\n");
@@ -28,7 +26,7 @@ namespace Models {
         if (len > 0) {
             log = (char*)malloc(len);
             glGetShaderInfoLog(shader, len, &chWrittn, log);
-            cout << "Shader Info Log: " << log << endl;
+            std::cout << "Shader Info Log: " << log << std::endl;
             free(log);
         }
     }
@@ -41,7 +39,7 @@ namespace Models {
         if (len > 0) {
             log = (char*)malloc(len);
             glGetProgramInfoLog(prog, len, &chWrittn, log);
-            cout << "Program Info Log: " << log << endl;
+            std::cout << "Program Info Log: " << log << std::endl;
             free(log);
         }
     }
@@ -50,7 +48,7 @@ namespace Models {
         bool foundError = false;
         int glErr = glGetError();
         while (glErr != GL_NO_ERROR) {
-            cout << "glError: " << glErr << endl;
+            std::cout << "glError: " << glErr << std::endl;
             foundError = true;
             glErr = glGetError();
         }
@@ -62,9 +60,9 @@ namespace Models {
         GLint fragCompiled;
         GLint linked;
 
-        string vShaderSource = readFile(vShaderPath);
+        std::string vShaderSource = readFile(vShaderPath);
         const char* vShaderArr = vShaderSource.c_str();
-        string fShaderSource = readFile(fShaderPath);
+        std::string fShaderSource = readFile(fShaderPath);
         const char* fShaderArr = fShaderSource.c_str();
 
         GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
@@ -76,7 +74,7 @@ namespace Models {
         checkOpenGLError();
         glGetShaderiv(vShader, GL_COMPILE_STATUS, &vertCompiled);
         if (vertCompiled != 1) {
-            cout << "vertex compilation failed" << endl;
+            std::cout << "vertex compilation failed" << std::endl;
             printShaderLog(vShader);
         }
 
@@ -84,7 +82,7 @@ namespace Models {
         checkOpenGLError();
         glGetShaderiv(fShader, GL_COMPILE_STATUS, &fragCompiled);
         if (fragCompiled != 1) {
-            cout << "fragment compilation failed" << endl;
+            std::cout << "fragment compilation failed" << std::endl;
             printShaderLog(fShader);
         }
 
@@ -95,7 +93,7 @@ namespace Models {
         checkOpenGLError();
         glGetProgramiv(vfProgram, GL_LINK_STATUS, &linked);
         if (linked != 1) {
-            cout << "linking failed" << endl;
+            std::cout << "linking failed" << std::endl;
             printProgramLog(vfProgram);
         }
         return vfProgram;

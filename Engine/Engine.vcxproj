@@ -153,7 +153,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="MatrixCollection.h" />
     <ClInclude Include="Loaders\ModelGenerator.h" />
-    <ClInclude Include="Loaders\ModelLoader.h" />
+    <ClInclude Include="Loaders\Model.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Loaders\shaderLoader.h" />
     <ClInclude Include="Renderers\StandardRenderer.h" />
@@ -171,6 +171,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MatrixCollection.cpp" />
     <ClCompile Include="Loaders\ModelLoader.cpp" />
+    <ClCompile Include="Loaders\Model.cpp" />
     <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="Loaders\shaderLoader.cpp" />
     <ClCompile Include="Renderers\SkyboxRenderer.cpp" />
@@ -182,6 +183,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
+    <None Include="shaders\terrainF.glsl" />
+    <None Include="shaders\terrainV.glsl" />
+    <None Include="shaders\textureF.glsl" />
     <None Include="shaders\textureV.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

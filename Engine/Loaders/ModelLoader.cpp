@@ -1,34 +1,27 @@
-#include <GL\glew.h>
-#include <fstream>
-#include <vector>
-#include <string>
-#include "ModelLoader.h"
-#include <GLM/vec3.hpp>
-#include <GLM/vec2.hpp>
-#include <sstream>
 #include "../AssetPaths.h"
+#include "Model.h"
+#include "ModelGenerator.h"
 #include <algorithm>
+#include <fstream>
+#include <GL\glew.h>
+#include <GLM/vec2.hpp>
+#include <GLM/vec3.hpp>
+#include <sstream>
+#include <string>
+#include <vector>
 
 namespace Models {
-	void ModelLoader::applyTiling(float tiling)
-	{
-		std::for_each(texList.begin(), texList.end(), [tiling](float& coord) -> void { coord *= tiling; });
-	}
-
-	void ModelLoader::clearVals()
-	{
-		vertexList.clear();
-		texList.clear();
-		normalList.clear();
-		isLoaded = false;
-	}
-
-	bool Models::ObjLoader::loadObj(std::string fileName)
+	Model Models::loadObj(std::string fileName)
 	{
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec2> textures;
 		std::vector<glm::vec3> normals;
 		std::vector<float> triangles;
+
+		std::vector<float> vertexList;
+		std::vector<float> texList;
+		std::vector<float> normalList;
+
 		std::ifstream objFile(modelPath + fileName);
 		
 		std::string buffer;
@@ -83,8 +76,8 @@ namespace Models {
 				}
 			}
 		}
-		isLoaded = true;
-		return true;
+		
+		return Model(vertexList, texList, normalList);
 	}
 }
 
