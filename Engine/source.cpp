@@ -41,7 +41,6 @@ SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
 CameraMouse cameraHandler;
-ObjectData* cube;
 
 void init() {
     vboGenerator.init(15);
@@ -58,10 +57,13 @@ void init() {
     cube->matrices.rotateY((float)M_PI / 4);
 
     Models::Model tile = Models::genTile();
-    tile.applyTiling(5);
+    //tile.applyTiling(5);
     ObjectData* terrain = defaultScene.genObject();
-    terrain->loadModel(tile, &vboGenerator);
+    terrain->loadModel(Models::loadObj("tile.obj"), &vboGenerator);
     terrain->setTexture("sand.jpg");
+    Models::tilingMode = GL_CLAMP_TO_EDGE;
+    terrain->setHeightMap("height.png");
+    Models::tilingMode = GL_REPEAT;
     terrain->matrices.translate(0, -4, 0);
     terrain->matrices.scale(10, 1, 10);
     terrain->material.shininess = 10;
@@ -90,7 +92,7 @@ void init() {
     lightSourceModel->matrices.translate(0, 2, 0);
     lightSourceModel->matrices.scale(0.1f);
     lightSourceModel->material.specular = glm::vec4(0, 0, 0, 1);
-    lightSourceModel->flags.setInternallyLit(true);
+    lightSourceModel->flags.internallyLit = true;
 
     Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight.position = glm::vec3(0, 2, 0);

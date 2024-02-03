@@ -4,6 +4,7 @@ layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec2 texCoord;
 layout (location = 2) in vec3 vertexNormal;
 layout (binding = 0) uniform sampler2D samp;
+layout (binding = 1) uniform sampler2D height;
 out vec2 textureCoordinate;
 out vec3 varyingNormal;
 out vec3 varyingVertexPosition;
@@ -31,14 +32,20 @@ uniform mat4 v_matrix;
 uniform mat4 proj_matrix;
 uniform mat4 norm_matrix;
 uniform vec4 globalAmbient;
-uniform int internallyLit;
+uniform int internallyLit; //-1 if internally lit, 1 if not
+
+uniform int heightMapped; //0 if no height map, 1 if height map
+vec3 heightChange;
+float heightMapMult = 2.f;
 
 void main(void) {
+	heightChange = vertexNormal*texture(height, texCoord).r * heightMapMult * heightMapped;
+
 	varyingVertexPosition = (m_matrix * vec4(vertexPosition, 1.0)).xyz;
     varyingNormal = (norm_matrix * vec4(vertexNormal, 1.0)).xyz;
-    //varyingNormal = vec3(internallyLit*varyingNormal.x, internallyLit*varyingNormal.y, internallyLit*varyingNormal.z);
 	varyingNormal = internallyLit * varyingNormal;
 
-	gl_Position = proj_matrix * v_matrix * m_matrix * vec4(vertexPosition, 1);
+	gl_Position = vec4(vertexPosition + heightChange, 1);
+	gl_Position = proj_matrix * v_matrix * m_matrix * gl_Position;
 	textureCoordinate = texCoord;
 }

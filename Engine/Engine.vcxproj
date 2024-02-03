@@ -156,9 +156,12 @@
     <ClInclude Include="Loaders\Model.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Loaders\shaderLoader.h" />
+    <ClInclude Include="Renderers\SceneRenderer.h" />
     <ClInclude Include="Renderers\StandardRenderer.h" />
     <ClInclude Include="Renderers\SkyboxRenderer.h" />
+    <ClInclude Include="RenderFlags.h" />
     <ClInclude Include="SceneData.h" />
+    <ClInclude Include="VBOData.h" />
     <ClInclude Include="VBOManager.h" />
   </ItemGroup>
   <ItemGroup>
@@ -174,7 +177,9 @@
     <ClCompile Include="Loaders\Model.cpp" />
     <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="Loaders\shaderLoader.cpp" />
+    <ClCompile Include="Renderers\SceneRenderer.cpp" />
     <ClCompile Include="Renderers\SkyboxRenderer.cpp" />
+    <ClCompile Include="RenderFlags.cpp" />
     <ClCompile Include="SceneData.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="Loaders\ModelGenerator.cpp" />
@@ -183,8 +188,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
-    <None Include="shaders\terrainF.glsl" />
-    <None Include="shaders\terrainV.glsl" />
+    <None Include="shaders\skyboxF.glsl" />
+    <None Include="shaders\skyboxV.glsl" />
     <None Include="shaders\textureF.glsl" />
     <None Include="shaders\textureV.glsl" />
   </ItemGroup>

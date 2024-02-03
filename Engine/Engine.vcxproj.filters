@@ -66,6 +66,15 @@
     <ClInclude Include="Loaders\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderers\SceneRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderFlags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VBOData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp">
@@ -122,12 +131,18 @@
     <ClCompile Include="Loaders\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Renderers\SceneRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderFlags.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\textureV.glsl" />
     <None Include="glew32.dll" />
-    <None Include="shaders\terrainF.glsl" />
     <None Include="shaders\textureF.glsl" />
-    <None Include="shaders\terrainV.glsl" />
+    <None Include="shaders\skyboxF.glsl" />
+    <None Include="shaders\skyboxV.glsl" />
   </ItemGroup>
 </Project>

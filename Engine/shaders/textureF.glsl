@@ -4,6 +4,7 @@ in vec2 textureCoordinate;
 in vec3 varyingNormal;
 in vec3 varyingVertexPosition;
 layout (binding = 0) uniform sampler2D samp;
+layout (binding = 1) uniform sampler2D height;
 out vec4 color;
 
 struct Light {

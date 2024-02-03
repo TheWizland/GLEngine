@@ -29,10 +29,19 @@ namespace Renderers {
 
         //Flags
         {
-            GLuint internalLitLoc;
+            GLuint internalLitLoc, heightMapLoc;
             internalLitLoc = glGetUniformLocation(program, "internallyLit");
-            int normMult = object.flags.getInternallyLit() ? -1 : 1;
+            int normMult = object.flags.internallyLit ? -1 : 1;
             glUniform1i(internalLitLoc, normMult);
+
+            heightMapLoc = glGetUniformLocation(program, "heightMapped");
+            glUniform1i(heightMapLoc, (int)object.flags.heightMapped);
+            
+            if (object.flags.heightMapped)
+            {
+                glActiveTexture(GL_TEXTURE1);
+                glBindTexture(GL_TEXTURE_2D, object.heightMapID);
+            }
         }
     }
 

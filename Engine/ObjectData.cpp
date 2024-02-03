@@ -33,3 +33,15 @@ void ObjectData::copyVBO(ObjectData object)
 	vboNormal = object.vboNormal;
 	vertexCount = object.vertexCount;
 }
+
+void ObjectData::setHeightMap(std::string imageName)
+{
+	heightMapID = Models::genTexture(texturePath + imageName);
+	flags.heightMapped = true;
+}
+
+void ObjectData::setHeightMap(GLuint heightMapID)
+{
+	this->heightMapID = heightMapID;
+	flags.heightMapped = true;
+}
