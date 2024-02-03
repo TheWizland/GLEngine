@@ -59,7 +59,6 @@ void MatrixCollection::setParent(MatrixCollection* newParent)
 
 void MatrixCollection::removeParent()
 {
-	//updateModel();
 	localTranslation = worldTranslation;
 	localScale = worldScale;
 	localRotation = worldRotation;
@@ -73,7 +72,7 @@ void MatrixCollection::addChild(MatrixCollection* childMatrix)
 
 void MatrixCollection::removeChild(MatrixCollection* childMatrix)
 {
-	children.erase(std::remove(children.begin(), children.end(), childMatrix));
+	children.erase(std::remove(children.begin(), children.end(), childMatrix), children.end());
 }
 
 glm::mat4 MatrixCollection::getModel()
