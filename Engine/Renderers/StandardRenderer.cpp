@@ -26,6 +26,14 @@ namespace Renderers {
             shininessLoc = glGetUniformLocation(program, "material.shininess");
             glUniform1f(shininessLoc, object.material.shininess);
         }
+
+        //Flags
+        {
+            GLuint internalLitLoc;
+            internalLitLoc = glGetUniformLocation(program, "internallyLit");
+            int normMult = object.flags.getInternallyLit() ? -1 : 1;
+            glUniform1i(internalLitLoc, normMult);
+        }
     }
 
     void StandardRenderer::uniformCamera(Camera camera) {

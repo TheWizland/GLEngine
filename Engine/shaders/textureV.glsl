@@ -31,11 +31,13 @@ uniform mat4 v_matrix;
 uniform mat4 proj_matrix;
 uniform mat4 norm_matrix;
 uniform vec4 globalAmbient;
+uniform int internallyLit;
 
 void main(void) {
 	varyingVertexPosition = (m_matrix * vec4(vertexPosition, 1.0)).xyz;
     varyingNormal = (norm_matrix * vec4(vertexNormal, 1.0)).xyz;
     //varyingNormal = vec3(internallyLit*varyingNormal.x, internallyLit*varyingNormal.y, internallyLit*varyingNormal.z);
+	varyingNormal = internallyLit * varyingNormal;
 
 	gl_Position = proj_matrix * v_matrix * m_matrix * vec4(vertexPosition, 1);
 	textureCoordinate = texCoord;

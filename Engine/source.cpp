@@ -72,7 +72,7 @@ void init() {
     sphere->setTexture("rock.jpg");
     sphere->matrices.setParent(&cube->matrices);
     sphere->matrices.translate(4.f, 0.f, 0.f);
-
+    
     ObjectData* dolphin = defaultScene.genObject();
     dolphin->loadModel(Models::loadObj("dolphinHighPoly.obj"), &vboGenerator);
     dolphin->setTexture("Dolphin_HighPolyUV.png");
@@ -89,6 +89,8 @@ void init() {
     lightSourceModel->setTexture("sunmap.jpg");
     lightSourceModel->matrices.translate(0, 2, 0);
     lightSourceModel->matrices.scale(0.1f);
+    lightSourceModel->material.specular = glm::vec4(0, 0, 0, 1);
+    lightSourceModel->flags.setInternallyLit(true);
 
     Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight.position = glm::vec3(0, 2, 0);
