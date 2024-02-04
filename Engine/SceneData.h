@@ -8,13 +8,10 @@
 class SceneData
 {
 private:
-	Renderers::StandardRenderer standardRenderer;
 	std::vector<std::unique_ptr<ObjectData>> renderList;
 	std::unique_ptr<Camera> camera;
 	std::unique_ptr<ObjectData> skybox;
 public:
-	void init();
-	
 	Light getLight();
 	void setLight(Light light);
 

@@ -4,11 +4,6 @@
 #include "Loaders/textureLoader.h"
 #include <algorithm>
 
-void SceneData::init()
-{
-	standardRenderer.init();
-}
-
 Camera* SceneData::newCamera(float fieldOfView, float aspectRatio)
 {
 	camera = std::make_unique<Camera>(fieldOfView, aspectRatio);

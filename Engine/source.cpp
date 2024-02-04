@@ -46,7 +46,6 @@ void init() {
     vboGenerator.init(15);
     textureRenderer.init();
     skyboxRenderer.init();
-    defaultScene.init();
 
     defaultScene.genSkybox("milkyway", ".jpg", vboGenerator);
 
@@ -74,6 +73,13 @@ void init() {
     sphere->setTexture("rock.jpg");
     sphere->matrices.setParent(&cube->matrices);
     sphere->matrices.translate(4.f, 0.f, 0.f);
+
+    ObjectData* sphere2 = defaultScene.genObject();
+    sphere2->copyVBO(*sphere);
+    sphere2->setTexture(sphere->textureID);
+    sphere2->matrices.setParent(&sphere->matrices);
+    sphere2->matrices.translate(0, -2, 0);
+    sphere2->matrices.scale(0.5f);
     
     ObjectData* dolphin = defaultScene.genObject();
     dolphin->loadModel(Models::loadObj("dolphinHighPoly.obj"), &vboGenerator);
@@ -87,7 +93,7 @@ void init() {
     dolphin->matrices.translate(0.f, -1.f, 0.f);
 
     ObjectData* lightSourceModel = defaultScene.genObject();
-    lightSourceModel->copyVBO(*sphere);
+    lightSourceModel->copyVBO(*sphere2);
     lightSourceModel->setTexture("sunmap.jpg");
     lightSourceModel->matrices.translate(0, 2, 0);
     lightSourceModel->matrices.scale(0.1f);
@@ -100,6 +106,9 @@ void init() {
     
     camera = defaultScene.newCamera(90.f, float(windowX) / windowY);
     camera->moveForward(-8);
+
+    sphere->matrices.translate(4.f, 0.f, 0.f);
+    //printf("%d\n", sphere->matrices)
 }
 
 void updateTransform(float deltaTime) {
