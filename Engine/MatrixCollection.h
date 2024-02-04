@@ -54,6 +54,8 @@ public:
 	~MatrixCollection();
 	MatrixCollection();
 	//Children are not copied from original to copy.
-	MatrixCollection(MatrixCollection& original);
+	//Parent matrix is copied.
+	MatrixCollection(const MatrixCollection& original);
+	void operator=(const MatrixCollection& original);
 };
 

@@ -159,7 +159,7 @@ MatrixCollection::MatrixCollection()
 {
 }
 
-MatrixCollection::MatrixCollection(MatrixCollection& original)
+MatrixCollection::MatrixCollection(const MatrixCollection& original)
 {
 	localRotation = original.localRotation;
 	worldRotation = original.worldRotation;
@@ -177,5 +177,26 @@ MatrixCollection::MatrixCollection(MatrixCollection& original)
 
 	parentMatrix = original.parentMatrix;
 	if(parentMatrix)
+		parentMatrix->addChild(this);
+}
+
+void MatrixCollection::operator=(const MatrixCollection& original)
+{
+	localRotation = original.localRotation;
+	worldRotation = original.worldRotation;
+	localTranslation = original.localTranslation;
+	worldTranslation = original.worldTranslation;
+	localScale = original.localScale;
+	worldScale = original.worldScale;
+	model = original.model;
+
+	inheritTranslation = original.inheritTranslation;
+	inheritRotation = original.inheritRotation;
+	inheritScale = original.inheritScale;
+	applyParentRotationToPosition = original.applyParentRotationToPosition;
+	applyParentScaleToPosition = original.applyParentScaleToPosition;
+
+	parentMatrix = original.parentMatrix;
+	if (parentMatrix)
 		parentMatrix->addChild(this);
 }
