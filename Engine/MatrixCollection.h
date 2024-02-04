@@ -52,5 +52,8 @@ public:
 	void setApplyParentRotationToPosition(bool willApply) { applyParentRotationToPosition = willApply; updateModel(); }
 	void setApplyParentScaleToPosition(bool willApply) { applyParentScaleToPosition = willApply; updateModel(); }
 	~MatrixCollection();
+	MatrixCollection();
+	//Children are not copied from original to copy.
+	MatrixCollection(MatrixCollection& original);
 };
 
