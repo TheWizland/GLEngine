@@ -4,6 +4,17 @@
 #include "Loaders/textureLoader.h"
 #include <algorithm>
 
+Light* SceneData::newLight()
+{
+	light = std::make_unique<Light>();
+	return light.get();
+}
+
+Light* SceneData::getLight()
+{
+	return light.get();
+}
+
 Camera* SceneData::newCamera(float fieldOfView, float aspectRatio)
 {
 	camera = std::make_unique<Camera>(fieldOfView, aspectRatio);
