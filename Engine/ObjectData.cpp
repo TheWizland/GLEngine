@@ -1,20 +1,6 @@
 #include "./AssetPaths.h"
-#include "Loaders/Model.h"
 #include "Loaders/textureLoader.h"
 #include "ObjectData.h"
-#include <iostream>
-#include <vector>
-
-void ObjectData::loadModel(Models::Model modelData, VBOManager* vboHandler)
-{
-	assert(modelData.modelLoaded());
-	
-	std::vector<float> vertexList = modelData.getVertices();
-	vbo.vertexCount = (int)vertexList.size();
-	vbo.vertex = vboHandler->setupVBO(vertexList);
-	vbo.texture = vboHandler->setupVBO(modelData.getTexCoords());
-	vbo.normal = vboHandler->setupVBO(modelData.getNormals());
-}
 
 void ObjectData::setTexture(std::string imageName)
 {

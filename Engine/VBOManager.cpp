@@ -19,3 +19,23 @@ int VBOManager::setupVBO(std::vector<float> vals)
     maxUnusedVBO++;
     return vbo[maxUnusedVBO - 1];
 }
+
+VBOData VBOManager::setupVBO(Models::Model model)
+{
+    VBOData vbo;
+    if (model.hasVertex()) 
+    {
+        vbo.vertex = setupVBO(model.getVertices());
+        vbo.vertexCount = model.vertexCount();
+    }
+    if (model.hasTexture())
+    {
+        vbo.texture = setupVBO(model.getTexCoords());
+    }
+    if (model.hasNormal())
+    {
+        vbo.normal = setupVBO(model.getNormals());
+    }
+        
+    return vbo;
+}

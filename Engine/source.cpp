@@ -50,7 +50,7 @@ void init() {
     defaultScene.genSkybox("milkyway", ".jpg", vboGenerator);
 
     ObjectData* cube = defaultScene.genObject();
-    cube->loadModel(Models::loadObj("cube.obj"), &vboGenerator);
+    cube->setVBOs(vboGenerator.setupVBO(Models::loadObj("cube.obj")));
     cube->setTexture("sand.jpg");
     cube->matrices()->translate(0, 3, 0);
     cube->matrices()->rotateY((float)M_PI / 4);
@@ -58,7 +58,7 @@ void init() {
     //Models::Model tile = Models::genTile();
     //tile.applyTiling(5);
     ObjectData* terrain = defaultScene.genObject();
-    terrain->loadModel(Models::loadObj("tile.obj"), &vboGenerator);
+    terrain->setVBOs(vboGenerator.setupVBO(Models::loadObj("tile.obj")));
     terrain->setTexture("sand.jpg");
     Models::tilingMode = GL_CLAMP_TO_EDGE;
     terrain->setHeightMap("height.png");
@@ -69,7 +69,7 @@ void init() {
     terrain->material.specular = glm::vec4(0.1, 0.1, 0.1, 1);
     
     ObjectData* sphere = defaultScene.genObject();
-    sphere->loadModel(Models::genSphere(24), &vboGenerator);
+    sphere->setVBOs(vboGenerator.setupVBO(Models::genSphere(24)));
     sphere->setTexture("rock.jpg");
     MatrixCollection* cMat = cube->matrices();
     glm::mat4 cMod = cMat->getModel();
@@ -84,7 +84,7 @@ void init() {
     sphere2->matrices()->scale(0.5f);
     
     ObjectData* dolphin = defaultScene.genObject();
-    dolphin->loadModel(Models::loadObj("dolphinHighPoly.obj"), &vboGenerator);
+    dolphin->setVBOs(vboGenerator.setupVBO(Models::loadObj("dolphinHighPoly.obj")));
     dolphin->setTexture("Dolphin_HighPolyUV.png");
     dolphin->matrices()->setParent(cube->matrices());
     dolphin->matrices()->translate(6.f, 0.f, 0.f);
