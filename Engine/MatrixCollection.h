@@ -27,7 +27,7 @@ protected:
 public:
 	void setParent(MatrixCollection* newParent);
 	void removeParent();
-	glm::mat4 getModel();
+	glm::mat4 const getModel();
 	glm::mat4 getInverseTranspose();
 	void setLocalTranslation(glm::mat4 localTranslation);
 	void setLocalRotation(glm::mat4 localRotation);

@@ -52,10 +52,10 @@ void init() {
     ObjectData* cube = defaultScene.genObject();
     cube->loadModel(Models::loadObj("cube.obj"), &vboGenerator);
     cube->setTexture("sand.jpg");
-    cube->matrices.translate(0, 3, 0);
-    cube->matrices.rotateY((float)M_PI / 4);
+    cube->matrices()->translate(0, 3, 0);
+    cube->matrices()->rotateY((float)M_PI / 4);
 
-    Models::Model tile = Models::genTile();
+    //Models::Model tile = Models::genTile();
     //tile.applyTiling(5);
     ObjectData* terrain = defaultScene.genObject();
     terrain->loadModel(Models::loadObj("tile.obj"), &vboGenerator);
@@ -63,40 +63,42 @@ void init() {
     Models::tilingMode = GL_CLAMP_TO_EDGE;
     terrain->setHeightMap("height.png");
     Models::tilingMode = GL_REPEAT;
-    terrain->matrices.translate(0, -4, 0);
-    terrain->matrices.scale(10, 1, 10);
+    terrain->matrices()->translate(0, -4, 0);
+    terrain->matrices()->scale(10, 1, 10);
     terrain->material.shininess = 10;
     terrain->material.specular = glm::vec4(0.1, 0.1, 0.1, 1);
     
     ObjectData* sphere = defaultScene.genObject();
     sphere->loadModel(Models::genSphere(24), &vboGenerator);
     sphere->setTexture("rock.jpg");
-    sphere->matrices.setParent(&cube->matrices);
-    sphere->matrices.translate(4.f, 0.f, 0.f);
+    MatrixCollection* cMat = cube->matrices();
+    glm::mat4 cMod = cMat->getModel();
+    sphere->matrices()->setParent(cube->matrices());
+    sphere->matrices()->translate(4.f, 0.f, 0.f);
 
     ObjectData* sphere2 = defaultScene.genObject();
-    sphere2->copyVBO(*sphere);
+    sphere2->setVBOs(sphere->vbo);
     sphere2->setTexture(sphere->textureID);
-    sphere2->matrices.setParent(&sphere->matrices);
-    sphere2->matrices.translate(0, -2, 0);
-    sphere2->matrices.scale(0.5f);
+    sphere2->matrices()->setParent(sphere->matrices());
+    sphere2->matrices()->translate(0, -2, 0);
+    sphere2->matrices()->scale(0.5f);
     
     ObjectData* dolphin = defaultScene.genObject();
     dolphin->loadModel(Models::loadObj("dolphinHighPoly.obj"), &vboGenerator);
     dolphin->setTexture("Dolphin_HighPolyUV.png");
-    dolphin->matrices.setParent(&cube->matrices);
-    dolphin->matrices.translate(6.f, 0.f, 0.f);
-    dolphin->matrices.scale(1.75f);
-    dolphin->matrices.setApplyParentRotationToPosition(false);
+    dolphin->matrices()->setParent(cube->matrices());
+    dolphin->matrices()->translate(6.f, 0.f, 0.f);
+    dolphin->matrices()->scale(1.75f);
+    dolphin->matrices()->setApplyParentRotationToPosition(false);
 
     defaultScene.deleteObject(cube);
-    dolphin->matrices.translate(0.f, -1.f, 0.f);
+    dolphin->matrices()->translate(0.f, -1.f, 0.f);
 
     ObjectData* lightSourceModel = defaultScene.genObject();
-    lightSourceModel->copyVBO(*sphere2);
+    lightSourceModel->setVBOs(sphere2->vbo);
     lightSourceModel->setTexture("sunmap.jpg");
-    lightSourceModel->matrices.translate(0, 2, 0);
-    lightSourceModel->matrices.scale(0.1f);
+    lightSourceModel->matrices()->translate(0, 2, 0);
+    lightSourceModel->matrices()->scale(0.1f);
     lightSourceModel->material.specular = glm::vec4(0, 0, 0, 1);
     lightSourceModel->flags.internallyLit = true;
 
@@ -107,7 +109,7 @@ void init() {
     camera = defaultScene.newCamera(90.f, float(windowX) / windowY);
     camera->moveForward(-8);
 
-    sphere->matrices.translate(4.f, 0.f, 0.f);
+    sphere->matrices()->translate(4.f, 0.f, 0.f);
     //printf("%d\n", sphere->matrices)
 }
 
@@ -119,6 +121,7 @@ void display(GLFWwindow* window, double deltaTime) {
 
     textureRenderer.uniformCamera(*defaultScene.getCamera());
     textureRenderer.uniformLight(positionalLight);
+    //textureRenderer.render(defaultScene.objectBegin(), defaultScene.objectEnd());
     for (auto it = defaultScene.objectBegin(); it != defaultScene.objectEnd(); ++it) {
         textureRenderer.render(*it->get());
     }

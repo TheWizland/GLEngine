@@ -7,27 +7,28 @@
 #include <vector>
 #include <string>
 #include "RenderFlags.h"
+#include "VBOData.h"
+#include <memory>
 
 //Stores data about an individual object.
 class ObjectData
 {
 public:
-	MatrixCollection matrices;
-	GLuint vboVertex = -1;
-	GLuint vboTex = -1;
-	GLuint vboNormal = -1;
+	std::unique_ptr<MatrixCollection> matrix;
+	VBOData vbo;
 	GLuint textureID = -1;
 	GLuint heightMapID = -1;
 	GLuint normalID = -1;
-	int vertexCount = -1;
 	Material material;
 	RenderFlags flags;
 
+	ObjectData() { matrix = std::make_unique<MatrixCollection>(); }
 	void loadModel(Models::Model modelData, VBOManager* vboHandler);
 	void setTexture(std::string imageName);
 	void setTexture(GLuint textureID);
 	void setHeightMap(std::string imageName);
 	void setHeightMap(GLuint heightMapID);
-	void copyVBO(ObjectData object);
+	void setVBOs(VBOData vbo);
+	MatrixCollection* matrices() { return matrix.get(); }
 };
 

@@ -47,6 +47,8 @@ void MatrixCollection::updateModel()
 	for (MatrixCollection* child : children) {
 		child->updateModel();
 	}
+
+	model = glm::mat4(1.f) * worldTranslation * worldRotation * worldScale;
 }
 
 void MatrixCollection::setParent(MatrixCollection* newParent)
@@ -75,9 +77,8 @@ void MatrixCollection::removeChild(MatrixCollection* childMatrix)
 	children.erase(std::remove(children.begin(), children.end(), childMatrix), children.end());
 }
 
-glm::mat4 MatrixCollection::getModel()
+glm::mat4 const MatrixCollection::getModel()
 {
-	model = glm::mat4(1.f) * worldTranslation * worldRotation * worldScale;
 	return model;
 }
 

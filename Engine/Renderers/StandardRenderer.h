@@ -3,18 +3,32 @@
 #include "../Light.h"
 #include "../ObjectData.h"
 #include <GL/glew.h>
+#include <GLM/mat4x4.hpp>
 
 namespace Renderers {
 	class StandardRenderer
 	{
 	private:
 		GLuint program;
-		void uniformObject(ObjectData object);
-		void bindBuffers(ObjectData object);
+		GLuint programShadow;
+		glm::mat4 camToTexSpace; //Used to convert camera space to texture space.
+		void uniformObject(ObjectData& object);
+		void bindBuffers(ObjectData& object);
 	public:
 		void init();
 		void uniformCamera(Camera camera);
 		void uniformLight(Light light);
-		void render(ObjectData renderList);
+		void render(ObjectData& object);
+
+		/*template<typename ObjectIterator>
+		void render(ObjectIterator const objStart, ObjectIterator const objEnd)
+		{
+			for (auto it = objStart; it != objEnd; ++it)
+			{
+				render(*it->get());
+			}
+		}*/
+
+		void render(std::vector<ObjectData*> renderList);
 	};
 }

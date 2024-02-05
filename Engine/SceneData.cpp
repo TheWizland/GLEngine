@@ -33,9 +33,9 @@ ObjectData* SceneData::genSkybox(std::string skyboxName, std::string extension, 
 
 	Models::Model cube = Models::genCube();
 
-	skybox->vertexCount = (int)cube.vertexCount();
-	skybox->vboVertex = vboGenerator.setupVBO(cube.getVertices());
-	skybox->vboTex = vboGenerator.setupVBO(cube.getTexCoords());
+	skybox->vbo.vertexCount = (int)cube.vertexCount();
+	skybox->vbo.vertex = vboGenerator.setupVBO(cube.getVertices());
+	skybox->vbo.texture = vboGenerator.setupVBO(cube.getTexCoords());
 
 	std::string skyboxDir = skyboxPath + skyboxName + "/";
 	skybox->textureID = Models::genCubeMap(skyboxDir, extension);
@@ -48,12 +48,12 @@ ObjectData* SceneData::getSkybox()
 	return skybox.get();
 }
 
-std::vector<std::unique_ptr<ObjectData>>::const_iterator SceneData::objectBegin()
+std::vector<std::unique_ptr<ObjectData>>::iterator SceneData::objectBegin()
 {
 	return objectList.begin();
 }
 
-std::vector<std::unique_ptr<ObjectData>>::const_iterator SceneData::objectEnd()
+std::vector<std::unique_ptr<ObjectData>>::iterator SceneData::objectEnd()
 {
 	return objectList.end();
 }

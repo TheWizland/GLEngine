@@ -11,7 +11,7 @@ namespace Renderers {
 		GLuint program;
 	public:
 		void init();
-		void render(ObjectData skybox, Camera camera);
+		void render(ObjectData const& skybox, Camera camera);
 	};
 }
 

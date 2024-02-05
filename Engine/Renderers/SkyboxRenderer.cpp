@@ -10,7 +10,7 @@ namespace Renderers {
 		program = Shaders::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
 	}
 
-	void SkyboxRenderer::render(ObjectData skybox, Camera camera)
+	void SkyboxRenderer::render(ObjectData const& skybox, Camera camera)
 	{
 		glUseProgram(program);
         GLuint vMatLoc, pMatLoc;
@@ -20,7 +20,7 @@ namespace Renderers {
         pMatLoc = glGetUniformLocation(program, "proj_matrix");
         glUniformMatrix4fv(pMatLoc, 1, GL_FALSE, glm::value_ptr(camera.getPerspective()));
 
-        glBindBuffer(GL_ARRAY_BUFFER, skybox.vboVertex);
+        glBindBuffer(GL_ARRAY_BUFFER, skybox.vbo.vertex);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(0);
 
@@ -31,7 +31,7 @@ namespace Renderers {
         glFrontFace(GL_CW);
         glDisable(GL_DEPTH_TEST);
 
-        glDrawArrays(GL_TRIANGLES, 0, skybox.vertexCount);
+        glDrawArrays(GL_TRIANGLES, 0, skybox.vbo.vertexCount);
 
         glFrontFace(GL_CCW);
         glEnable(GL_DEPTH_TEST);

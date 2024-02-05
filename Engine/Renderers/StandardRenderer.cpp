@@ -1,15 +1,17 @@
+#include "../Loaders/shaderLoader.h"
 #include "StandardRenderer.h"
 #include <GLM/gtc/type_ptr.hpp>
-#include "../Loaders/shaderLoader.h"
+#include <iterator>
 
 namespace Renderers {
-    void StandardRenderer::uniformObject(ObjectData object)
+    void StandardRenderer::uniformObject(ObjectData& object)
     {
         GLuint mMatLoc = glGetUniformLocation(program, "m_matrix");
-        glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(object.matrices.getModel()));
+        glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(object.matrices()->getModel()));
+        
 
         GLuint nLoc = glGetUniformLocation(program, "norm_matrix");
-        glUniformMatrix4fv(nLoc, 1, GL_FALSE, glm::value_ptr(object.matrices.getInverseTranspose()));
+        glUniformMatrix4fv(nLoc, 1, GL_FALSE, glm::value_ptr(object.matrices()->getInverseTranspose()));
 
         //Material
         {
@@ -82,17 +84,17 @@ namespace Renderers {
         glProgramUniform1f(program, quadAttLoc, light.quadraticAttenuation);
     }
 
-    void StandardRenderer::bindBuffers(ObjectData object)
+    void StandardRenderer::bindBuffers(ObjectData& object)
     {
-        glBindBuffer(GL_ARRAY_BUFFER, object.vboVertex);
+        glBindBuffer(GL_ARRAY_BUFFER, object.vbo.vertex);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, object.vboTex);
+        glBindBuffer(GL_ARRAY_BUFFER, object.vbo.texture);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(1);
 
-        glBindBuffer(GL_ARRAY_BUFFER, object.vboNormal);
+        glBindBuffer(GL_ARRAY_BUFFER, object.vbo.normal);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(2);
 
@@ -103,9 +105,14 @@ namespace Renderers {
     void StandardRenderer::init()
     {
         program = Shaders::createShaderProgram("shaders/textureV.glsl", "shaders/textureF.glsl");
+        camToTexSpace = glm::mat4(
+            0.5f, 0, 0, 0,
+            0, 0.5f, 0, 0,
+            0, 0, 0.5f, 0,
+            0.5f, 0.5f, 0.5f, 1.0f);
     }
 
-    void StandardRenderer::render(ObjectData object) 
+    void StandardRenderer::render(ObjectData& object)
     {
         glUseProgram(program);
 
@@ -115,6 +122,6 @@ namespace Renderers {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        glDrawArrays(GL_TRIANGLES, 0, object.vertexCount);
+        glDrawArrays(GL_TRIANGLES, 0, object.vbo.vertexCount);
     }
 }
