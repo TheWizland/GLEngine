@@ -3,6 +3,7 @@
 #include "Light.h"
 #include "Renderers/SkyboxRenderer.h"
 #include "Renderers/StandardRenderer.h"
+#include "DereferenceIterator.h"
 #include <memory>
 
 class SceneData
@@ -24,7 +25,7 @@ public:
 	void deleteObject(ObjectData* object);
 	ObjectData* genSkybox(std::string name, std::string extension, VBOManager vboGenerator);
 	ObjectData* getSkybox();
-	std::vector<std::unique_ptr<ObjectData>>::iterator objectBegin();
-	std::vector<std::unique_ptr<ObjectData>>::iterator objectEnd();
+	DereferenceIterator<std::vector<std::unique_ptr<ObjectData>>::iterator> objectBegin();
+	DereferenceIterator<std::vector<std::unique_ptr<ObjectData>>::iterator> objectEnd();
 };
 

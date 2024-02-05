@@ -48,12 +48,12 @@ ObjectData* SceneData::getSkybox()
 	return skybox.get();
 }
 
-std::vector<std::unique_ptr<ObjectData>>::iterator SceneData::objectBegin()
+DereferenceIterator<std::vector<std::unique_ptr<ObjectData>>::iterator> SceneData::objectBegin()
 {
-	return objectList.begin();
+	return dereference_iterator(objectList.begin());
 }
 
-std::vector<std::unique_ptr<ObjectData>>::iterator SceneData::objectEnd()
+DereferenceIterator<std::vector<std::unique_ptr<ObjectData>>::iterator> SceneData::objectEnd()
 {
-	return objectList.end();
+	return dereference_iterator(objectList.end());
 }
