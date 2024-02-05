@@ -124,4 +124,13 @@ namespace Renderers {
         glDepthFunc(GL_LEQUAL);
         glDrawArrays(GL_TRIANGLES, 0, object.vbo.vertexCount);
     }
+
+    void StandardRenderer::render(SceneData& scene)
+    {
+        uniformCamera(*scene.getCamera());
+        uniformLight(*scene.getLight());
+        for (auto it = scene.objectBegin(); it != scene.objectEnd(); ++it) {
+            render(*it);
+        }
+    }
 }

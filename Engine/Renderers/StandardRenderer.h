@@ -2,8 +2,10 @@
 #include "../Camera.h"
 #include "../Light.h"
 #include "../ObjectData.h"
+#include "../SceneData.h"
 #include <GL/glew.h>
 #include <GLM/mat4x4.hpp>
+
 
 namespace Renderers {
 	class StandardRenderer
@@ -20,15 +22,15 @@ namespace Renderers {
 		void uniformLight(Light light);
 		void render(ObjectData& object);
 
-		/*template<typename ObjectIterator>
+		template<typename ObjectIterator>
 		void render(ObjectIterator const objStart, ObjectIterator const objEnd)
 		{
 			for (auto it = objStart; it != objEnd; ++it)
 			{
-				render(*it->get());
+				render(*it);
 			}
-		}*/
+		}
 
-		void render(std::vector<ObjectData*> renderList);
+		void render(SceneData& scene);
 	};
 }

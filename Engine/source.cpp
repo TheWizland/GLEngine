@@ -21,8 +21,6 @@
 #include "Renderers/StandardRenderer.h"
 #include "Renderers/SkyboxRenderer.h"
 #include "SceneData.h"
-
-#include <iostream>
 #include "InputHandler/CameraMouse.h"
 
 
@@ -36,7 +34,7 @@ const char* windowTitle = "OpenGL Window";
 InputManager inputManager;
 Camera* camera;
 ObjectData skybox;
-Light positionalLight;
+Light* positionalLight;
 SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
@@ -103,7 +101,8 @@ void init() {
     lightSourceModel->flags.internallyLit = true;
 
     Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
-    positionalLight.position = glm::vec3(0, 2, 0);
+    positionalLight = defaultScene.newLight();
+    positionalLight->position = glm::vec3(0, 2, 0);
     
     
     camera = defaultScene.newCamera(90.f, float(windowX) / windowY);
@@ -119,12 +118,7 @@ void updateTransform(float deltaTime) {
 void display(GLFWwindow* window, double deltaTime) {
     skyboxRenderer.render(*defaultScene.getSkybox(), *camera);
 
-    textureRenderer.uniformCamera(*defaultScene.getCamera());
-    textureRenderer.uniformLight(positionalLight);
-    //textureRenderer.render(defaultScene.objectBegin(), defaultScene.objectEnd());
-    for (auto it = defaultScene.objectBegin(); it != defaultScene.objectEnd(); ++it) {
-        textureRenderer.render(*it->get());
-    }
+    textureRenderer.render(defaultScene);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
