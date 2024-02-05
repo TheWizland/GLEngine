@@ -17,13 +17,13 @@ Camera* SceneData::getCamera()
 
 ObjectData* SceneData::genObject()
 {
-	renderList.emplace_back(std::make_unique<ObjectData>());
-	return renderList.back().get();
+	objectList.emplace_back(std::make_unique<ObjectData>());
+	return objectList.back().get();
 }
 
 void SceneData::deleteObject(ObjectData* object)
 {
-	renderList.erase(std::remove_if(renderList.begin(), renderList.end(), 
+	objectList.erase(std::remove_if(objectList.begin(), objectList.end(), 
 		[object](std::unique_ptr<ObjectData> const& objectPtr) { return objectPtr.get() == object; }));
 }
 
@@ -48,7 +48,12 @@ ObjectData* SceneData::getSkybox()
 	return skybox.get();
 }
 
-std::vector<std::unique_ptr<ObjectData>> const& SceneData::getObjectList() const
+std::vector<std::unique_ptr<ObjectData>>::const_iterator SceneData::objectBegin()
 {
-	return renderList;
+	return objectList.begin();
+}
+
+std::vector<std::unique_ptr<ObjectData>>::const_iterator SceneData::objectEnd()
+{
+	return objectList.end();
 }

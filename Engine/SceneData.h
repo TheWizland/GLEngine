@@ -8,7 +8,7 @@
 class SceneData
 {
 private:
-	std::vector<std::unique_ptr<ObjectData>> renderList;
+	std::vector<std::unique_ptr<ObjectData>> objectList;
 	std::unique_ptr<Camera> camera;
 	std::unique_ptr<ObjectData> skybox;
 public:
@@ -24,6 +24,7 @@ public:
 	void deleteObject(ObjectData* object);
 	ObjectData* genSkybox(std::string name, std::string extension, VBOManager vboGenerator);
 	ObjectData* getSkybox();
-	std::vector<std::unique_ptr<ObjectData>> const& getObjectList() const;
+	std::vector<std::unique_ptr<ObjectData>>::const_iterator objectBegin();
+	std::vector<std::unique_ptr<ObjectData>>::const_iterator objectEnd();
 };
 

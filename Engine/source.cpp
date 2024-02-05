@@ -119,8 +119,8 @@ void display(GLFWwindow* window, double deltaTime) {
 
     textureRenderer.uniformCamera(*defaultScene.getCamera());
     textureRenderer.uniformLight(positionalLight);
-    for (auto const& object : defaultScene.getObjectList()) {
-        textureRenderer.render(*object);
+    for (auto it = defaultScene.objectBegin(); it != defaultScene.objectEnd(); ++it) {
+        textureRenderer.render(*it->get());
     }
 }
 
