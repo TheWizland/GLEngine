@@ -22,12 +22,14 @@
 #include "Renderers/SkyboxRenderer.h"
 #include "SceneData.h"
 #include "InputHandler/CameraMouse.h"
+#include "Renderers/ShadowRenderer.h"
 
 
 GLuint vao[1];
 VBOManager vboGenerator; //Needs to be constructed
 Renderers::StandardRenderer textureRenderer;
 Renderers::SkyboxRenderer skyboxRenderer;
+Renderers::ShadowRenderer shadowRenderer;
 int windowX = 1200;
 int windowY = 900;
 const char* windowTitle = "OpenGL Window";
@@ -44,6 +46,7 @@ void init() {
     vboGenerator.init(15);
     textureRenderer.init();
     skyboxRenderer.init();
+    shadowRenderer.init();
 
     defaultScene.genSkybox("milkyway", ".jpg", vboGenerator);
 
@@ -51,7 +54,7 @@ void init() {
     cube->setVBOs(vboGenerator.setupVBO(Models::loadObj("cube.obj")));
     cube->setTexture("sand.jpg");
     cube->matrices()->translate(0, 3, 0);
-    cube->matrices()->rotateY((float)M_PI / 4);
+    //cube->matrices()->rotateY((float)M_PI / 4);
 
     //Models::Model tile = Models::genTile();
     //tile.applyTiling(5);
@@ -59,7 +62,7 @@ void init() {
     terrain->setVBOs(vboGenerator.setupVBO(Models::loadObj("tile.obj")));
     terrain->setTexture("sand.jpg");
     Models::tilingMode = GL_CLAMP_TO_EDGE;
-    terrain->setHeightMap("height.png");
+    terrain->setHeightMap("height.png"); //Shadow mapping currently does not account for height maps.
     Models::tilingMode = GL_REPEAT;
     terrain->matrices()->translate(0, -4, 0);
     terrain->matrices()->scale(10, 1, 10);
@@ -72,7 +75,7 @@ void init() {
     MatrixCollection* cMat = cube->matrices();
     glm::mat4 cMod = cMat->getModel();
     sphere->matrices()->setParent(cube->matrices());
-    sphere->matrices()->translate(4.f, 0.f, 0.f);
+    sphere->matrices()->translate(0.f, 0.f, 0.f);
 
     ObjectData* sphere2 = defaultScene.genObject();
     sphere2->setVBOs(sphere->vbo);
@@ -85,7 +88,7 @@ void init() {
     dolphin->setVBOs(vboGenerator.setupVBO(Models::loadObj("dolphinHighPoly.obj")));
     dolphin->setTexture("Dolphin_HighPolyUV.png");
     dolphin->matrices()->setParent(cube->matrices());
-    dolphin->matrices()->translate(6.f, 0.f, 0.f);
+    dolphin->matrices()->translate(2.f, 0.f, 0.f);
     dolphin->matrices()->scale(1.75f);
     dolphin->matrices()->setApplyParentRotationToPosition(false);
 
@@ -95,20 +98,21 @@ void init() {
     ObjectData* lightSourceModel = defaultScene.genObject();
     lightSourceModel->setVBOs(sphere2->vbo);
     lightSourceModel->setTexture("sunmap.jpg");
-    lightSourceModel->matrices()->translate(0, 2, 0);
+    lightSourceModel->matrices()->translate(0, 6, 0);
     lightSourceModel->matrices()->scale(0.1f);
     lightSourceModel->material.specular = glm::vec4(0, 0, 0, 1);
     lightSourceModel->flags.internallyLit = true;
 
     Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight = defaultScene.newLight();
-    positionalLight->position = glm::vec3(0, 2, 0);
+    positionalLight->position = glm::vec3(0, 6, 0);
+    positionalLight->diffuse = glm::vec4(1, 1, 1, 1);
     
     
     camera = defaultScene.newCamera(90.f, float(windowX) / windowY);
     camera->moveForward(-8);
 
-    sphere->matrices()->translate(4.f, 0.f, 0.f);
+    //sphere->matrices()->translate(4.f, 0.f, 0.f);
     //printf("%d\n", sphere->matrices)
 }
 
@@ -116,8 +120,9 @@ void updateTransform(float deltaTime) {
 }
 
 void display(GLFWwindow* window, double deltaTime) {
+    shadowRenderer.render(defaultScene);
     skyboxRenderer.render(*defaultScene.getSkybox(), *camera);
-
+    textureRenderer.bindShadow(shadowRenderer.getDepthMapTexture());
     textureRenderer.render(defaultScene);
 }
 

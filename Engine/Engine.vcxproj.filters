@@ -75,6 +75,12 @@
     <ClInclude Include="VBOData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderers\ShadowRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DereferenceIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp">
@@ -137,6 +143,9 @@
     <ClCompile Include="RenderFlags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Renderers\ShadowRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\textureV.glsl" />
@@ -144,5 +153,7 @@
     <None Include="shaders\textureF.glsl" />
     <None Include="shaders\skyboxF.glsl" />
     <None Include="shaders\skyboxV.glsl" />
+    <None Include="shaders\shadowF.glsl" />
+    <None Include="shaders\shadowV.glsl" />
   </ItemGroup>
 </Project>

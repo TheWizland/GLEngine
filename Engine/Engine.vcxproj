@@ -146,6 +146,7 @@
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3.h" />
     <ClInclude Include="..\..\glfw-3.3.9\include\GLFW\glfw3native.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DereferenceIterator.h" />
     <ClInclude Include="InputHandler\CameraMouse.h" />
     <ClInclude Include="InputHandler\InputHandler.h" />
     <ClInclude Include="Light.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Renderers\SkyboxRenderer.h" />
     <ClInclude Include="RenderFlags.h" />
     <ClInclude Include="SceneData.h" />
+    <ClInclude Include="Renderers\ShadowRenderer.h" />
     <ClInclude Include="VBOData.h" />
     <ClInclude Include="VBOManager.h" />
   </ItemGroup>
@@ -181,6 +183,7 @@
     <ClCompile Include="Renderers\SkyboxRenderer.cpp" />
     <ClCompile Include="RenderFlags.cpp" />
     <ClCompile Include="SceneData.cpp" />
+    <ClCompile Include="Renderers\ShadowRenderer.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="Loaders\ModelGenerator.cpp" />
     <ClCompile Include="Renderers\StandardRenderer.cpp" />
@@ -188,6 +191,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
+    <None Include="shaders\shadowF.glsl" />
+    <None Include="shaders\shadowV.glsl" />
     <None Include="shaders\skyboxF.glsl" />
     <None Include="shaders\skyboxV.glsl" />
     <None Include="shaders\textureF.glsl" />

@@ -20,6 +20,7 @@ namespace Renderers {
 		void init();
 		void uniformCamera(Camera camera);
 		void uniformLight(Light light);
+		void bindShadow(GLuint shadowTex);
 		void render(ObjectData& object);
 
 		template<typename ObjectIterator>

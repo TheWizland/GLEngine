@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include <GLM/glm.hpp>
 #include <glm/mat4x4.hpp>
 #include <GLM/vec3.hpp>
 #include <glm/ext.hpp>

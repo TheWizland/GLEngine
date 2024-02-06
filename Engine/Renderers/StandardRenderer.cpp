@@ -9,7 +9,6 @@ namespace Renderers {
         GLuint mMatLoc = glGetUniformLocation(program, "m_matrix");
         glUniformMatrix4fv(mMatLoc, 1, GL_FALSE, glm::value_ptr(object.matrices()->getModel()));
         
-
         GLuint nLoc = glGetUniformLocation(program, "norm_matrix");
         glUniformMatrix4fv(nLoc, 1, GL_FALSE, glm::value_ptr(object.matrices()->getInverseTranspose()));
 
@@ -82,6 +81,18 @@ namespace Renderers {
 
         quadAttLoc = glGetUniformLocation(program, "light.quadraticAttenuation");
         glProgramUniform1f(program, quadAttLoc, light.quadraticAttenuation);
+
+        float aspectRatio = 1200.f / 900;
+        GLuint sVPLoc = glGetUniformLocation(program, "vp_shadow");
+        glm::mat4 shadowVP = camToTexSpace * light.getMatVP(aspectRatio);
+        glProgramUniformMatrix4fv(program, sVPLoc, 1, GL_FALSE, glm::value_ptr(shadowVP));
+    }
+
+    void StandardRenderer::bindShadow(GLuint shadowTex)
+    {
+        glUseProgram(program);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, shadowTex);
     }
 
     void StandardRenderer::bindBuffers(ObjectData& object)

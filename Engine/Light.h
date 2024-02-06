@@ -1,6 +1,14 @@
 #pragma once
 #include <GLM/vec4.hpp>
 #include <GLM/vec3.hpp>
+#include <GLM/mat4x4.hpp>
+
+enum LightType
+{
+	Positional, //Position, Projection Matrix (+ Cubemap?)
+	Directional, //Direction, Ortho Matrix
+	Spot //Position + Direction, Projection Matrix
+};
 
 class Light
 {
@@ -14,6 +22,8 @@ public:
 	float constantAttenuation;
 	float linearAttenuation;
 	float quadraticAttenuation;
+	LightType type = LightType::Positional;
+	glm::mat4 getMatVP(float aspectRatio);
 	Light();
 };
 

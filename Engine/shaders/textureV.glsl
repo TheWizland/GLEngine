@@ -5,9 +5,11 @@ layout (location = 1) in vec2 texCoord;
 layout (location = 2) in vec3 vertexNormal;
 layout (binding = 0) uniform sampler2D samp;
 layout (binding = 1) uniform sampler2D height;
+layout (binding = 2) uniform sampler2DShadow shadowTex;
 out vec2 textureCoordinate;
 out vec3 varyingNormal;
 out vec3 varyingVertexPosition;
+out vec4 shadow_coord;
 
 struct Light {
 	vec4 ambient;
@@ -31,6 +33,7 @@ uniform mat4 m_matrix;
 uniform mat4 v_matrix;
 uniform mat4 proj_matrix;
 uniform mat4 norm_matrix;
+uniform mat4 vp_shadow;
 uniform vec4 globalAmbient;
 uniform int internallyLit; //-1 if internally lit, 1 if not
 
@@ -46,6 +49,9 @@ void main(void) {
 	varyingNormal = internallyLit * varyingNormal;
 
 	gl_Position = vec4(vertexPosition + heightChange, 1);
+
+	shadow_coord = vp_shadow * m_matrix * gl_Position;
+
 	gl_Position = proj_matrix * v_matrix * m_matrix * gl_Position;
 	textureCoordinate = texCoord;
 }
