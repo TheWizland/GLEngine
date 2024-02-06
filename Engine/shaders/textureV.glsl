@@ -35,7 +35,9 @@ uniform mat4 proj_matrix;
 uniform mat4 norm_matrix;
 uniform mat4 vp_shadow;
 uniform vec4 globalAmbient;
+
 uniform int internallyLit; //-1 if internally lit, 1 if not
+uniform int hasShadows; //0 if shadows are cast on this object, 1 if no shadows
 
 uniform int heightMapped; //0 if no height map, 1 if height map
 vec3 heightChange;

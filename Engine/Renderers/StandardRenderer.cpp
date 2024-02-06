@@ -43,6 +43,10 @@ namespace Renderers {
                 glActiveTexture(GL_TEXTURE1);
                 glBindTexture(GL_TEXTURE_2D, object.heightMapID);
             }
+
+            GLuint shadowFlagLoc = glGetUniformLocation(program, "hasShadows");
+            int shadowVal = !object.flags.hasShadows;
+            glUniform1i(shadowFlagLoc, shadowVal);
         }
     }
 

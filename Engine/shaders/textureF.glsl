@@ -32,6 +32,10 @@ uniform mat4 v_matrix;
 uniform mat4 proj_matrix;
 uniform vec4 globalAmbient;
 
+uniform int internallyLit; //-1 if internally lit, 1 if not
+uniform int hasShadows; //0 if shadows are cast on this object, 1 if no shadows
+uniform int heightMapped; //0 if no height map, 1 if height map
+
 vec3 L, N, V, R;
 vec4 ambient, diffuse, specular;
 vec3 halfVector;
@@ -70,7 +74,7 @@ void main(void) {
     shadowFactor += lookup( 0.5*swidth + o.x,  1.5*swidth - o.y);
     shadowFactor += lookup( 0.5*swidth + o.x, -0.5*swidth - o.y);
     shadowFactor = shadowFactor / 4.0;
-    shadowFactor = min(shadowFactor, 1.0);
+    shadowFactor = min(shadowFactor + hasShadows, 1.0);
 
     texColor = texture(samp, textureCoordinate);
 	color = texColor * (ambient + shadowFactor*(diffuse + specular));
