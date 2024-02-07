@@ -129,6 +129,9 @@ namespace Renderers {
 
     void StandardRenderer::render(ObjectData& object)
     {
+        if (!object.flags.visible)
+            return;
+
         glUseProgram(program);
 
         uniformObject(object);

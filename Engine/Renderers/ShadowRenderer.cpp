@@ -18,7 +18,7 @@ namespace Renderers {
 		glGenFramebuffers(1, &depthMapBuffer);
 		glGenTextures(1, &depthMapTexture);
 		glBindTexture(GL_TEXTURE_2D, depthMapTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32,
 			width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -70,6 +70,10 @@ namespace Renderers {
 
 	void ShadowRenderer::render(ObjectData const& object)
 	{
+		if (!object.flags.castsShadows
+			|| !object.flags.visible)
+			return;
+
 		glm::mat4 shadowMVP = lightVP * object.matrix->getModel();
 
 		int shadowLoc = glGetUniformLocation(program, "shadowMVP");

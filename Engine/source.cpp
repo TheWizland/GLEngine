@@ -88,7 +88,7 @@ void init() {
     dolphin->setVBOs(vboGenerator.setupVBO(Models::loadObj("dolphinHighPoly.obj")));
     dolphin->setTexture("Dolphin_HighPolyUV.png");
     dolphin->matrices()->setParent(cube->matrices());
-    dolphin->matrices()->translate(2.f, 0.f, 0.f);
+    dolphin->matrices()->translate(4.f, 0.f, 0.f);
     dolphin->matrices()->scale(1.75f);
     dolphin->matrices()->setApplyParentRotationToPosition(false);
 
@@ -102,6 +102,7 @@ void init() {
     lightSourceModel->matrices()->scale(0.1f);
     lightSourceModel->material.specular = glm::vec4(0, 0, 0, 1);
     lightSourceModel->flags.internallyLit = true;
+    lightSourceModel->flags.hasShadows = false;
 
     Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight = defaultScene.newLight();
