@@ -2,6 +2,7 @@
 #include <GLFW\glfw3.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <iostream>
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -185,12 +186,21 @@ int main(void)
     float curTime = prevTime;
     deltaTime = 0;
 
+    float alpha = 0.1f;
+    float averageFPS = 60;
+    float frameTime = 0;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         deltaTime = curTime - prevTime;
         prevTime = curTime;
         curTime = (float)glfwGetTime();
+
+        if(deltaTime != 0)
+            frameTime = (1.f / deltaTime);
+        averageFPS = (alpha * frameTime) + (1.0 - alpha) * averageFPS;
+        std::cout << " FPS: " << averageFPS << '\r';
   
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);
