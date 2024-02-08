@@ -13,6 +13,7 @@
 namespace Models {
     bool genTextures = true;
     bool genNormals = true;
+    bool genTangents = false;
 
     Model genCube()
     {

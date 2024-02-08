@@ -8,9 +8,11 @@ namespace Models {
 		std::vector<float> vertexList;
 		std::vector<float> textureList;
 		std::vector<float> normalList;
-		bool vertexLoaded;
-		bool textureLoaded;
-		bool normalLoaded;
+		std::vector<float> tangentList;
+		bool vertexLoaded = false;
+		bool textureLoaded = false;
+		bool normalLoaded = false;
+		bool tangentLoaded = false;
 		bool isLoaded = false;
 	public:
 		Model(std::vector<float> vertexList);
@@ -27,5 +29,6 @@ namespace Models {
 		/* Multiply all texture coordinates by tiling.
 		   Does nothing if no texture coordinates have been loaded. */
 		void applyTiling(float tiling);
+		void genTangents();
 	};
 }
