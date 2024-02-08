@@ -55,8 +55,9 @@ void MatrixCollection::setParent(MatrixCollection* newParent)
 {
 	if (parentMatrix)
 		parentMatrix->removeChild(this);
+
 	parentMatrix = newParent;
-	parentMatrix->addChild(this);
+	parentMatrix->children.push_back(this);
 }
 
 void MatrixCollection::removeParent()
@@ -64,17 +65,22 @@ void MatrixCollection::removeParent()
 	localTranslation = worldTranslation;
 	localScale = worldScale;
 	localRotation = worldRotation;
+	parentMatrix->removeChild(this);
 	parentMatrix = nullptr;
+	//Shouldn't this call removeChild(this) on the parent?
 }
 
 void MatrixCollection::addChild(MatrixCollection* childMatrix)
 {
 	children.push_back(childMatrix);
+	childMatrix->removeParent();
+	childMatrix->parentMatrix = this;
 }
 
 void MatrixCollection::removeChild(MatrixCollection* childMatrix)
 {
-	children.erase(std::remove(children.begin(), children.end(), childMatrix), children.end());
+	if(!children.empty())
+		children.erase(std::remove(children.begin(), children.end(), childMatrix), children.end());
 }
 
 glm::mat4 const MatrixCollection::getModel()
@@ -162,23 +168,7 @@ MatrixCollection::MatrixCollection()
 
 MatrixCollection::MatrixCollection(const MatrixCollection& original)
 {
-	localRotation = original.localRotation;
-	worldRotation = original.worldRotation;
-	localTranslation = original.localTranslation;
-	worldTranslation = original.worldTranslation;
-	localScale = original.localScale;
-	worldScale = original.worldScale;
-	model = original.model;
-	
-	inheritTranslation = original.inheritTranslation;
-	inheritRotation = original.inheritRotation;
-	inheritScale = original.inheritScale;
-	applyParentRotationToPosition = original.applyParentRotationToPosition;
-	applyParentScaleToPosition = original.applyParentScaleToPosition;
-
-	parentMatrix = original.parentMatrix;
-	if(parentMatrix)
-		parentMatrix->addChild(this);
+	*this = original;
 }
 
 void MatrixCollection::operator=(const MatrixCollection& original)

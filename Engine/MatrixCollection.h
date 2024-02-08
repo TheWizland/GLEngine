@@ -13,14 +13,14 @@ private:
 	glm::mat4 worldRotation = glm::mat4(1.f);
 	glm::mat4 worldScale = glm::mat4(1.f);
 	glm::mat4 model = glm::mat4(1.f);
-	MatrixCollection* parentMatrix = NULL;
-	std::vector<MatrixCollection*> children;
 	bool inheritTranslation = true;
 	bool inheritRotation = true;
 	bool inheritScale = true;
 	bool applyParentRotationToPosition = true;
 	bool applyParentScaleToPosition = true;
 protected:
+	MatrixCollection* parentMatrix = NULL;
+	std::vector<MatrixCollection*> children;
 	void addChild(MatrixCollection* childMatrix);
 	void removeChild(MatrixCollection* childMatrix);
 	void updateModel();
