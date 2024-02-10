@@ -6,7 +6,6 @@
 namespace Models {
     extern bool genTextures;
     extern bool genNormals;
-    extern bool genTangents;
     Model genCube();
     Model genSphere(int precision);
     Model genTile();

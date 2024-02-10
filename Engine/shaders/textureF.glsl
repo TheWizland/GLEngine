@@ -2,11 +2,13 @@
 
 in vec2 textureCoordinate;
 in vec3 varyingNormal;
+in vec3 varyingTangent;
 in vec3 varyingVertexPosition;
 in vec4 shadow_coord;
 layout (binding = 0) uniform sampler2D samp;
 layout (binding = 1) uniform sampler2D height;
 layout (binding = 2) uniform sampler2DShadow shadowTex;
+layout (binding = 3) uniform sampler2D normalMap;
 out vec4 color;
 
 struct Light {
@@ -35,6 +37,7 @@ uniform vec4 globalAmbient;
 uniform int internallyLit; //-1 if internally lit, 1 if not
 uniform int hasShadows; //0 if shadows are cast on this object, 1 if no shadows
 uniform int heightMapped; //0 if no height map, 1 if height map
+uniform int normalMapped;
 
 vec3 L, N, V, R;
 vec4 ambient, diffuse, specular;
@@ -50,9 +53,26 @@ float lookup(float x, float y) {
     return texVal;
 }
 
+vec3 calcNewNormal() {
+    vec3 normal = N;
+    vec3 tangent = normalize(varyingTangent);
+    tangent = normalize(tangent - dot(tangent, normal) * normal);
+    vec3 bitangent = cross(tangent, normal);
+    mat3 tbn = mat3(tangent, bitangent, normal);
+    vec3 retrievedNormal = texture(normalMap,textureCoordinate).xyz;
+    retrievedNormal = retrievedNormal * 2.0 - 1.0;
+    vec3 newNormal = tbn * retrievedNormal;
+    newNormal = normalize(newNormal);
+    return newNormal;
+}
+
 void main(void) {
+    N = normalize(varyingNormal);
+    if(normalMapped == 1)
+        N = calcNewNormal();
+
 	L = normalize(light.position - varyingVertexPosition);
-	N = normalize(varyingNormal);
+	
 	V = normalize(-v_matrix[3].xyz - varyingVertexPosition);
 
 	cosTheta = dot(L,N);

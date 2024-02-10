@@ -28,3 +28,17 @@ void ObjectData::setHeightMap(GLuint heightMapID)
 	this->heightMapID = heightMapID;
 	flags.heightMapped = true;
 }
+
+void ObjectData::setNormalMap(std::string imageName)
+{
+	assert(vbo.tangent != -1 && "No tangent VBO loaded.");
+	normalMapID = Models::genTexture(texturePath + imageName);
+	flags.normalMapped = true;
+}
+
+void ObjectData::setNormalMap(GLuint normalMapID)
+{
+	assert(vbo.tangent != -1 && "No tangent VBO loaded.");
+	this->normalMapID = normalMapID;
+	flags.normalMapped = true;
+}

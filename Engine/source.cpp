@@ -38,19 +38,21 @@ InputManager inputManager;
 Camera* camera;
 ObjectData skybox;
 Light* positionalLight;
+ObjectData* lightSourceModel;
 SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
 CameraMouse cameraHandler;
 
 void init() {
-    vboGenerator.init(15);
+    vboGenerator.init(21);
     textureRenderer.init();
     skyboxRenderer.init();
     shadowRenderer.init();
 
     defaultScene.genSkybox("milkyway", ".jpg", vboGenerator);
 
+    double t0 = glfwGetTime();
     ObjectData* cube = defaultScene.genObject();
     cube->setVBOs(vboGenerator.setupVBO(Models::loadObj("cube.obj")));
     cube->setTexture("sand.jpg");
@@ -72,7 +74,8 @@ void init() {
     
     ObjectData* sphere = defaultScene.genObject();
     sphere->setVBOs(vboGenerator.setupVBO(Models::genSphere(24)));
-    sphere->setTexture("rock.jpg");
+    sphere->setTexture("moon.jpg");
+    sphere->setNormalMap("moonN.jpg");
     MatrixCollection* cMat = cube->matrices();
     glm::mat4 cMod = cMat->getModel();
     sphere->matrices()->setParent(cube->matrices());
@@ -85,18 +88,24 @@ void init() {
     sphere2->matrices()->translate(0, -2, 0);
     sphere2->matrices()->scale(0.5f);
     
+
     ObjectData* dolphin = defaultScene.genObject();
+
+    
     dolphin->setVBOs(vboGenerator.setupVBO(Models::loadObj("dolphinHighPoly.obj")));
+    
+
     dolphin->setTexture("Dolphin_HighPolyUV.png");
     dolphin->matrices()->setParent(cube->matrices());
     dolphin->matrices()->translate(4.f, 0.f, 0.f);
     dolphin->matrices()->scale(1.75f);
     dolphin->matrices()->setApplyParentRotationToPosition(false);
 
+    cube->matrices()->translate(-1.f, 0.f, 1.f);
     defaultScene.deleteObject(cube);
     dolphin->matrices()->translate(0.f, -1.f, 0.f);
 
-    ObjectData* lightSourceModel = defaultScene.genObject();
+    lightSourceModel = defaultScene.genObject();
     lightSourceModel->setVBOs(sphere2->vbo);
     lightSourceModel->setTexture("sunmap.jpg");
     lightSourceModel->matrices()->translate(0, 6, 0);
@@ -105,11 +114,24 @@ void init() {
     lightSourceModel->flags.internallyLit = true;
     lightSourceModel->flags.hasShadows = false;
 
+
+    ObjectData* cube2 = defaultScene.genObject();
+    Models::Model cubeModel = Models::loadObj("cube.obj");
+    cubeModel.genTangents();
+    cube2->setVBOs(vboGenerator.setupVBO(cubeModel));
+    cube2->setTexture("rock.jpg");
+    cube2->setNormalMap("rockN.jpg");
+    cube2->matrices()->translate(2, 3, 2);
+
     Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight = defaultScene.newLight();
     positionalLight->position = glm::vec3(0, 6, 0);
     positionalLight->diffuse = glm::vec4(1, 1, 1, 1);
+    positionalLight->specular = glm::vec4(1, 1, 1, 1);
     
+
+    double t1 = glfwGetTime();
+    std::cout << "Object Load Time: " << t1 - t0 << std::endl;
     
     camera = defaultScene.newCamera(90.f, float(windowX) / windowY);
     camera->moveForward(-8);
@@ -119,6 +141,8 @@ void init() {
 }
 
 void updateTransform(float deltaTime) {
+    glm::mat4 translation = glm::translate(glm::mat4(1.f), positionalLight->position);
+    lightSourceModel->matrices()->setLocalTranslation(translation);
 }
 
 void display(GLFWwindow* window, double deltaTime) {
@@ -148,8 +172,15 @@ void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_DOWN, [](float deltaTime) -> void { camera->pitch(-deltaTime); });
     inputManager.addAction(GLFW_KEY_Z, [](float deltaTime) -> void { camera->roll(-deltaTime); });
     inputManager.addAction(GLFW_KEY_C, [](float deltaTime) -> void { camera->roll(deltaTime); });
+    
+    //Light Controls
     inputManager.addAction(GLFW_KEY_EQUAL, [](float deltaTime) -> void { Light::globalAmbient += deltaTime; });
     inputManager.addAction(GLFW_KEY_MINUS, [](float deltaTime) -> void { Light::globalAmbient -= deltaTime; });
+    inputManager.addAction(GLFW_KEY_I, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, 0, deltaTime); });
+    inputManager.addAction(GLFW_KEY_K, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, 0, -deltaTime); });
+    inputManager.addAction(GLFW_KEY_J, [](float deltaTime) -> void { positionalLight->position += glm::vec3(deltaTime, 0, 0); });
+    inputManager.addAction(GLFW_KEY_L, [](float deltaTime) -> void { positionalLight->position += glm::vec3(-deltaTime, 0, 0); });
+
     glfwSetKeyCallback(window, key_callback);
 }
 

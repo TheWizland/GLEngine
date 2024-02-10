@@ -36,6 +36,10 @@ VBOData VBOManager::setupVBO(Models::Model model)
     {
         vbo.normal = setupVBO(model.getNormals());
     }
+    if (model.hasTangent())
+    {
+        vbo.tangent = setupVBO(model.getTangents());
+    }
         
     return vbo;
 }

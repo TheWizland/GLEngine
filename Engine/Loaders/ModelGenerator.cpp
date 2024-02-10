@@ -13,7 +13,6 @@
 namespace Models {
     bool genTextures = true;
     bool genNormals = true;
-    bool genTangents = false;
 
     Model genCube()
     {
@@ -59,6 +58,7 @@ namespace Models {
         std::vector<float> vertexList;
         std::vector<float> texList;
         std::vector<float> normalList;
+        std::vector<float> tangentList;
 
         double toRadians = M_PI / 180;
         // calculate triangle vertices
@@ -105,12 +105,12 @@ namespace Models {
             normalList.push_back(normals.at(indices[i]).x);
             normalList.push_back(normals.at(indices[i]).y);
             normalList.push_back(normals.at(indices[i]).z);
-            /*tangentList.push_back(tangents.at(indices[i]).x());
-            tangentList.push_back(tangents.at(indices[i]).y());
-            tangentList.push_back(tangents.at(indices[i]).z());*/
+            tangentList.push_back(tangents.at(indices[i]).x);
+            tangentList.push_back(tangents.at(indices[i]).y);
+            tangentList.push_back(tangents.at(indices[i]).z);
         }
 
-        return Model(vertexList, texList, normalList);
+        return Model(vertexList, texList, normalList, tangentList);
     }
 
     Model genTile()

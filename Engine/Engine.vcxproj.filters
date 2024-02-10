@@ -66,9 +66,6 @@
     <ClInclude Include="Loaders\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Renderers\SceneRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RenderFlags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -135,9 +132,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Loaders\Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderers\SceneRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderFlags.cpp">

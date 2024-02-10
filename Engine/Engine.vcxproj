@@ -157,7 +157,6 @@
     <ClInclude Include="Loaders\Model.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Loaders\shaderLoader.h" />
-    <ClInclude Include="Renderers\SceneRenderer.h" />
     <ClInclude Include="Renderers\StandardRenderer.h" />
     <ClInclude Include="Renderers\SkyboxRenderer.h" />
     <ClInclude Include="RenderFlags.h" />
@@ -179,7 +178,6 @@
     <ClCompile Include="Loaders\Model.cpp" />
     <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="Loaders\shaderLoader.cpp" />
-    <ClCompile Include="Renderers\SceneRenderer.cpp" />
     <ClCompile Include="Renderers\SkyboxRenderer.cpp" />
     <ClCompile Include="RenderFlags.cpp" />
     <ClCompile Include="SceneData.cpp" />

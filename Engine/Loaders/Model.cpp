@@ -12,23 +12,24 @@ Models::Model::Model(std::vector<float> vertexList)
 }
 
 Models::Model::Model(std::vector<float> vertexList, std::vector<float> textureList)
+	: Model(vertexList)
 {
-	this->vertexList = vertexList;
 	this->textureList = textureList;
-	vertexLoaded = true;
 	textureLoaded = true;
-	isLoaded = true;
 }
 
 Models::Model::Model(std::vector<float> vertexList, std::vector<float> textureList, std::vector<float> normalList)
+	: Model(vertexList, textureList)
 {
-	this->vertexList = vertexList;
-	this->textureList = textureList;
 	this->normalList = normalList;
-	vertexLoaded = true;
-	textureLoaded = true;
 	normalLoaded = true;
-	isLoaded = true;
+}
+
+Models::Model::Model(std::vector<float> vertexList, std::vector<float> textureList, std::vector<float> normalList, std::vector<float> tangentList)
+	: Model(vertexList, textureList, normalList)
+{
+	this->tangentList = tangentList;
+	tangentLoaded = true;
 }
 
 void Models::Model::applyTiling(float tiling)
@@ -52,7 +53,7 @@ void Models::Model::genTangents()
 
 	assert(textureLoaded && normalLoaded && "genTangents requires textures and normals to be loaded.");
 
-	for (int i = 0; i < vertexList.size(); i += 3)
+	for (int i = 0; i*3 < vertexList.size(); i += 3)
 	{
 		vertex0 = glm::vec3(vertexList[i*3 + 0], vertexList[i*3 + 1], vertexList[i*3 + 2]);
 		vertex1 = glm::vec3(vertexList[i*3 + 3], vertexList[i*3 + 4], vertexList[i*3 + 5]);

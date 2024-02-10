@@ -54,7 +54,7 @@ namespace Models {
 				iss >> face[0][0] >> discard >> face[0][1] >> discard >> face[0][2]
 					>> face[1][0] >> discard >> face[1][1] >> discard >> face[1][2]
 					>> face[2][0] >> discard >> face[2][1] >> discard >> face[2][2];
-				
+
 				for (int i = 0; i < 3; ++i) {
 					point = vertices[face[i][0] - 1];
 					vertexList.push_back(point.x);
@@ -76,7 +76,7 @@ namespace Models {
 				}
 			}
 		}
-		
+
 		return Model(vertexList, texList, normalList);
 	}
 }

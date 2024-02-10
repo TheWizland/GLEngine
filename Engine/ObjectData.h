@@ -15,7 +15,7 @@ public:
 	VBOData vbo;
 	GLuint textureID = -1;
 	GLuint heightMapID = -1;
-	GLuint normalID = -1;
+	GLuint normalMapID = -1;
 	Material material;
 	RenderFlags flags;
 
@@ -24,6 +24,8 @@ public:
 	void setTexture(GLuint textureID);
 	void setHeightMap(std::string imageName);
 	void setHeightMap(GLuint heightMapID);
+	void setNormalMap(std::string imageName);
+	void setNormalMap(GLuint normalMapID);
 	void setVBOs(VBOData vbo);
 	MatrixCollection* matrices() { return matrix.get(); }
 };

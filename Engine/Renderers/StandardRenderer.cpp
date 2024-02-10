@@ -47,7 +47,13 @@ namespace Renderers {
             GLuint shadowFlagLoc = glGetUniformLocation(program, "hasShadows");
             int shadowVal = !object.flags.hasShadows;
             glUniform1i(shadowFlagLoc, shadowVal);
+
+            
         }
+    }
+
+    void StandardRenderer::uniformRenderFlags(RenderFlags& renderFlags)
+    {
     }
 
     void StandardRenderer::uniformCamera(Camera camera) {
@@ -117,6 +123,33 @@ namespace Renderers {
         glBindTexture(GL_TEXTURE_2D, object.textureID);
     }
 
+
+    void StandardRenderer::bindHeightMap(ObjectData& object)
+    {
+        GLuint heightMapLoc = glGetUniformLocation(program, "heightMapped");
+        glUniform1i(heightMapLoc, (int)object.flags.heightMapped);
+
+        if (object.flags.heightMapped)
+        {
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, object.heightMapID);
+        }
+    }
+
+    //Assumed that object has texture and normal VBOs bound.
+    void StandardRenderer::bindNormalMap(ObjectData& object)
+    {
+        GLuint mappedLoc = glGetUniformLocation(program, "normalMapped");
+        glUniform1i(mappedLoc, (int)object.flags.normalMapped);
+
+        glBindBuffer(GL_ARRAY_BUFFER, object.vbo.tangent);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(3);
+        
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, object.normalMapID);
+    }
+
     void StandardRenderer::init()
     {
         program = Shaders::createShaderProgram("shaders/textureV.glsl", "shaders/textureF.glsl");
@@ -136,6 +169,7 @@ namespace Renderers {
 
         uniformObject(object);
         bindBuffers(object);
+        bindNormalMap(object);
 
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
