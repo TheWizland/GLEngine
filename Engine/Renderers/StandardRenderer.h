@@ -15,10 +15,8 @@ namespace Renderers {
 		GLuint programShadow;
 		glm::mat4 camToTexSpace; //Used to convert camera space to texture space.
 		void uniformObject(ObjectData& object);
-		void uniformRenderFlags(RenderFlags& renderFlags);
+		void uniformRenderFlags(RenderFlags& flags);
 		void bindBuffers(ObjectData& object);
-		void bindHeightMap(ObjectData& object);
-		void bindNormalMap(ObjectData& object);
 	public:
 		void init();
 		void uniformCamera(Camera camera);

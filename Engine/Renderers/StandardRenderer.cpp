@@ -27,33 +27,23 @@ namespace Renderers {
             shininessLoc = glGetUniformLocation(program, "material.shininess");
             glUniform1f(shininessLoc, object.material.shininess);
         }
-
-        //Flags
-        {
-            GLuint internalLitLoc, heightMapLoc;
-            internalLitLoc = glGetUniformLocation(program, "internallyLit");
-            int normMult = object.flags.internallyLit ? -1 : 1;
-            glUniform1i(internalLitLoc, normMult);
-
-            heightMapLoc = glGetUniformLocation(program, "heightMapped");
-            glUniform1i(heightMapLoc, (int)object.flags.heightMapped);
-            
-            if (object.flags.heightMapped)
-            {
-                glActiveTexture(GL_TEXTURE1);
-                glBindTexture(GL_TEXTURE_2D, object.heightMapID);
-            }
-
-            GLuint shadowFlagLoc = glGetUniformLocation(program, "hasShadows");
-            int shadowVal = !object.flags.hasShadows;
-            glUniform1i(shadowFlagLoc, shadowVal);
-
-            
-        }
     }
 
-    void StandardRenderer::uniformRenderFlags(RenderFlags& renderFlags)
+    void StandardRenderer::uniformRenderFlags(RenderFlags& flags)
     {
+        GLuint internalLitLoc = glGetUniformLocation(program, "internallyLit");
+        int normMult = flags.internallyLit ? -1 : 1;
+        glUniform1i(internalLitLoc, normMult);
+
+        GLuint heightMapLoc = glGetUniformLocation(program, "heightMapped");
+        glUniform1i(heightMapLoc, (int)flags.heightMapped);
+
+        GLuint shadowFlagLoc = glGetUniformLocation(program, "hasShadows");
+        int shadowVal = !flags.hasShadows;
+        glUniform1i(shadowFlagLoc, shadowVal);
+
+        GLuint mappedLoc = glGetUniformLocation(program, "normalMapped");
+        glUniform1i(mappedLoc, (int)flags.normalMapped);
     }
 
     void StandardRenderer::uniformCamera(Camera camera) {
@@ -107,6 +97,7 @@ namespace Renderers {
 
     void StandardRenderer::bindBuffers(ObjectData& object)
     {
+        //VBO
         glBindBuffer(GL_ARRAY_BUFFER, object.vbo.vertex);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(0);
@@ -119,33 +110,17 @@ namespace Renderers {
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(2);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, object.textureID);
-    }
-
-
-    void StandardRenderer::bindHeightMap(ObjectData& object)
-    {
-        GLuint heightMapLoc = glGetUniformLocation(program, "heightMapped");
-        glUniform1i(heightMapLoc, (int)object.flags.heightMapped);
-
-        if (object.flags.heightMapped)
-        {
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, object.heightMapID);
-        }
-    }
-
-    //Assumed that object has texture and normal VBOs bound.
-    void StandardRenderer::bindNormalMap(ObjectData& object)
-    {
-        GLuint mappedLoc = glGetUniformLocation(program, "normalMapped");
-        glUniform1i(mappedLoc, (int)object.flags.normalMapped);
-
         glBindBuffer(GL_ARRAY_BUFFER, object.vbo.tangent);
         glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(3);
-        
+
+        //Textures
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, object.textureID);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, object.heightMapID);
+
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, object.normalMapID);
     }
@@ -168,8 +143,8 @@ namespace Renderers {
         glUseProgram(program);
 
         uniformObject(object);
+        uniformRenderFlags(object.flags);
         bindBuffers(object);
-        bindNormalMap(object);
 
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
