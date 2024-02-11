@@ -26,7 +26,7 @@ VBOData VBOManager::setupVBO(Models::Model model)
     if (model.hasVertex()) 
     {
         vbo.vertex = setupVBO(model.getVertices());
-        vbo.vertexCount = model.vertexCount();
+        vbo.vertexCount = (int)model.vertexCount();
     }
     if (model.hasTexture())
     {

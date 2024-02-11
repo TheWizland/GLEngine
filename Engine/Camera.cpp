@@ -57,7 +57,7 @@ void Camera::globalYaw(float distance)
 void Camera::pitch(float distance)
 {
 	if (curPitch + distance > M_PI / 2) {
-		distance = M_PI / 2 - curPitch;
+		distance = (float)M_PI / 2 - curPitch;
 	}
 	else if (curPitch + distance < -M_PI / 2) {
 		distance = (float)(-curPitch - M_PI / 2);

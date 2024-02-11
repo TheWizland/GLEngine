@@ -15,8 +15,8 @@ void CameraMouse::checkMouse(GLFWwindow* window)
 	double deltaX = mouseX - centerX;
 	double deltaY = centerY - mouseY;
 
-	camera->globalYaw(deltaX*sensitivityX);
-	camera->pitch(deltaY*sensitivityY);
+	camera->globalYaw((float)(deltaX*sensitivityX));
+	camera->pitch((float)(deltaY*sensitivityY));
 
 	
 	glfwSetCursorPos(window, centerX, centerY);

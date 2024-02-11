@@ -9,8 +9,8 @@ Light::Light() {
 	specular = glm::vec4(0.8f, 0.8f, 0.8f, 1.f);
 	position = glm::vec3(0.f, 0.f, 0.f);
 	constantAttenuation = 1;
-	linearAttenuation = 0.05;
-	quadraticAttenuation = 0.01;
+	linearAttenuation = 0.05f;
+	quadraticAttenuation = 0.01f;
 }
 
 glm::mat4 Light::getMatVP(float aspectRatio)
