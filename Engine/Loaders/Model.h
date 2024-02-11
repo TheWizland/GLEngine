@@ -13,25 +13,22 @@ namespace Models {
 		bool textureLoaded = false;
 		bool normalLoaded = false;
 		bool tangentLoaded = false;
-		bool isLoaded = false;
 	public:
 		Model(std::vector<float> vertexList);
 		Model(std::vector<float> vertexList, std::vector<float> textureList);
 		Model(std::vector<float> vertexList, std::vector<float> textureList, std::vector<float> normalList);
 		Model(std::vector<float> vertexList, std::vector<float> textureList, std::vector<float> normalList, std::vector<float> tangentList);
-		std::vector<float> getVertices() { return vertexList; }
-		std::vector<float> getTexCoords() { return textureList; }
-		std::vector<float> getNormals() { return normalList; }
-		std::vector<float> getTangents() { return tangentList; }
-		bool modelLoaded() { return isLoaded; }
-		bool hasVertex() { return vertexLoaded; }
-		bool hasTexture() { return textureLoaded; }
-		bool hasNormal() { return normalLoaded; }
-		bool hasTangent() { return tangentLoaded; }
-		size_t vertexCount() { return vertexList.size(); }
-		/* Multiply all texture coordinates by tiling.
-		   Does nothing if no texture coordinates have been loaded. */
-		void applyTiling(float tiling);
-		void genTangents();
+		std::vector<float> const getVertices() { return vertexList; }
+		std::vector<float> const getTexCoords() { return textureList; }
+		std::vector<float> const getNormals() { return normalList; }
+		std::vector<float> const getTangents() { return tangentList; }
+		bool const hasVertex() { return vertexLoaded; }
+		bool const hasTexture() { return textureLoaded; }
+		bool const hasNormal() { return normalLoaded; }
+		bool const hasTangent() { return tangentLoaded; }
+		size_t const vertexCount() { return vertexList.size(); }
+		
+		void setTexCoords(std::vector<float> texCoords);
+		void setTangents(std::vector<float> tangents);
 	};
 }

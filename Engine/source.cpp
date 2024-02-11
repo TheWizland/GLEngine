@@ -60,7 +60,7 @@ void init() {
     //cube->matrices()->rotateY((float)M_PI / 4);
 
     //Models::Model tile = Models::genTile();
-    //tile.applyTiling(5);
+    //applyTiling(tile, 5);
     ObjectData* terrain = defaultScene.genObject();
     terrain->setVBOs(vboGenerator.setupVBO(Models::loadObj("tile.obj")));
     terrain->setTexture("sand.jpg");
@@ -90,8 +90,6 @@ void init() {
     
 
     ObjectData* dolphin = defaultScene.genObject();
-
-    
     dolphin->setVBOs(vboGenerator.setupVBO(Models::loadObj("dolphinHighPoly.obj")));
     
 
@@ -117,7 +115,7 @@ void init() {
 
     ObjectData* cube2 = defaultScene.genObject();
     Models::Model cubeModel = Models::loadObj("cube.obj");
-    cubeModel.genTangents();
+    Models::genTangents(cubeModel);
     cube2->setVBOs(vboGenerator.setupVBO(cubeModel));
     cube2->setTexture("rock.jpg");
     cube2->setNormalMap("rockN.jpg");
@@ -218,7 +216,7 @@ int main(void)
     deltaTime = 0;
 
     float alpha = 0.1f;
-    float averageFPS = 60;
+    double averageFPS = 60;
     float frameTime = 0;
 
     /* Loop until the user closes the window */
