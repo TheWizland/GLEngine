@@ -33,7 +33,7 @@ uniform int patchCount;
 
 in vec2 tcs_out[];
 out vec2 tes_out;
-out vec3 varyingVertexPos;
+out vec3 varyingVertexPosition;
 out vec3 varyingLightDirection;
 out float height;
 
@@ -60,4 +60,8 @@ void main(void)
 	point += normal * height;
 
 	gl_Position = p_matrix * v_matrix * m_matrix * point;
+
+
+	varyingVertexPosition = (m_matrix * point).xyz;
+	varyingLightDirection = light.position - varyingVertexPosition;
 }
