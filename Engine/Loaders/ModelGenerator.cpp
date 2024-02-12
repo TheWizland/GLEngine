@@ -143,6 +143,27 @@ namespace Models {
         return Model(vertexList, texList, normalList);
     }
 
+    Model genPatch(float size)
+    {
+        //Patch is a quad.
+        std::vector<float> vertexList = {
+            -size, 0, -size,
+            size, 0, -size,
+            -size, 0, size,
+            size, 0, size
+        };
+
+        std::vector<float> texList = {
+            0.0f, 0.0f,
+            1.f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f
+        };
+
+        //Normals are generated in the shader.
+        return Model(vertexList, texList);
+    }
+
     void applyTiling(Model& model, float tiling)
     {
         assert(model.hasTexture() && " Can't apply tiling with no texture coordinates.");
