@@ -8,4 +8,5 @@ namespace Shaders {
 	void printProgramLog(int prog);
 	bool checkOpenGLError();
 	GLuint createShaderProgram(const char* vShaderPath, const char* fShaderPath);
+	GLuint createShaderProgram(const char* vShaderPath, const char* tcsShaderPath, const char* tesShaderPath, const char* fShaderPath);
 }

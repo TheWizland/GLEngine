@@ -55,47 +55,66 @@ namespace Shaders {
         return foundError;
     }
 
-    GLuint createShaderProgram(const char* vShaderPath, const char* fShaderPath) {
-        GLint vertCompiled;
-        GLint fragCompiled;
+    GLuint compileShader(const char* shaderPath, GLuint shaderType)
+    {
+        std::string shaderSource = readFile(shaderPath);
+        const char* shaderArr = shaderSource.c_str();
+        GLuint shader = glCreateShader(shaderType);
+        glShaderSource(shader, 1, &shaderArr, NULL);
+        glCompileShader(shader);
+
+        checkOpenGLError();
+        GLint compiled;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+        if (compiled != 1) {
+            std::cout << shaderPath << " compilation failed" << std::endl;
+            printShaderLog(shader);
+        }
+
+        return shader;
+    }
+
+    GLuint createShaderProgram(const char* vShaderPath, const char* fShaderPath) 
+    {
         GLint linked;
 
-        std::string vShaderSource = readFile(vShaderPath);
-        const char* vShaderArr = vShaderSource.c_str();
-        std::string fShaderSource = readFile(fShaderPath);
-        const char* fShaderArr = fShaderSource.c_str();
+        GLuint vShader = compileShader(vShaderPath, GL_VERTEX_SHADER);
+        GLuint fShader = compileShader(fShaderPath, GL_FRAGMENT_SHADER);
 
-        GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
-        GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(vShader, 1, &vShaderArr, NULL);
-        glShaderSource(fShader, 1, &fShaderArr, NULL);
-
-        glCompileShader(vShader);
+        GLuint program = glCreateProgram();
+        glAttachShader(program, vShader);
+        glAttachShader(program, fShader);
+        glLinkProgram(program);
         checkOpenGLError();
-        glGetShaderiv(vShader, GL_COMPILE_STATUS, &vertCompiled);
-        if (vertCompiled != 1) {
-            std::cout << "vertex compilation failed" << std::endl;
-            printShaderLog(vShader);
-        }
-
-        glCompileShader(fShader);
-        checkOpenGLError();
-        glGetShaderiv(fShader, GL_COMPILE_STATUS, &fragCompiled);
-        if (fragCompiled != 1) {
-            std::cout << "fragment compilation failed" << std::endl;
-            printShaderLog(fShader);
-        }
-
-        GLuint vfProgram = glCreateProgram();
-        glAttachShader(vfProgram, vShader);
-        glAttachShader(vfProgram, fShader);
-        glLinkProgram(vfProgram);
-        checkOpenGLError();
-        glGetProgramiv(vfProgram, GL_LINK_STATUS, &linked);
+        glGetProgramiv(program, GL_LINK_STATUS, &linked);
         if (linked != 1) {
             std::cout << "linking failed" << std::endl;
-            printProgramLog(vfProgram);
+            printProgramLog(program);
         }
-        return vfProgram;
+        return program;
+    }
+
+    GLuint createShaderProgram(const char* vShaderPath, const char* tcsShaderPath, const char* tesShaderPath, const char* fShaderPath)
+    {
+        GLint linked;
+
+        GLuint vShader = compileShader(vShaderPath, GL_VERTEX_SHADER);
+        GLuint tcsShader = compileShader(tcsShaderPath, GL_TESS_CONTROL_SHADER);
+        GLuint tesShader = compileShader(tesShaderPath, GL_TESS_EVALUATION_SHADER);
+        GLuint fShader = compileShader(fShaderPath, GL_FRAGMENT_SHADER);
+
+        GLuint program = glCreateProgram();
+        glAttachShader(program, vShader);
+        glAttachShader(program, tcsShader);
+        glAttachShader(program, tesShader);
+        glAttachShader(program, fShader);
+        glLinkProgram(program);
+        checkOpenGLError();
+        glGetProgramiv(program, GL_LINK_STATUS, &linked);
+        if (linked != 1) {
+            std::cout << "linking failed" << std::endl;
+            printProgramLog(program);
+        }
+        return program;
     }
 }
