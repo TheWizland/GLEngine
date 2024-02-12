@@ -24,6 +24,7 @@
 #include "SceneData.h"
 #include "InputHandler/CameraMouse.h"
 #include "Renderers/ShadowRenderer.h"
+#include "Renderers/TessellationRenderer.h"
 
 
 GLuint vao[1];
@@ -31,6 +32,7 @@ VBOManager vboGenerator; //Needs to be constructed
 Renderers::StandardRenderer textureRenderer;
 Renderers::SkyboxRenderer skyboxRenderer;
 Renderers::ShadowRenderer shadowRenderer;
+Renderers::TessellationRenderer tessRenderer;
 int windowX = 1200;
 int windowY = 900;
 const char* windowTitle = "OpenGL Window";
@@ -39,6 +41,7 @@ Camera* camera;
 ObjectData skybox;
 Light* positionalLight;
 ObjectData* lightSourceModel;
+ObjectData terrainMoon;
 SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
@@ -49,6 +52,7 @@ void init() {
     textureRenderer.init();
     skyboxRenderer.init();
     shadowRenderer.init();
+    tessRenderer.init();
 
     defaultScene.genSkybox("milkyway", ".jpg", vboGenerator);
 
@@ -61,7 +65,7 @@ void init() {
 
     //Models::Model tile = Models::genTile();
     //applyTiling(tile, 5);
-    ObjectData* terrain = defaultScene.genObject();
+    /*ObjectData* terrain = defaultScene.genObject();
     terrain->setVBOs(vboGenerator.setupVBO(Models::loadObj("tile.obj")));
     terrain->setTexture("sand.jpg");
     Models::tilingMode = GL_CLAMP_TO_EDGE;
@@ -70,7 +74,7 @@ void init() {
     terrain->matrices()->translate(0, -4, 0);
     terrain->matrices()->scale(10, 1, 10);
     terrain->material.shininess = 10;
-    terrain->material.specular = glm::vec4(0.1, 0.1, 0.1, 1);
+    terrain->material.specular = glm::vec4(0.1, 0.1, 0.1, 1);*/
     
     ObjectData* sphere = defaultScene.genObject();
     sphere->setVBOs(vboGenerator.setupVBO(Models::genSphere(24)));
@@ -121,6 +125,15 @@ void init() {
     cube2->setNormalMap("rockN.jpg");
     cube2->matrices()->translate(2, 3, 2);
 
+
+    Models::Model patch = Models::genPatch(10);
+    terrainMoon.setVBOs(vboGenerator.setupVBO(patch));
+    terrainMoon.setTexture("squareMoonMap.jpg");
+    terrainMoon.setHeightMap("squareMoonBump.jpg");
+    terrainMoon.setNormalMap("squareMoonNormal.jpg");
+    terrainMoon.matrices()->translate(0, -4, 0);
+    
+
     Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight = defaultScene.newLight();
     positionalLight->position = glm::vec3(0, 6, 0);
@@ -148,6 +161,7 @@ void display(GLFWwindow* window, double deltaTime) {
     skyboxRenderer.render(*defaultScene.getSkybox(), *camera);
     textureRenderer.bindShadow(shadowRenderer.getDepthMapTexture());
     textureRenderer.render(defaultScene);
+    tessRenderer.render(terrainMoon, *camera, *positionalLight);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -178,6 +192,8 @@ void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_K, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, 0, -deltaTime); });
     inputManager.addAction(GLFW_KEY_J, [](float deltaTime) -> void { positionalLight->position += glm::vec3(deltaTime, 0, 0); });
     inputManager.addAction(GLFW_KEY_L, [](float deltaTime) -> void { positionalLight->position += glm::vec3(-deltaTime, 0, 0); });
+    inputManager.addAction(GLFW_KEY_U, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, deltaTime, 0); });
+    inputManager.addAction(GLFW_KEY_O, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, -deltaTime, 0); });
 
     glfwSetKeyCallback(window, key_callback);
 }
