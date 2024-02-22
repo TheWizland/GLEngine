@@ -9,6 +9,7 @@ enum LightType
 	Directional, //Direction, Ortho Matrix
 	Spot //Position + Direction, Projection Matrix
 };
+//TODO: Add directional and spot lights.
 
 class Light
 {
@@ -23,7 +24,8 @@ public:
 	float linearAttenuation;
 	float quadraticAttenuation;
 	LightType type = LightType::Positional;
-	glm::mat4 getMatVP(float aspectRatio);
+	glm::mat4 getView();
+	glm::mat4 getPerspective(float aspectRatio);
 	Light();
 };
 

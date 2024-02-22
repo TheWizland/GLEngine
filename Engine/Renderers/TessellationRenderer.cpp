@@ -11,6 +11,19 @@ namespace Renderers
 			"shaders/tessellationTCS.glsl",
 			"shaders/tessellationTES.glsl",
 			"shaders/tessellationF.glsl");
+
+		camToTexSpace = glm::mat4(
+			0.5f, 0, 0, 0,
+			0, 0.5f, 0, 0,
+			0, 0, 0.5f, 0,
+			0.5f, 0.5f, 0.5f, 1.0f);
+	}
+
+	void TessellationRenderer::bindShadow(GLuint shadowTex)
+	{
+		glUseProgram(program);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, shadowTex);
 	}
 
 	void TessellationRenderer::render(ObjectData& object, Camera& camera, Light& light)
@@ -96,6 +109,10 @@ namespace Renderers
 			glProgramUniform1f(program, quadAttLoc, light.quadraticAttenuation);
 		}
 
+		float aspectRatio = 1200.f / 900;
+		GLuint sVPLoc = glGetUniformLocation(program, "vp_shadow");
+		glm::mat4 shadowVP = camToTexSpace * light.getPerspective(aspectRatio) * light.getView();
+		glProgramUniformMatrix4fv(program, sVPLoc, 1, GL_FALSE, glm::value_ptr(shadowVP));
 
 		glPatchParameteri(GL_PATCH_VERTICES, 4);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

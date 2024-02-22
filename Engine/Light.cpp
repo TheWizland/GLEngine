@@ -13,12 +13,17 @@ Light::Light() {
 	quadraticAttenuation = 0.01f;
 }
 
-glm::mat4 Light::getMatVP(float aspectRatio)
+glm::mat4 Light::getView()
 {
-	glm::mat4 lightPerspective = glm::perspective(glm::radians(90.f), aspectRatio, 0.1f, 100.f);
 	glm::mat4 lightView = glm::lookAt(position, glm::vec3(0, 0, 0), glm::vec3(1, 0, 0)); 
-	//up-vector is not world up. Needs to be adjusted based on position and target
-	return lightPerspective * lightView;
+	//TODO: up-vector is not world up. Needs to be adjusted based on position and target
+	return lightView;
+	
+}
+
+glm::mat4 Light::getPerspective(float aspectRatio)
+{
+	return glm::perspective(glm::radians(90.f), aspectRatio, 0.1f, 100.f);
 	//glm::ortho(-10.f, 10.f, -10.f, 10.f, 0.1f, 100.f);
-	//lightPerspective should be projection for a positional/spot light source, orthographic for a directional light source.
+	//TODO: lightPerspective should be projection for a positional/spot light source, orthographic for a directional light source.
 }

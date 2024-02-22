@@ -9,8 +9,10 @@ namespace Renderers
 	{
 	private:
 		GLuint program;
+		glm::mat4 camToTexSpace;
 	public:
 		void init();
+		void bindShadow(GLuint shadowTex);
 		void render(ObjectData& object, Camera& camera, Light& light);
 	};
 }

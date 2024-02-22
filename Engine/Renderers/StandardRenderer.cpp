@@ -84,7 +84,7 @@ namespace Renderers {
 
         float aspectRatio = 1200.f / 900;
         GLuint sVPLoc = glGetUniformLocation(program, "vp_shadow");
-        glm::mat4 shadowVP = camToTexSpace * light.getMatVP(aspectRatio);
+        glm::mat4 shadowVP = camToTexSpace * light.getPerspective(aspectRatio) * light.getView();
         glProgramUniformMatrix4fv(program, sVPLoc, 1, GL_FALSE, glm::value_ptr(shadowVP));
     }
 

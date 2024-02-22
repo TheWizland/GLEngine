@@ -5,6 +5,7 @@ layout (quads, equal_spacing, ccw) in;
 layout (binding = 0) uniform sampler2D texColor;
 layout (binding = 1) uniform sampler2D texHeight;
 layout (binding = 2) uniform sampler2D texNormal;
+layout (binding = 3) uniform sampler2DShadow texShadow;
 
 struct Light {
 	vec4 ambient;
@@ -28,6 +29,7 @@ uniform mat4 m_matrix;
 uniform mat4 v_matrix;
 uniform mat4 p_matrix;
 uniform mat4 norm_matrix;
+uniform mat4 vp_shadow;
 uniform vec4 globalAmbient;
 uniform int patchCount;
 
@@ -35,6 +37,7 @@ in vec2 tcs_out[];
 out vec2 tes_out;
 out vec3 varyingVertexPosition;
 out vec3 varyingLightDirection;
+out vec4 shadow_coord;
 out float height;
 
 float heightMult = 1.0;
@@ -60,7 +63,7 @@ void main(void)
 	point += normal * height;
 
 	gl_Position = p_matrix * v_matrix * m_matrix * point;
-
+	shadow_coord = vp_shadow * m_matrix * point;
 
 	varyingVertexPosition = (m_matrix * point).xyz;
 	varyingLightDirection = light.position - varyingVertexPosition;

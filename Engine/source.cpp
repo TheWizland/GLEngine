@@ -157,10 +157,15 @@ void updateTransform(float deltaTime) {
 }
 
 void display(GLFWwindow* window, double deltaTime) {
+    shadowRenderer.enableBindings();
     shadowRenderer.render(defaultScene);
+    shadowRenderer.renderTessellated(terrainMoon);
+    shadowRenderer.clearBindings();
+
     skyboxRenderer.render(*defaultScene.getSkybox(), *camera);
     textureRenderer.bindShadow(shadowRenderer.getDepthMapTexture());
     textureRenderer.render(defaultScene);
+    tessRenderer.bindShadow(shadowRenderer.getDepthMapTexture());
     tessRenderer.render(terrainMoon, *camera, *positionalLight);
 }
 

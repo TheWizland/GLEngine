@@ -9,13 +9,16 @@ namespace Renderers {
 	{
 	private:
 		GLuint program;
+		GLuint programTess;
 		GLuint depthMapBuffer;
 		GLuint depthMapTexture;
 		int shadowWidth, shadowHeight;
-		glm::mat4 lightVP;
-		void bindings();
-		void clearBindings();
+		glm::mat4 lightV;
+		glm::mat4 lightP;
+		bool bindingsActive = false;
 	public:
+		void enableBindings();
+		void clearBindings();
 		void init();
 		void init(int width, int height);
 		GLuint getDepthMapTexture() { return depthMapTexture; }
@@ -32,5 +35,6 @@ namespace Renderers {
 		}
 
 		void render(SceneData& scene);
+		void renderTessellated(ObjectData const& object);
 	};
 }
