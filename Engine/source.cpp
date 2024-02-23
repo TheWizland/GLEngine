@@ -18,7 +18,7 @@
 #include "ObjectData.h"
 #include "InputHandler/InputHandler.h"
 #include "VBOManager.h"
-#include "Light.h"
+#include "LightData/Light.h"
 #include "Renderers/StandardRenderer.h"
 #include "Renderers/SkyboxRenderer.h"
 #include "SceneData.h"
@@ -39,7 +39,7 @@ const char* windowTitle = "OpenGL Window";
 InputManager inputManager;
 Camera* camera;
 ObjectData skybox;
-Light* positionalLight;
+Lighting::PositionalLight* positionalLight;
 ObjectData* lightSourceModel;
 ObjectData terrainMoon;
 SceneData defaultScene;
@@ -112,7 +112,7 @@ void init() {
     lightSourceModel->setTexture("sunmap.jpg");
     lightSourceModel->matrices()->translate(0, 6, 0);
     lightSourceModel->matrices()->scale(0.1f);
-    lightSourceModel->material.specular = glm::vec4(0, 0, 0, 1);
+    lightSourceModel->material.ads.specular = glm::vec4(0, 0, 0, 1);
     lightSourceModel->flags.internallyLit = true;
     lightSourceModel->flags.hasShadows = false;
 
@@ -134,11 +134,11 @@ void init() {
     terrainMoon.matrices()->translate(0, -4, 0);
     
 
-    Light::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
+    Lighting::globalAmbient = glm::vec4(0.1f, 0.1f, 0.1f, 1);
     positionalLight = defaultScene.newLight();
-    positionalLight->position = glm::vec3(0, 6, 0);
-    positionalLight->diffuse = glm::vec4(1, 1, 1, 1);
-    positionalLight->specular = glm::vec4(1, 1, 1, 1);
+    positionalLight->setPosition(0, 6, 0);
+    positionalLight->ads.diffuse = glm::vec4(1, 1, 1, 1);
+    positionalLight->ads.specular = glm::vec4(1, 1, 1, 1);
     
 
     double t1 = glfwGetTime();
@@ -152,7 +152,7 @@ void init() {
 }
 
 void updateTransform(float deltaTime) {
-    glm::mat4 translation = glm::translate(glm::mat4(1.f), positionalLight->position);
+    glm::mat4 translation = glm::translate(glm::mat4(1.f), positionalLight->getPosition());
     lightSourceModel->matrices()->setLocalTranslation(translation);
 }
 
@@ -191,14 +191,14 @@ void initCallbacks(GLFWwindow* window) {
     inputManager.addAction(GLFW_KEY_C, [](float deltaTime) -> void { camera->roll(deltaTime); });
     
     //Light Controls
-    inputManager.addAction(GLFW_KEY_EQUAL, [](float deltaTime) -> void { Light::globalAmbient += deltaTime; });
-    inputManager.addAction(GLFW_KEY_MINUS, [](float deltaTime) -> void { Light::globalAmbient -= deltaTime; });
-    inputManager.addAction(GLFW_KEY_I, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, 0, deltaTime); });
-    inputManager.addAction(GLFW_KEY_K, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, 0, -deltaTime); });
-    inputManager.addAction(GLFW_KEY_J, [](float deltaTime) -> void { positionalLight->position += glm::vec3(deltaTime, 0, 0); });
-    inputManager.addAction(GLFW_KEY_L, [](float deltaTime) -> void { positionalLight->position += glm::vec3(-deltaTime, 0, 0); });
-    inputManager.addAction(GLFW_KEY_U, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, deltaTime, 0); });
-    inputManager.addAction(GLFW_KEY_O, [](float deltaTime) -> void { positionalLight->position += glm::vec3(0, -deltaTime, 0); });
+    inputManager.addAction(GLFW_KEY_EQUAL, [](float deltaTime) -> void { Lighting::globalAmbient += deltaTime; });
+    inputManager.addAction(GLFW_KEY_MINUS, [](float deltaTime) -> void { Lighting::globalAmbient -= deltaTime; });
+    inputManager.addAction(GLFW_KEY_I, [](float deltaTime) -> void { positionalLight->translate(0, 0, deltaTime); });
+    inputManager.addAction(GLFW_KEY_K, [](float deltaTime) -> void { positionalLight->translate(0, 0, -deltaTime); });
+    inputManager.addAction(GLFW_KEY_J, [](float deltaTime) -> void { positionalLight->translate(deltaTime, 0, 0); });
+    inputManager.addAction(GLFW_KEY_L, [](float deltaTime) -> void { positionalLight->translate(-deltaTime, 0, 0); });
+    inputManager.addAction(GLFW_KEY_U, [](float deltaTime) -> void { positionalLight->translate(0, deltaTime, 0); });
+    inputManager.addAction(GLFW_KEY_O, [](float deltaTime) -> void { positionalLight->translate(0, -deltaTime, 0); });
 
     glfwSetKeyCallback(window, key_callback);
 }

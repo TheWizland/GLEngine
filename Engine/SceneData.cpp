@@ -4,13 +4,13 @@
 #include "Loaders/textureLoader.h"
 #include <algorithm>
 
-Light* SceneData::newLight()
+Lighting::PositionalLight* SceneData::newLight()
 {
-	light = std::make_unique<Light>();
+	light = std::make_unique<Lighting::PositionalLight>();
 	return light.get();
 }
 
-Light* SceneData::getLight()
+Lighting::PositionalLight* SceneData::getLight()
 {
 	return light.get();
 }

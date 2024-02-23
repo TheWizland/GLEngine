@@ -1,7 +1,7 @@
 #pragma once
 #include "../ObjectData.h"
 #include "../Camera.h"
-#include "../Light.h"
+#include "../LightData/Light.h"
 
 namespace Renderers
 {
@@ -13,7 +13,7 @@ namespace Renderers
 	public:
 		void init();
 		void bindShadow(GLuint shadowTex);
-		void render(ObjectData& object, Camera& camera, Light& light);
+		void render(ObjectData& object, Camera& camera, Lighting::Light& light);
 	};
 }
 

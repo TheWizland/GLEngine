@@ -69,11 +69,10 @@ namespace Renderers {
 		bindingsActive = false;
 	}
 
-	void ShadowRenderer::uniformLight(Light& light)
+	void ShadowRenderer::uniformLight(Lighting::Light& light)
 	{
-		float aspectRatio = (float)(shadowWidth) / shadowHeight;
 		lightV = light.getView();
-		lightP = light.getPerspective(aspectRatio);
+		lightP = light.getPerspective();
 	}
 
 	void ShadowRenderer::render(ObjectData const& object)

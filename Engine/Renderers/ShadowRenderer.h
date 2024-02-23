@@ -22,7 +22,7 @@ namespace Renderers {
 		void init();
 		void init(int width, int height);
 		GLuint getDepthMapTexture() { return depthMapTexture; }
-		void uniformLight(Light& light);
+		void uniformLight(Lighting::Light& light);
 		void render(ObjectData const& object);
 
 		template<typename ObjectIterator>

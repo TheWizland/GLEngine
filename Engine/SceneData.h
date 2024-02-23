@@ -1,6 +1,6 @@
 #pragma once
 #include "Camera.h"
-#include "Light.h"
+#include "LightData/Light.h"
 #include "VBOManager.h"
 #include "ObjectData.h"
 #include "DereferenceIterator.h"
@@ -10,12 +10,16 @@ class SceneData
 {
 private:
 	std::vector<std::unique_ptr<ObjectData>> objectList;
+	//TODO: Maybe instead of vector<unique_ptr>, simply add an isDeleted field to ObjectData
+	//Then, whenever access to objectList is requested, remove any objects with isDeleted.
+	//Setting isDeleted should also delete unique_ptr<MatrixCollection> in ObjectData?
+	//Downside: Could cause stale data.
 	std::unique_ptr<Camera> camera;
 	std::unique_ptr<ObjectData> skybox;
-	std::unique_ptr<Light> light;
+	std::unique_ptr<Lighting::PositionalLight> light;
 public:
-	Light* newLight();
-	Light* getLight();
+	Lighting::PositionalLight* newLight();
+	Lighting::PositionalLight* getLight();
 	/* Destroys the current camera, creates a new one, and returns a non-owned pointer to the camera. */
 	Camera* newCamera(float fieldOfView, float aspectRatio);
 	/* Returns a non-owned pointer to the camera. */

@@ -1,6 +1,6 @@
 #pragma once
 #include "../Camera.h"
-#include "../Light.h"
+#include "../LightData/Light.h"
 #include "../ObjectData.h"
 #include "../SceneData.h"
 #include <GL/glew.h>
@@ -20,7 +20,7 @@ namespace Renderers {
 	public:
 		void init();
 		void uniformCamera(Camera camera);
-		void uniformLight(Light light);
+		void uniformLight(Lighting::Light const& light);
 		void bindShadow(GLuint shadowTex);
 		void render(ObjectData& object);
 

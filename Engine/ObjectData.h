@@ -1,5 +1,5 @@
 #pragma once
-#include "Material.h"
+#include "LightData/Material.h"
 #include "MatrixCollection.h"
 #include "RenderFlags.h"
 #include "VBOData.h"
@@ -16,7 +16,7 @@ public:
 	GLuint textureID = -1;
 	GLuint heightMapID = -1;
 	GLuint normalMapID = -1;
-	Material material;
+	Lighting::Material material;
 	RenderFlags flags;
 
 	ObjectData() { matrix = std::make_unique<MatrixCollection>(); }

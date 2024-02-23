@@ -26,7 +26,7 @@ namespace Renderers
 		glBindTexture(GL_TEXTURE_2D, shadowTex);
 	}
 
-	void TessellationRenderer::render(ObjectData& object, Camera& camera, Light& light)
+	void TessellationRenderer::render(ObjectData& object, Camera& camera, Lighting::Light& light)
 	{
 		glUseProgram(program);
 
@@ -67,13 +67,13 @@ namespace Renderers
 		{
 			GLuint matAmbientLoc, matDiffuseLoc, matSpecularLoc, shininessLoc;
 			matAmbientLoc = glGetUniformLocation(program, "material.ambient");
-			glUniform4fv(matAmbientLoc, 1, glm::value_ptr(object.material.ambient));
+			glUniform4fv(matAmbientLoc, 1, glm::value_ptr(object.material.ads.ambient));
 
 			matDiffuseLoc = glGetUniformLocation(program, "material.diffuse");
-			glUniform4fv(matDiffuseLoc, 1, glm::value_ptr(object.material.diffuse));
+			glUniform4fv(matDiffuseLoc, 1, glm::value_ptr(object.material.ads.diffuse));
 
 			matSpecularLoc = glGetUniformLocation(program, "material.specular");
-			glUniform4fv(matSpecularLoc, 1, glm::value_ptr(object.material.specular));
+			glUniform4fv(matSpecularLoc, 1, glm::value_ptr(object.material.ads.specular));
 
 			shininessLoc = glGetUniformLocation(program, "material.shininess");
 			glUniform1f(shininessLoc, object.material.shininess);
@@ -84,34 +84,34 @@ namespace Renderers
 			GLuint globalAmbientLoc, ambientLoc, diffuseLoc, specularLoc, positionLoc;
 
 			globalAmbientLoc = glGetUniformLocation(program, "globalAmbient");
-			glProgramUniform4fv(program, globalAmbientLoc, 1, glm::value_ptr(Light::globalAmbient));
+			glProgramUniform4fv(program, globalAmbientLoc, 1, glm::value_ptr(Lighting::globalAmbient));
 
 			ambientLoc = glGetUniformLocation(program, "light.ambient");
-			glProgramUniform4fv(program, ambientLoc, 1, glm::value_ptr(light.ambient));
+			glProgramUniform4fv(program, ambientLoc, 1, glm::value_ptr(light.ads.ambient));
 
 			diffuseLoc = glGetUniformLocation(program, "light.diffuse");
-			glProgramUniform4fv(program, diffuseLoc, 1, glm::value_ptr(light.diffuse));
+			glProgramUniform4fv(program, diffuseLoc, 1, glm::value_ptr(light.ads.diffuse));
 
 			specularLoc = glGetUniformLocation(program, "light.specular");
-			glProgramUniform4fv(program, specularLoc, 1, glm::value_ptr(light.specular));
+			glProgramUniform4fv(program, specularLoc, 1, glm::value_ptr(light.ads.specular));
 
 			positionLoc = glGetUniformLocation(program, "light.position");
-			glProgramUniform3fv(program, positionLoc, 1, glm::value_ptr(light.position));
+			glProgramUniform3fv(program, positionLoc, 1, glm::value_ptr(light.getPosition()));
 
 			GLuint constAttLoc, linearAttLoc, quadAttLoc;
 			constAttLoc = glGetUniformLocation(program, "light.constantAttenuation");
-			glProgramUniform1f(program, constAttLoc, light.constantAttenuation);
+			glProgramUniform1f(program, constAttLoc, light.attenuation.constant);
 
 			linearAttLoc = glGetUniformLocation(program, "light.linearAttenuation");
-			glProgramUniform1f(program, linearAttLoc, light.linearAttenuation);
+			glProgramUniform1f(program, linearAttLoc, light.attenuation.linear);
 
 			quadAttLoc = glGetUniformLocation(program, "light.quadraticAttenuation");
-			glProgramUniform1f(program, quadAttLoc, light.quadraticAttenuation);
+			glProgramUniform1f(program, quadAttLoc, light.attenuation.quadratic);
 		}
 
 		float aspectRatio = 1200.f / 900;
 		GLuint sVPLoc = glGetUniformLocation(program, "vp_shadow");
-		glm::mat4 shadowVP = camToTexSpace * light.getPerspective(aspectRatio) * light.getView();
+		glm::mat4 shadowVP = camToTexSpace * light.getPerspective() * light.getView();
 		glProgramUniformMatrix4fv(program, sVPLoc, 1, GL_FALSE, glm::value_ptr(shadowVP));
 
 		glPatchParameteri(GL_PATCH_VERTICES, 4);
