@@ -4,8 +4,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-using namespace glm;
-
 Camera::Camera(float fieldOfView, float aspectRatio) 
 {
 	fov = fieldOfView;
@@ -15,10 +13,10 @@ Camera::Camera(float fieldOfView, float aspectRatio)
 		fov = fovMin;
 
 	perspective = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 1000.0f);
-	location = vec3(0, 0, 0);
-	U = vec3(1, 0, 0);
-	V = vec3(0, 1, 0);
-	N = vec3(0, 0, -1);
+	location = glm::vec3(0, 0, 0);
+	U = glm::vec3(1, 0, 0);
+	V = glm::vec3(0, 1, 0);
+	N = glm::vec3(0, 0, -1);
 
 	this->aspectRatio = aspectRatio;
 }
@@ -93,16 +91,16 @@ void Camera::translate(float x, float y, float z)
 	location.z += z;
 }
 
-mat4 Camera::getView() 
+glm::mat4 Camera::getView() 
 {
-	mat4 view = glm::mat4(1); //Identity Matrix
-	mat4 viewR = mat4(
+	glm::mat4 view = glm::mat4(1); //Identity Matrix
+	glm::mat4 viewR = glm::mat4(
 		U.x, V.x, -N.x, 0,
 		U.y, V.y, -N.y, 0,
 		U.z, V.z, -N.z, 0,
 		0, 0, 0, 1);
 
-	mat4 viewT = mat4(
+	glm::mat4 viewT = glm::mat4(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
@@ -111,7 +109,7 @@ mat4 Camera::getView()
 	return viewR*viewT*view;
 }
 
-mat4 Camera::getPerspective() 
+glm::mat4 Camera::getPerspective()
 {
-	return mat4(perspective);
+	return perspective;
 }
