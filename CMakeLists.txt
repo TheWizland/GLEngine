@@ -15,10 +15,10 @@ file(GLOB_RECURSE SOURCE_FILES
 if (UNIX)
 	add_executable(source ${SOURCE_FILES})
 	
-	find_package(glfw3 3.3 REQUIRED PATHS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-	find_package(OpenGL REQUIRED PATHS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-	find_package(GLEW REQUIRED PATHS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-	find_package(glm CONFIG REQUIRED PATHS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+	find_package(glfw3 3.3 REQUIRED)
+	find_package(OpenGL REQUIRED)
+	find_package(GLEW REQUIRED)
+	find_package(glm CONFIG REQUIRED)
 
 	target_include_directories(source PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 	target_link_libraries(source PRIVATE glfw glm::glm OpenGL::GL GLEW)
