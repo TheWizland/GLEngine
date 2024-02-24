@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.12)
 
 project(
   GLEngine
@@ -8,13 +8,13 @@ project(
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-file(GLOB_RECURSE SOURCE_FILES
-    "Engine/*.h"
-    "Engine/*.cpp")
+file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS
+    "src/*.h"
+    "src/*.cpp")
+
+add_executable(source ${SOURCE_FILES})
 
 if (UNIX)
-	add_executable(source ${SOURCE_FILES})
-	
 	find_package(glfw3 3.3 REQUIRED)
 	find_package(OpenGL REQUIRED)
 	find_package(GLEW REQUIRED)
@@ -22,9 +22,7 @@ if (UNIX)
 
 	target_include_directories(source PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 	target_link_libraries(source PRIVATE glfw glm::glm OpenGL::GL GLEW)
-elseif (WIN32)	
-	add_executable(source ${SOURCE_FILES})
-	
+elseif (WIN32)
 	target_include_directories(source PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 	target_link_directories(source PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/)
 	target_link_libraries(source PRIVATE opengl32.lib glfw3.lib glew32.lib)
