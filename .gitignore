@@ -6,6 +6,8 @@
 Build
 
 .vscode
+include
+libs
 
 # User-specific files
 *.rsuser
