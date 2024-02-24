@@ -25,8 +25,6 @@ https://www.glfw.org/download.html
 
 https://www.glfw.org/docs/3.3/compile.html
 
-Windows: Pre-compiled binaries recommended.
-
 Linux: 
 
 2a. cmake -S ./path-to-glfw3 -B ./build-directory
@@ -41,6 +39,9 @@ https://glew.sourceforge.net/
 
 https://github.com/g-truc/glm
 
+Windows: Place glfw3.lib and glew32.lib in /libs/
+
+Place header files in /include/GLFW/, /include/GL/, and /include/glm/. Place stb_image.h in /include/
 
 Note: source.cpp provides a working code example, but 3rd party assets used have not been included.
 
