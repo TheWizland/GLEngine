@@ -3,9 +3,9 @@
 #include <vector>
 #include <iostream>
 #include "ModelGenerator.h"
-#include <GLM/vec3.hpp>
-#include <GLM/vec2.hpp>
-#include <GLM/geometric.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
+#include <glm/geometric.hpp>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <algorithm>

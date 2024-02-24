@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <GL\glew.h>
+#include <GL/glew.h>
 
 namespace Shaders {
 	std::string readFile(const char* path);

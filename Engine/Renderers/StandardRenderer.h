@@ -4,7 +4,7 @@
 #include "../ObjectData.h"
 #include "../SceneData.h"
 #include <GL/glew.h>
-#include <GLM/mat4x4.hpp>
+#include <glm/mat4x4.hpp>
 
 
 namespace Renderers {

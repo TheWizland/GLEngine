@@ -1,6 +1,6 @@
 #include "../Loaders/shaderLoader.h"
 #include "StandardRenderer.h"
-#include <GLM/gtc/type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iterator>
 
 namespace Renderers {
@@ -110,24 +110,38 @@ namespace Renderers {
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(2);
 
-        glBindBuffer(GL_ARRAY_BUFFER, object.vbo.tangent);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(3);
+        //Binding VBO or textures that are -1 causes OpenGL error 1282 on Linux
+        //But not on Windows
+        //It renders fine regardless, this is just to stop error vomit.
+        if(object.vbo.tangent != -1) 
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, object.vbo.tangent);
+            glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
+            glEnableVertexAttribArray(3);
+        }
 
         //Textures
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, object.textureID);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, object.heightMapID);
+        if(object.heightMapID != -1)
+        {
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, object.heightMapID);
+        }
 
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_2D, object.normalMapID);
+        if(object.normalMapID != -1)
+        {
+            glActiveTexture(GL_TEXTURE3);
+            glBindTexture(GL_TEXTURE_2D, object.normalMapID);
+        }
     }
 
     void StandardRenderer::init()
     {
-        program = Shaders::createShaderProgram("shaders/textureV.glsl", "shaders/textureF.glsl");
+        program = Shaders::createShaderProgram(
+            "textureV.glsl", 
+            "textureF.glsl");
         camToTexSpace = glm::mat4(
             0.5f, 0, 0, 0,
             0, 0.5f, 0, 0,
@@ -150,6 +164,12 @@ namespace Renderers {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glDrawArrays(GL_TRIANGLES, 0, object.vbo.vertexCount);
+        
+        GLenum err;
+		while ((err = glGetError()) != GL_NO_ERROR)
+		{
+			printf("Standard Renderer Error: %d\n", err);
+		}
     }
 
     void StandardRenderer::render(SceneData& scene)

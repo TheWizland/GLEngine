@@ -1,16 +1,16 @@
 #include "TessellationRenderer.h"
 #include "../Loaders/shaderLoader.h"
-#include <GLM/gtc/type_ptr.hpp>
-#include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Renderers
 {
 	void TessellationRenderer::init()
 	{
-		program = Shaders::createShaderProgram("shaders/tessellationV.glsl", 
-			"shaders/tessellationTCS.glsl",
-			"shaders/tessellationTES.glsl",
-			"shaders/tessellationF.glsl");
+		program = Shaders::createShaderProgram(
+			"tessellationV.glsl", 
+			"tessellationTCS.glsl",
+			"tessellationTES.glsl",
+			"tessellationF.glsl");
 
 		camToTexSpace = glm::mat4(
 			0.5f, 0, 0, 0,
@@ -122,7 +122,7 @@ namespace Renderers
 		GLenum err;
 		while ((err = glGetError()) != GL_NO_ERROR)
 		{
-			std::cout << "Tess Renderer Error: " << err << std::endl;
+			printf("Tess Renderer Error: %d\n", err);
 		}
 	}
 }

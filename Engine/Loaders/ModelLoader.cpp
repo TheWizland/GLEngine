@@ -3,15 +3,15 @@
 #include "ModelGenerator.h"
 #include <algorithm>
 #include <fstream>
-#include <GL\glew.h>
-#include <GLM/vec2.hpp>
-#include <GLM/vec3.hpp>
+#include <GL/glew.h>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 #include <sstream>
 #include <string>
 #include <vector>
 
 namespace Models {
-	Model Models::loadObj(std::string fileName)
+	Model loadObj(std::string fileName)
 	{
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec2> textures;

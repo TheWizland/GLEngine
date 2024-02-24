@@ -1,9 +1,0 @@
-Skybox images are provided as six files, named as such:
-xp.png (Right)
-xn.png (Left)
-yp.png (Top)
-yn.png (Bottom)
-zp.png (Front)
-zn.png (Back)
-Extension does not have to be .png, may be any that stb_image.h can handle.
-Path to the folder and extension are provided as parameters to SkyboxRenderer::init()

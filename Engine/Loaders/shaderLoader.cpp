@@ -1,14 +1,20 @@
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include "../AssetPaths.h"
 
 namespace Shaders {
     //Most of this file is from Computer Graphics Programming in OpenGL with C++ by V. Scott Gordon and John Clevenger
-    std::string readFile(const char* path) {
+    std::string readFile(const char* filePath) {
         std::string content;
-        std::ifstream fileStream(path, std::ios::in);
+        std::ifstream fileStream(filePath, std::ios::in);
         std::string line = "";
+        if(fileStream.fail()) {
+            std::cout << "Shaders::readFile: " << filePath << " not found." << std::endl;
+            abort();
+        }
         while (!fileStream.eof()) {
             getline(fileStream, line);
             content.append(line + "\n");
@@ -55,9 +61,11 @@ namespace Shaders {
         return foundError;
     }
 
-    GLuint compileShader(const char* shaderPath, GLuint shaderType)
+    GLuint compileShader(const char* shaderName, GLuint shaderType)
     {
-        std::string shaderSource = readFile(shaderPath);
+        std::string fullPath = shaderPath;
+        fullPath += shaderName;
+        std::string shaderSource = readFile(fullPath.c_str());
         const char* shaderArr = shaderSource.c_str();
         GLuint shader = glCreateShader(shaderType);
         glShaderSource(shader, 1, &shaderArr, NULL);
@@ -67,7 +75,7 @@ namespace Shaders {
         GLint compiled;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
         if (compiled != 1) {
-            std::cout << shaderPath << " compilation failed" << std::endl;
+            std::cout << fullPath << " compilation failed" << std::endl;
             printShaderLog(shader);
         }
 

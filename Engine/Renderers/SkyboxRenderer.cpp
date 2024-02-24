@@ -2,12 +2,12 @@
 #include "../Loaders/shaderLoader.h"
 #include "../Loaders/textureLoader.h"
 #include "SkyboxRenderer.h"
-#include <GLM/gtc/type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Renderers {
 	void SkyboxRenderer::init()
 	{
-		program = Shaders::createShaderProgram("shaders/skyboxV.glsl", "shaders/skyboxF.glsl");
+		program = Shaders::createShaderProgram("skyboxV.glsl", "skyboxF.glsl");
 	}
 
 	void SkyboxRenderer::render(ObjectData const& skybox, Camera camera)
@@ -35,5 +35,11 @@ namespace Renderers {
 
         glFrontFace(GL_CCW);
         glEnable(GL_DEPTH_TEST);
+
+        GLenum err;
+		while ((err = glGetError()) != GL_NO_ERROR)
+		{
+			printf("Skybox Renderer Error: %d\n", err);
+		}
 	}
 }

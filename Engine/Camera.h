@@ -1,6 +1,6 @@
 #pragma once
-#include <GLM/mat4x4.hpp>
-#include <GLM/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 class Camera {
 private:
 	glm::mat4 perspective;
@@ -11,8 +11,7 @@ private:
 	float aspectRatio;
 	float curPitch = 0;
 public:
-	Camera();
-	Camera(float fieldOfView, float aspectRatio);
+	Camera(float fieldOfView = 90.f, float aspectRatio = 4.f/3.f);
 	void addFoV(float deltaFoV);
 	void yaw(float distance);
 	void globalYaw(float distance);

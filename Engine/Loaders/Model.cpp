@@ -1,8 +1,8 @@
 #include "Model.h"
 #include <algorithm>
 #include <cassert>
-#include <GLM/vec3.hpp>
-#include <GLM/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
 Models::Model::Model(std::vector<float> vertexList)
 {

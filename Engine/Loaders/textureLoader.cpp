@@ -1,8 +1,8 @@
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include <string>
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
-#include <.\stb_image.h>
+#include <stb_image.h>
 #include "textureLoader.h"
 
 namespace Models {
@@ -21,8 +21,8 @@ namespace Models {
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, Models::tilingMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, Models::tilingMode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tilingMode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tilingMode);
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -37,7 +37,7 @@ namespace Models {
 		return textureID;
 	}
 
-	GLuint Models::genCubeMap(std::string path, std::string extension)
+	GLuint genCubeMap(std::string path, std::string extension)
 	{
 		std::vector<std::string> files;
 		files.push_back(path + "xp" + extension); //right

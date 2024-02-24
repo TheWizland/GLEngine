@@ -1,17 +1,10 @@
 #include "Camera.h"
-#include <glm/mat4x4.hpp>
-#include <GLM/vec3.hpp>
-#include <glm/ext.hpp>
-#include <GLM/gtx/rotate_vector.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/rotate_vector.hpp>
 #define _USE_MATH_DEFINES
 #include <math.h>
 
 using namespace glm;
-
-Camera::Camera() 
-{
-	Camera::Camera(90.f, 16.f / 9.f);
-}
 
 Camera::Camera(float fieldOfView, float aspectRatio) 
 {

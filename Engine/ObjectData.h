@@ -3,7 +3,7 @@
 #include "MatrixCollection.h"
 #include "RenderFlags.h"
 #include "VBOData.h"
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include <memory>
 #include <string>
 

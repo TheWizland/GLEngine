@@ -1,9 +1,9 @@
 #pragma once
-#include <GLM/vec4.hpp>
-#include <GLM/vec3.hpp>
-#include <GLM/mat4x4.hpp>
-#include <GL\glew.h>
-#include <GLM/gtc/matrix_transform.hpp>
+#include <glm/vec4.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <GL/glew.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include "LightStruct.h"
 
 namespace Lighting

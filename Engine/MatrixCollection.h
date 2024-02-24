@@ -1,5 +1,5 @@
 #pragma once
-#include <GLM/mat4x4.hpp>
+#include <glm/mat4x4.hpp>
 #include <vector>
 
 //Node Graph Data

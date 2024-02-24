@@ -1,7 +1,7 @@
 #include "ShadowRenderer.h"
 #include "../Loaders/shaderLoader.h"
-#include <GLM/gtc/matrix_transform.hpp>
-#include <GLM/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Renderers {
 	void ShadowRenderer::init()
@@ -14,11 +14,11 @@ namespace Renderers {
 		shadowWidth = width;
 		shadowHeight = height;
 
-		program = Shaders::createShaderProgram("shaders/shadowV.glsl", "shaders/shadowF.glsl");
-		programTess = Shaders::createShaderProgram("shaders/tessellationV.glsl",
-			"shaders/tessellationTCS.glsl",
-			"shaders/tessellationTES.glsl",
-			"shaders/shadowF.glsl");
+		program = Shaders::createShaderProgram("shadowV.glsl", "shadowF.glsl");
+		programTess = Shaders::createShaderProgram("tessellationV.glsl",
+			"tessellationTCS.glsl",
+			"tessellationTES.glsl",
+			"shadowF.glsl");
 
 		glGenFramebuffers(1, &depthMapBuffer);
 		glGenTextures(1, &depthMapTexture);
@@ -94,6 +94,12 @@ namespace Renderers {
 		glEnableVertexAttribArray(0);
 
 		glDrawArrays(GL_TRIANGLES, 0, object.vbo.vertexCount);
+
+		GLenum err;
+		while ((err = glGetError()) != GL_NO_ERROR)
+		{
+			printf("Shadow (Standard) Renderer Error: %d\n", err);
+		}
 	}
 
 	void ShadowRenderer::render(SceneData& scene)
@@ -141,5 +147,11 @@ namespace Renderers {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDisable(GL_CULL_FACE);
 		glDrawArrays(GL_PATCHES, 0, 4);
+
+		GLenum err;
+		while ((err = glGetError()) != GL_NO_ERROR)
+		{
+			printf("Shadow (Tess) Renderer Error: %d\n", err);
+		}
 	}
 }

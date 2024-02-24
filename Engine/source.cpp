@@ -1,13 +1,14 @@
-#include <GL\glew.h>
-#include <GLFW\glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <glm/mat4x4.hpp>
-#include <GLM/vec3.hpp>
+#include <glm/vec3.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
@@ -215,6 +216,7 @@ int main(void)
     /* Create a windowed mode window and its OpenGL context */
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);  
     window = glfwCreateWindow(windowX, windowY, windowTitle, NULL, NULL);
     if (!window)
     {
@@ -239,7 +241,7 @@ int main(void)
     float alpha = 0.1f;
     double averageFPS = 60;
     float frameTime = 0;
-
+    
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
