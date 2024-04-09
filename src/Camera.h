@@ -20,6 +20,9 @@ public:
 	void moveForward(float distance);
 	void moveRight(float distance);
 	void moveUp(float distance);
+	glm::vec3 getUp() { return V; }
+	glm::vec3 getRight() { return U; }
+	glm::vec3 getForward() { return N; }
 	void translate(glm::vec3 translation);
 	void translate(float x, float y, float z);
 	glm::mat4 getView();
