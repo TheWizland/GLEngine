@@ -17,7 +17,7 @@ namespace Renderers {
         VBOData tileVBO;
     public:
         void init(VBOManager& vboGen);
-        void uniformCamera(Camera& camera);
+        void uniformCamera(Camera& camera, bool verticalRotation = true);
         //Renders a vertical tile.
         void render(MatrixCollection& matrix, GLuint sprite);
     };
