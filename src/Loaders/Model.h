@@ -27,7 +27,7 @@ namespace Models {
 		bool const hasTexture() { return textureLoaded; }
 		bool const hasNormal() { return normalLoaded; }
 		bool const hasTangent() { return tangentLoaded; }
-		size_t const vertexCount() { return vertexList.size(); }
+		size_t const vertexCount() { return vertexList.size()/3; }
 		
 		void setTexCoords(std::vector<float> texCoords);
 		void setTangents(std::vector<float> tangents);
