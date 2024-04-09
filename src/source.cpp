@@ -26,7 +26,7 @@
 #include "InputHandler/CameraMouse.h"
 #include "Renderers/ShadowRenderer.h"
 #include "Renderers/TessellationRenderer.h"
-
+#include "Renderers/SpriteRenderer.h"
 
 GLuint vao[1];
 VBOManager vboGenerator; //Needs to be constructed
@@ -34,6 +34,7 @@ Renderers::StandardRenderer textureRenderer;
 Renderers::SkyboxRenderer skyboxRenderer;
 Renderers::ShadowRenderer shadowRenderer;
 Renderers::TessellationRenderer tessRenderer;
+Renderers::SpriteRenderer spriteRenderer;
 int windowX = 1200;
 int windowY = 900;
 const char* windowTitle = "OpenGL Window";
@@ -43,17 +44,19 @@ ObjectData skybox;
 Lighting::PositionalLight* positionalLight;
 ObjectData* lightSourceModel;
 ObjectData terrainMoon;
+ObjectData tile;
 SceneData defaultScene;
 float deltaTime = 0;
 glm::vec4 globalAmbient = glm::vec4();
 CameraMouse cameraHandler;
 
 void init() {
-    vboGenerator.init(21);
+    vboGenerator.init(24);
     textureRenderer.init();
     skyboxRenderer.init();
     shadowRenderer.init();
     tessRenderer.init();
+    spriteRenderer.init(vboGenerator);
 
     defaultScene.genSkybox("milkyway", ".jpg", vboGenerator);
 
@@ -64,7 +67,10 @@ void init() {
     cube->matrices()->translate(0, 3, 0);
     //cube->matrices()->rotateY((float)M_PI / 4);
 
-    //Models::Model tile = Models::genTile();
+    tile.setTexture("sand.jpg");
+    //tile.matrices()->rotateX(M_PI/2);
+    //tile.matrices()->translate(0,-1,0);
+    
     //applyTiling(tile, 5);
     /*ObjectData* terrain = defaultScene.genObject();
     terrain->setVBOs(vboGenerator.setupVBO(Models::loadObj("tile.obj")));
@@ -92,7 +98,6 @@ void init() {
     sphere2->matrices()->setParent(sphere->matrices());
     sphere2->matrices()->translate(0, -2, 0);
     sphere2->matrices()->scale(0.5f);
-    
 
     ObjectData* dolphin = defaultScene.genObject();
     dolphin->setVBOs(vboGenerator.setupVBO(Models::loadObj("dolphinHighPoly.obj")));
@@ -168,6 +173,9 @@ void display(GLFWwindow* window, double deltaTime) {
     textureRenderer.render(defaultScene);
     tessRenderer.bindShadow(shadowRenderer.getDepthMapTexture());
     tessRenderer.render(terrainMoon, *camera, *positionalLight);
+
+    spriteRenderer.uniformCamera(*camera);
+    spriteRenderer.render(*tile.matrices(), tile.textureID);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
