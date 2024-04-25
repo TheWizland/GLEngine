@@ -37,10 +37,16 @@ namespace Renderers
         tileVBO = vboGen.setupVBO(billboard);
     }
 
-    void SpriteRenderer::uniformCamera(Camera& camera)
+    void SpriteRenderer::uniformCamera(Camera& camera, bool verticalRotation)
     {
         cameraUp = camera.getUp();
         cameraRight = camera.getRight();
+        
+        if(!verticalRotation) { //Object will only rotate on Y-axis.
+            cameraUp = glm::vec3(0,1,0);
+            cameraRight.y = 0;
+            cameraRight = glm::normalize(cameraRight);
+        }
         //glm::mat4 ortho = glm::ortho(0.f, 100.f, 100.f, 0.f, -1.f, 1.f);
         glm::mat4 vpMatrix = camera.getPerspective() * camera.getView();
 
@@ -57,7 +63,6 @@ namespace Renderers
         glm::vec2 size(0.5f,0.5f);
         GLuint sizeLoc = glGetUniformLocation(program, "billboard_size");
         glProgramUniform2fv(program, sizeLoc, 1, glm::value_ptr(size));
-
     }
 
     void SpriteRenderer::render(MatrixCollection& matrix, GLuint sprite)
@@ -76,9 +81,7 @@ namespace Renderers
         
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, sprite);
-
-        glDisable(GL_CULL_FACE);
-        glDisable(GL_DEPTH_TEST);
+        
         glDepthFunc(GL_LEQUAL);
         glDrawArrays(GL_TRIANGLES, 0, tileVBO.vertexCount);
         //Object rotation is determined by camera values.
