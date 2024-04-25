@@ -2,7 +2,7 @@
 #include "../ObjectData.h"
 #include <GL/glew.h>
 #include <memory>
-#include "../SceneData.h"
+#include "../Scenes/SceneData.h"
 
 namespace Renderers {
 	class ShadowRenderer

@@ -1,7 +1,7 @@
-#include "AssetPaths.h"
+#include "../AssetPaths.h"
 #include "SceneData.h"
-#include "Loaders/ModelGenerator.h"
-#include "Loaders/textureLoader.h"
+#include "../Loaders/ModelGenerator.h"
+#include "../Loaders/textureLoader.h"
 #include <algorithm>
 
 Lighting::PositionalLight* SceneData::newLight()
@@ -38,15 +38,14 @@ void SceneData::deleteObject(ObjectData* object)
 		[object](std::unique_ptr<ObjectData> const& objectPtr) { return objectPtr.get() == object; }));
 }
 
-ObjectData* SceneData::genSkybox(std::string skyboxName, std::string extension, VBOManager vboGenerator)
+ObjectData* SceneData::genSkybox(std::string skyboxName, std::string extension, VBOManager& vboGenerator)
 {
 	skybox = std::make_unique<ObjectData>();
 
-	Models::Model cube = Models::genCube();
+	//Models::Model cube = Models::genCube();
+	Models::Model cube = Models::loadObj("cube.obj");
 
-	skybox->vbo.vertexCount = (int)cube.vertexCount();
-	skybox->vbo.vertex = vboGenerator.setupVBO(cube.getVertices());
-	skybox->vbo.texture = vboGenerator.setupVBO(cube.getTexCoords());
+	skybox->setVBOs(vboGenerator.setupVBO(cube));
 
 	std::string skyboxDir = skyboxPath + skyboxName + "/";
 	skybox->textureID = Models::genCubeMap(skyboxDir, extension);

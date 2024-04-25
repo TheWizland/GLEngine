@@ -2,7 +2,7 @@
 #include "../Camera.h"
 #include "../LightData/Light.h"
 #include "../ObjectData.h"
-#include "../SceneData.h"
+#include "../Scenes/SceneData.h"
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 
