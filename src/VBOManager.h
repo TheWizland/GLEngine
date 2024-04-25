@@ -15,5 +15,9 @@ public:
 	void init(int numVBO);
 	int setupVBO(std::vector<float> vals);
 	VBOData setupVBO(Models::Model model);
+
+	VBOManager (const VBOManager&) = delete;
+	VBOManager& operator= (const VBOManager&) = delete;
+	VBOManager() = default;
 };
 
