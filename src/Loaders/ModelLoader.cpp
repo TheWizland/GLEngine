@@ -11,7 +11,7 @@
 #include <vector>
 
 namespace Models {
-	Model loadObj(std::string fileName)
+	Model loadObj(std::string fileName, bool genTextures, bool genNormals)
 	{
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec2> textures;
